@@ -1,4 +1,11 @@
-//META{"name":"DataSaver","source":"https://github.com/slow/better-discord-plugins/blob/master/DataSaver.plugin.js","authorId":"282595588950982656","donate":"https://paypal.me/eternal404"}*//
+/**
+ * @name DataSaver
+ * @source https://github.com/slow/better-discord-plugins/blob/main/DataSaver.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/main/DataSaver.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/main/DataSaver.plugin.js
+ * @authorId 282595588950982656
+ * @donate https://paypal.me/eternal404
+ */
 
 class DataSaver {
    constructor() {
