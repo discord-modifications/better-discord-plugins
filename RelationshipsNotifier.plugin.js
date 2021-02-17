@@ -1,4 +1,4 @@
-//META{"name":"RelationshipsNotifier"}*//
+//META{"name":"RelationshipsNotifier","source":"https://github.com/slow/better-discord-plugins/blob/master/RelationshipsNotifier.plugin.js","authorId":"282595588950982656","donate":"https://paypal.me/eternal404"}*//
 
 module.exports = (() => {
    const config = {
