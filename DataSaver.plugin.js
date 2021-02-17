@@ -1,4 +1,4 @@
-//META{"name":"DataSaver"}*//
+//META{"name":"DataSaver","source":"https://github.com/slow/better-discord-plugins/blob/master/DataSaver.plugin.js","authorId":"282595588950982656","donate":"https://paypal.me/eternal404"}*//
 
 class DataSaver {
    constructor() {
