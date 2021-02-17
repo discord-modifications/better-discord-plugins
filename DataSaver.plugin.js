@@ -1,8 +1,8 @@
 /**
  * @name DataSaver
- * @source https://github.com/slow/better-discord-plugins/blob/main/DataSaver.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/main/DataSaver.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/main/DataSaver.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/DataSaver.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/DataSaver.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
