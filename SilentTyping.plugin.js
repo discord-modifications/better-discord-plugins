@@ -1,8 +1,8 @@
 /**
  * @name SilentTyping
- * @source https://github.com/slow/better-discord-plugins/blob/main/SilentTyping.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/main/SilentTyping.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/main/SilentTyping.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/SilentTyping.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/SilentTyping.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/SilentTyping.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -22,8 +22,8 @@ const config = {
       ],
       version: '1.0.0',
       description: 'Silences your typing indicator/status.',
-      github: 'https://github.com/slow/better-discord-plugins/tree/main/SilentTyping.plugin.js',
-      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/main/SilentTyping.plugin.js',
+      github: 'https://github.com/slow/better-discord-plugins/tree/master/SilentTyping.plugin.js',
+      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/SilentTyping.plugin.js',
    }
 };
 

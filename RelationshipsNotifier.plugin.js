@@ -1,8 +1,8 @@
 /**
  * @name RelationshipsNotifier
- * @source https://github.com/slow/better-discord-plugins/blob/main/RelationshipsNotifier.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/main/RelationshipsNotifier.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/main/RelationshipsNotifier.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/RelationshipsNotifier.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/RelationshipsNotifier.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
