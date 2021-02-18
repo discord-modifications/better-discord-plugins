@@ -1,4 +1,4 @@
-# GameActivityToggle [![Download](https://media.wtf/39979457)](https://betterdiscord.net/ghdl?id=3500 "GameActivityToggle")
+# GameActivityToggle [![Download](https://media.wtf/65590215)](https://betterdiscord.net/ghdl?id=3500 "GameActivityToggle")
 Adds an entry in the status picker to toggle game activity.
 
 # Preview
