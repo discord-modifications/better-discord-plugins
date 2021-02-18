@@ -1,8 +1,8 @@
 /**
  * @name DataSaver
- * @source https://github.com/slow/better-discord-plugins/blob/master/DataSaver.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/DataSaver.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/DataSaver/DataSaver.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver/DataSaver.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/DataSaver/DataSaver.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -11,7 +11,7 @@ class DataSaver {
    constructor() {
       Object.assign(this, ...Object.entries({
          getName: 'Data Saver',
-         getDescription: 'Saves friends & Servers every 30 minutes.',
+         getDescription: 'Saves friends & Servers every 30 minutes to a file.',
          getVersion: '1.0.0',
          getAuthor: 'eternal'
       }).map(([f, v]) => ({ [f]: () => v })));

@@ -1,8 +1,8 @@
 /**
  * @name RelationshipsNotifier
- * @source https://github.com/slow/better-discord-plugins/blob/master/RelationshipsNotifier.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/RelationshipsNotifier.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -22,8 +22,8 @@ module.exports = (() => {
          ],
          version: '1.0.0',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
-         github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier.plugin.js'
+         github: 'https://github.com/slow/better-discord-plugins/tree/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
       }
    };
 

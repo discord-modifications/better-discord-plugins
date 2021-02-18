@@ -1,8 +1,8 @@
 /**
  * @name GameActivityToggle
- * @source https://github.com/slow/better-discord-plugins/blob/master/GameActivityToggle.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/GameActivityToggle/GameActivityToggle.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -22,8 +22,8 @@ const config = {
       ],
       version: '1.0.0',
       description: 'Adds an entry in the status picker to toggle game activity.',
-      github: 'https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle.plugin.js',
-      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle.plugin.js',
+      github: 'https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js',
+      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js',
    }
 };
 
@@ -50,7 +50,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
          confirmText: 'Download',
          cancelText: 'Cancel',
          onConfirm: () => {
-            request.get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', (error, response, body) => {
+            request.get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', (error, res, body) => {
                if (error) {
                   return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
                }
