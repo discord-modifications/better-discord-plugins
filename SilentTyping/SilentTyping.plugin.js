@@ -7,75 +7,25 @@
  * @donate https://paypal.me/eternal404
  */
 
-const request = require('request');
-const fs = require('fs');
-const path = require('path');
-
-const config = {
-   info: {
-      name: 'Silent Typing',
-      authors: [
-         {
-            name: 'eternal',
-            discord_id: '282595588950982656',
-         }
-      ],
-      version: '1.0.0',
-      description: 'Silences your typing indicator/status.',
-      github: 'https://github.com/slow/better-discord-plugins/tree/master/SilentTyping/SilentTyping.plugin.js',
-      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js',
-   }
-};
-
-module.exports = !global.ZeresPluginLibrary ? class {
-   getName() {
-      return config.info.name;
+class SilentTyping {
+   constructor() {
+      Object.assign(this, ...Object.entries({
+         getName: 'SilentTyping',
+         getDescription: 'Silences your typing indicator/status.',
+         getVersion: '1.0.0',
+         getAuthor: 'eternal'
+      }).map(([f, v]) => ({ [f]: () => v })));
    }
 
-   getAuthor() {
-      return config.info.authors[0].name;
+   start() {
+      let typing = BdApi.findModuleByProps('startTyping');
+      typing.startTyping = (() => () => { })(this.oldStartTyping = typing.startTyping);
+      typing.stopTyping = (() => () => { })(this.oldStopTyping = typing.stopTyping);
    }
 
-   getVersion() {
-      return config.info.version;
+   stop() {
+      let typing = BdApi.findModuleByProps('startTyping');
+      typing.startTyping = this.oldStartTyping;
+      typing.stopTyping = this.oldStopTyping;
    }
-
-   getDescription() {
-      return config.info.description;
-   }
-
-   load() {
-      BdApi.showConfirmationModal('Library Missing', `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-         confirmText: 'Download Now',
-         cancelText: 'Cancel',
-         onConfirm: () => {
-            require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
-               if (error) return require('electron').shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
-               await new Promise(r => require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, r));
-            });
-         }
-      });
-   }
-
-   start() { }
-
-   stop() { }
-} : (([Plugin, API]) => {
-   const { Patcher, WebpackModules } = API;
-   const Typing = WebpackModules.getByProps('startTyping');
-
-   return class SilentTyping extends Plugin {
-      constructor() {
-         super();
-      }
-
-      start() {
-         Patcher.instead(Typing, 'startTyping', () => { });
-         Patcher.instead(Typing, 'stopTyping', () => { });
-      }
-
-      stop() {
-         Patcher.unpatchAll();
-      }
-   };
-})(global.ZeresPluginLibrary.buildPlugin(config));
+}
