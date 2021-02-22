@@ -27,8 +27,13 @@ class DataSaver {
 
       this.interval = setInterval(async () => {
          let path = {
-            friends: '%userprofile%\\Documents\\Discord\\Discord Friends.json',
-            servers: '%userprofile%\\Documents\\Discord\\Discord Servers.json'
+            friends: '%userprofile%\\Documents\\Discord\\',
+            servers: '%userprofile%\\Documents\\Discord\\'
+         };
+
+         let fileNames = {
+            friends: 'Discord Friends',
+            servers: 'Discord Servers'
          };
 
          let obj = {
@@ -54,7 +59,11 @@ class DataSaver {
          }
 
          for (let save of Object.keys(obj)) {
-            fs.writeFile(path[save].replace(/%([^%]+)%/g, (_, n) => process.env[n]), JSON.stringify(obj[save]), (err) => {
+            let savePath = path[save].replace(/%([^%]+)%/g, (_, n) => process.env[n]);
+            if (!fs.existsSync(savePath)) {
+               fs.mkdirSync(savePath, { recursive: true });
+            }
+            fs.writeFile(`${path[save]}${fileNames[save]}.json`.replace(/%([^%]+)%/g, (_, n) => process.env[n]), JSON.stringify(obj[save]), (err) => {
                if (err) console.log(err);
             });
          }
