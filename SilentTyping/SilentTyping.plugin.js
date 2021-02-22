@@ -7,6 +7,8 @@
  * @donate https://paypal.me/eternal404
  */
 
+let typing = BdApi.findModuleByProps('startTyping');
+
 class SilentTyping {
    constructor() {
       Object.assign(this, ...Object.entries({
@@ -18,13 +20,11 @@ class SilentTyping {
    }
 
    start() {
-      let typing = BdApi.findModuleByProps('startTyping');
       typing.startTyping = (() => () => { })(this.oldStartTyping = typing.startTyping);
       typing.stopTyping = (() => () => { })(this.oldStopTyping = typing.stopTyping);
    }
 
    stop() {
-      let typing = BdApi.findModuleByProps('startTyping');
       typing.startTyping = this.oldStartTyping;
       typing.stopTyping = this.oldStopTyping;
    }
