@@ -45,16 +45,13 @@ module.exports = !global.ZeresPluginLibrary ? class {
    }
 
    load() {
-      BdApi.showConfirmationModal('Library plugin is needed',
-         `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-         confirmText: 'Download',
+      BdApi.showConfirmationModal('Library Missing', `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
+         confirmText: 'Download Now',
          cancelText: 'Cancel',
          onConfirm: () => {
-            request.get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', (error, res, body) => {
-               if (error) {
-                  return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
-               }
-               fs.writeFileSync(path.join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body);
+            require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
+               if (error) return require('electron').shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
+               await new Promise(r => require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, r));
             });
          }
       });
