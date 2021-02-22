@@ -20,8 +20,10 @@ class SilentTyping {
    }
 
    start() {
-      typing.startTyping = (() => () => { })(this.oldStartTyping = typing.startTyping);
-      typing.stopTyping = (() => () => { })(this.oldStopTyping = typing.stopTyping);
+      this.oldStartTyping = typing.startTyping;
+      this.oldStopTyping = typing.stopTyping;
+      typing.startTyping = (() => () => { })();
+      typing.stopTyping = (() => () => { })();
    }
 
    stop() {
