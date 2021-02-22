@@ -1,8 +1,8 @@
 /**
  * @name CommandsAPI
- * @source https://github.com/slow/better-discord-plugins/blob/main/CommandsAPI.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/main/CommandsAPI.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/main/CommandsAPI.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/CommandsAPI.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -19,8 +19,8 @@ module.exports = (() => {
          ],
          version: '1.0.0',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize.',
-         github: 'https://github.com/slow/better-discord-plugins/tree/main/CommandsAPI.plugin.js',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/main/CommandsAPI.plugin.js',
+         github: 'https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI.plugin.js',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI.plugin.js',
       },
       defaultConfig: [
          {

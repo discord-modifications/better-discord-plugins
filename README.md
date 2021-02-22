@@ -10,3 +10,9 @@ Notifies you when someone removes you from their friends list, you are banned/ki
 
 ## [SilentTyping](https://github.com/slow/better-discord-plugins/tree/master/SilentTyping "SilentTyping")
 Silences your typing indicator/status.
+
+## [CommandsAPI](https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI "CommandsAPI")
+Adds a command system to BetterDiscord for other plugins to utilize.
+
+## [MessageCleaner](https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner")
+Clears messages in the current channel.
