@@ -44,10 +44,10 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '1.0.2',
+         version: '1.0.3',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       defaultConfig: [
          {

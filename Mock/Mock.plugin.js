@@ -44,10 +44,10 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '1.0.2',
+         version: '1.0.3',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'
       }
    };
 
