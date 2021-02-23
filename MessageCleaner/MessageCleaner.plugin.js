@@ -1,8 +1,8 @@
 /**
  * @name MessageCleaner
- * @source https://github.com/slow/better-discord-plugins/blob/master/MessageCleaner.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/MessageCleaner/MessageCleaner.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner/MessageCleaner.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */

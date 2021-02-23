@@ -1,8 +1,8 @@
 /**
  * @name CommandsAPI
- * @source https://github.com/slow/better-discord-plugins/blob/master/CommandsAPI.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI.plugin.js
+ * @source https://github.com/slow/better-discord-plugins/blob/master/CommandsAPI/CommandsAPI.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
