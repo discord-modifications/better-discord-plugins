@@ -19,3 +19,6 @@ Clears messages in the current channel.
 
 ## [VoiceChatMoveAll](https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll")
 A context menu utility to move everyone to a certain voice channel.
+
+## [Mock](https://github.com/slow/better-discord-plugins/tree/master/Mock "Mock")
+Adds the command "mock" that uppercases & lowercases letters to mock someone.
