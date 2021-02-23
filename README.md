@@ -23,5 +23,8 @@ A context menu utility to move everyone to a certain voice channel.
 ## [Mock](https://github.com/slow/better-discord-plugins/tree/master/Mock "Mock")
 Adds the command "mock" that uppercases & lowercases letters to mock someone.
 
-## [UserLookup](https://github.com/slow/better-discord-plugins/tree/master/Mock "UserLookup")
+## [UserLookup](https://github.com/slow/better-discord-plugins/tree/master/UserLookup "UserLookup")
 Adds a command to look up information about the user using their ID.
+
+## [SpotifyCrack](https://github.com/slow/better-discord-plugins/tree/master/Mock "SpotifyCrack")
+Allows you to listen along with discord users without premium.
