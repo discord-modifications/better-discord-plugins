@@ -12,7 +12,7 @@ class DataSaver {
       Object.assign(this, ...Object.entries({
          getName: 'Data Saver',
          getDescription: 'Saves friends & Servers every 30 minutes to a file.',
-         getVersion: '1.0.1',
+         getVersion: '1.0.2',
          getAuthor: 'eternal'
       }).map(([f, v]) => ({ [f]: () => v })));
    }
@@ -63,7 +63,7 @@ class DataSaver {
             if (!fs.existsSync(savePath)) {
                fs.mkdirSync(savePath, { recursive: true });
             }
-            fs.writeFile(`${path[save]}${fileNames[save]}.json`.replace(/%([^%]+)%/g, (_, n) => process.env[n]), JSON.stringify(obj[save]), (err) => {
+            fs.writeFile(`${savePath}${fileNames[save]}.json`.replace(/%([^%]+)%/g, (_, n) => process.env[n]), JSON.stringify(obj[save]), (err) => {
                if (err) console.log(err);
             });
          }
