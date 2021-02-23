@@ -1,0 +1,212 @@
+/**
+ * @name UserLookup
+ * @source https://github.com/slow/better-discord-plugins/blob/master/UserLookup/UserLookup.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup/UserLookup.plugin.js
+ * @website https://github.com/slow/better-discord-plugins/tree/master/UserLookup/UserLookup.plugin.js
+ * @authorId 282595588950982656
+ * @donate https://paypal.me/eternal404
+ */
+
+const { getUser } = BdApi.findModuleByProps('getUser');
+
+module.exports = (() => {
+   const config = {
+      main: 'index.js',
+      info: {
+         name: 'UserLookup',
+         authors: [
+            {
+               name: 'eternal',
+               discord_id: '282595588950982656',
+               github_username: 'slow',
+               twitter_username: ''
+            }
+         ],
+         version: '1.0.1',
+         description: 'Adds a command to look up information about the user using their ID.',
+         github: 'https://github.com/slow',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup.plugin.js'
+      }
+   };
+
+   const buildPlugin = ([Plugin, API]) => {
+      return class UserLookup extends Plugin {
+         constructor() {
+            super();
+         }
+
+         start() {
+            commands.register({
+               command: 'whois',
+               aliases: ['id', 'lookup'],
+               label: 'User ID Info',
+               usage: '{c} <id>',
+               description: 'Lookup user info from a user id',
+               executor: this.getInfo
+            });
+         };
+
+         async getInfo(id) {
+            try {
+               let user = await getUser(String(id));
+               let tag = `${user.username}#${user.discriminator}`;
+               let avatar;
+
+               if (!user.avatar) {
+                  avatar = `https://canary.discord.com${user.avatarURL}`;
+               } else {
+                  avatar = `https://cdn.discordapp.com/avatars/${String(user.id)}/${user.avatar}.${user.avatar.startsWith('a_') ? 'gif' : 'png'}?size=4096`;
+               }
+
+               let unix = (id / 4194304) + 1420070400000;
+               let time = new Date(unix);
+               let date = `${time.getMonth() + 1}/${time.getDate()}/${time.getFullYear()} `;
+               let difference = UserLookup.differentiate(Date.now(), unix);
+
+               return {
+                  result: {
+                     type: 'rich',
+                     title: `User Lookup for ${tag}`,
+                     color: 0xff0000,
+                     fields: [
+                        { name: 'ID', value: String(id) },
+                        { name: 'Tag', value: `<@${id}> ` },
+                        { name: 'Username', value: tag },
+                        { name: 'Bot', value: user.bot ? 'Yes' : 'No' },
+                        { name: 'Avatar', value: `[URL](${avatar})` },
+                        { name: 'Created', value: `${date} (${difference})` }
+                     ]
+                  },
+                  embed: true
+               };
+            } catch (err) {
+               console.log(err);
+               return {
+                  result: 'Invalid ID.'
+               };
+            }
+         }
+
+         static differentiate(current, previous) {
+            var msPerMinute = 60 * 1000;
+            var msPerHour = msPerMinute * 60;
+            var msPerDay = msPerHour * 24;
+            var msPerMonth = msPerDay * 30;
+            var msPerYear = msPerDay * 365;
+            var elapsed = current - previous;
+            if (elapsed < msPerMinute) {
+               return `${Math.round(elapsed / 1000)} seconds ago`;
+            } else if (elapsed < msPerHour) {
+               return `${Math.round(elapsed / msPerMinute)} minutes ago`;
+            } else if (elapsed < msPerDay) {
+               return `${Math.round(elapsed / msPerHour)} hours ago`;
+            } else if (elapsed < msPerMonth) {
+               return `${Math.round(elapsed / msPerDay)} days ago`;
+            } else if (elapsed < msPerYear) {
+               return `${Math.round(elapsed / msPerMonth)} months ago`;
+            } else {
+               return `${Math.round(elapsed / msPerYear)} years ago`;
+            }
+         }
+
+         stop() {
+            commands.unregister('whois');
+         };
+      };
+   };
+
+   return !global.ZeresPluginLibrary || !global.XenoLib || !global.commands ? class {
+      constructor() {
+         this._XL_PLUGIN = true;
+         this.start = this.load = this.handleMissingLib;
+      }
+
+      getName() {
+         return this.name.replace(/\s+/g, '');
+      }
+
+      getAuthor() {
+         return this.author;
+      }
+
+      getVersion() {
+         return this.version;
+      }
+
+      getDescription() {
+         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+      }
+
+      start() { }
+
+      stop() { }
+
+      handleMissingLib() {
+         let missing = {
+            ZeresPluginLibrary: false,
+            CommandsAPI: false
+         };
+         if (!global.ZeresPluginLibrary) missing.ZeresPluginLibrary = true;
+         if (!global.commands) missing.CommandsAPI = true;
+         let missingCount = 0;
+         Object.values(missing).map(m => m ? missingCount++ : '');
+
+         BdApi.showConfirmationModal(missingCount == 1 ? 'Library plugin needed' : 'Library plugins needed',
+            `The library plugin${missingCount > 1 ? 's' : ''} needed for ${config.info.name} is missing. Please click Download to install the dependecies.`, {
+            confirmText: 'Download',
+            cancelText: 'Cancel',
+            onConfirm: async () => {
+               if (missing.ZeresPluginLibrary) {
+                  await new Promise((fulfill, reject) => {
+                     require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
+                        if (error) {
+                           return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
+                        }
+                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, fulfill);
+                     });
+                  });
+               }
+               if (missing.CommandsAPI) {
+                  await new Promise((fulfill, reject) => {
+                     require('request').get('https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js', async (error, response, body) => {
+                        if (error) {
+                           return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js');
+                        }
+                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, 'CommandsAPI.plugin.js'), body, fulfill);
+                     });
+                  });
+               }
+            }
+         });
+      }
+
+      get [Symbol.toStringTag]() {
+         return 'Plugin';
+      }
+
+      get name() {
+         return config.info.name;
+      }
+
+      get short() {
+         let string = '';
+         for (let i = 0, len = config.info.name.length; i < len; i++) {
+            const char = config.info.name[i];
+            if (char === char.toUpperCase()) string += char;
+         }
+         return string;
+      }
+
+      get author() {
+         return config.info.authors.map(author => author.name).join(', ');
+      }
+
+      get version() {
+         return config.info.version;
+      }
+
+      get description() {
+         return config.info.description;
+      }
+   } : buildPlugin(global.ZeresPluginLibrary.buildPlugin(config));
+})();
