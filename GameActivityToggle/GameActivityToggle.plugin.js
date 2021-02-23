@@ -20,7 +20,7 @@ const config = {
             discord_id: '282595588950982656',
          }
       ],
-      version: '1.0.0',
+      version: '1.0.1',
       description: 'Adds an entry in the status picker to toggle game activity.',
       github: 'https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js',
       github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js',

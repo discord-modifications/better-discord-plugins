@@ -14,7 +14,7 @@ class SilentTyping {
       Object.assign(this, ...Object.entries({
          getName: 'SilentTyping',
          getDescription: 'Silences your typing indicator/status.',
-         getVersion: '1.0.0',
+         getVersion: '1.0.1',
          getAuthor: 'eternal'
       }).map(([f, v]) => ({ [f]: () => v })));
    }

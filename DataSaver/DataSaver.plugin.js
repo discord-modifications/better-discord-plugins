@@ -12,7 +12,7 @@ class DataSaver {
       Object.assign(this, ...Object.entries({
          getName: 'Data Saver',
          getDescription: 'Saves friends & Servers every 30 minutes to a file.',
-         getVersion: '1.0.0',
+         getVersion: '1.0.1',
          getAuthor: 'eternal'
       }).map(([f, v]) => ({ [f]: () => v })));
    }
