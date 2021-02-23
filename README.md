@@ -16,3 +16,6 @@ Adds a command system to BetterDiscord for other plugins to utilize.
 
 ## [MessageCleaner](https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner")
 Clears messages in the current channel.
+
+## [VoiceChatMoveAll](https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll")
+A context menu utility to move everyone to a certain voice channel.
