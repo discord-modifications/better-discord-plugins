@@ -93,9 +93,9 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
       start() {
          Patcher.after(Profile, 'getProfile', async (_, args) => {
-            let patched = Patcher.after(Spotify, 'isSpotifyPremium', () => true);
+            let unpatch = Patcher.after(Spotify, 'isSpotifyPremium', () => true);
             Dispatcher.dispatch({ type: 'SPOTIFY_PROFILE_UPDATE', accountId: args[0], isPremium: true });
-            Patcher.unpatchAll(patched);
+            unpatch();
             return;
          });
       };
