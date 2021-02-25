@@ -28,3 +28,6 @@ Adds a command to look up information about the user using their ID.
 
 ## [SpotifyCrack](https://github.com/slow/better-discord-plugins/tree/master/SpotifyCrack "SpotifyCrack")
 Allows you to listen along with discord users without premium.
+
+## [NSFWGateBypass](https://github.com/slow/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass")
+Bypasses discord's NSFW age gate.
