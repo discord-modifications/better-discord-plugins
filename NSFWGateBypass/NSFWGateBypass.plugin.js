@@ -44,7 +44,7 @@ class NSFWGateBypass {
       }).map(([f, v]) => ({ [f]: () => v })));
    }
 
-   start() {
+   async start() {
       while (!document.querySelector('.usernameContainer-1fp4nu')) await sleep(1);
       let user = getCurrentUser();
       user._nsfwAllowed = user.nsfwAllowed;
