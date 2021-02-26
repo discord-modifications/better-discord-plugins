@@ -3,19 +3,19 @@ Clears messages in the current channel.
 
 # Usage
 
--  `clear all beforeId`
--  `clear number beforeId`
--  `prune all beforeId`
--  `prune number beforeId`
+-  `[prefix]clear all beforeId`
+-  `[prefix]clear number beforeId`
+-  `[prefix]prune all beforeId`
+-  `[prefix]prune number beforeId`
 
 
 # Examples
 
--  `clear all`
--  `clear all 739493961713975368`
--  `clear 10`
--  `clear 10 739493961713975368`
--  `prune all`
--  `prune all 739493961713975368`
--  `prune 10`
--  `prune 10 739493961713975368`
+-  `[prefix]clear all`
+-  `[prefix]clear all 739493961713975368`
+-  `[prefix]clear 10`
+-  `[prefix]clear 10 739493961713975368`
+-  `[prefix]prune all`
+-  `[prefix]prune all 739493961713975368`
+-  `[prefix]prune 10`
+-  `[prefix]prune 10 739493961713975368`
