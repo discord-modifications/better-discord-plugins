@@ -46,6 +46,7 @@ module.exports = (() => {
          ],
          version: '1.0.3',
          description: 'Clears messages in the current channel.',
+         version: '1.0.4',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
@@ -100,6 +101,7 @@ module.exports = (() => {
       const { WebpackModules, Patcher, Logger, PluginUtilities } = API;
       const { getToken } = WebpackModules.getByProps('getToken');
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
+      const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
       const { getChannel } = WebpackModules.getByProps('getChannel');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuild } = WebpackModules.getByProps('getGuild');
@@ -200,10 +202,10 @@ module.exports = (() => {
                let instance = await getChannel(location);
                if (instance.type == 0) {
                   let guild = getGuild(instance.guild_id);
-                  location = `in ${guild.name} > #${instance.name}`;
+                  location = `in ${guild.name} > <#${instance.id}>`;
                } else if (instance.type == 1) {
                   let user = await getUser(instance.recipients[0]);
-                  location = `in DMs with ${user.username}#${user.discriminator}`;
+                  location = `in DMs with <@${user.id}>`;
                } else if (instance.type == 3) {
                   if (instance.name.length == 0) {
                      let users = [];
@@ -211,13 +213,19 @@ module.exports = (() => {
                         user = await getUser(user);
                         users.push(user);
                      }
-                     location = `in group with ${users.map(u => `${u.username}#${u.discriminator}`)}`;
+                     location = `in group with ${users.map(u => `<@${u.id}>`).join(', ')}`;
                   } else {
                      location = `in group ${instance.name}`;
                   }
                }
 
-               XenoLib.Notifications.success(`Deleted ${amount} messages ${location}`, { timeout: 0 });
+               XenoLib.Notifications.success(`Deleted ${amount} messages ${location}`, {
+                  timeout: 0,
+                  onClick: () => {
+                     if (instance.type == 1) return ChannelStore.openPrivateChannel(instance.recipients[0]);
+                     ZLibrary.DiscordModules.NavigationUtils.transitionTo(`/channels/${instance.guild_id || '@me'}/${instance.id}`);
+                  }
+               });
 
                receivedMessage.content = `Cleared ${amount} messages.`;
             } else {
