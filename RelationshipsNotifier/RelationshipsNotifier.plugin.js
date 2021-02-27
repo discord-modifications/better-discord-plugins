@@ -44,7 +44,7 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '1.0.2',
+         version: '1.0.3',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow/better-discord-plugins/tree/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -53,6 +53,7 @@ module.exports = (() => {
 
    const buildPlugin = ([Plugin, API]) => {
       const { WebpackModules, Patcher } = API;
+      const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
       const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser');
       const { getChannels } = WebpackModules.getByProps('getChannels');
       const { getGuilds } = WebpackModules.getByProps('getGuilds');
@@ -173,9 +174,11 @@ module.exports = (() => {
 
          fireToast(type, instance) {
             let message = "Relationships Notifier - Couldn't determine type.";
+            let options = { timeout: 0 };
             switch (type) {
                case 'remove':
-                  message = `${instance.username}#${instance.discriminator} has removed you as a friend`;
+                  message = `<@${instance.id}> has removed you as a friend`;
+                  options.onClick = () => ChannelStore.openPrivateChannel(instance.id);
                   break;
                case 'kick':
                   message = `You've been kicked from ${instance.name}`;
@@ -186,13 +189,13 @@ module.exports = (() => {
                case 'group':
                   message = "You've been removed from the group chat ";
                   if (instance.name.length === 0) {
-                     message += instance.recipients.map((id) => getUser(id).username).join(', ');
+                     message += instance.recipients.map(u => `<@${u}>`).join(', ');
                   } else {
                      message += instance.name;
                   }
                   break;
             }
-            XenoLib.Notifications.warning(message, { timeout: 0 });
+            XenoLib.Notifications.warning(message, options);
          }
       };
    };
