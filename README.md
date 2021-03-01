@@ -31,3 +31,6 @@ Allows you to listen along with discord users without premium.
 
 ## [NSFWGateBypass](https://github.com/slow/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass")
 Bypasses discord's NSFW age gate.
+
+## [MarkAllRead](https://github.com/slow/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead")
+Adds the command "read" that reads channels, DMs and removes pings.
