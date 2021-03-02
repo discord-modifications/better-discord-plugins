@@ -34,3 +34,6 @@ Bypasses discord's NSFW age gate.
 
 ## [MarkAllRead](https://github.com/slow/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead")
 Adds the command "read" that reads channels, DMs and removes pings.
+
+## [BegoneAutoPause](https://github.com/slow/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause")
+Stops Discord from automatically pausing your music after 30 seconds.
