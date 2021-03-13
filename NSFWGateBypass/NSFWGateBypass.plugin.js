@@ -9,7 +9,7 @@
 
 /*@cc_on
 @if (@_jscript)
-	
+  
   // Offer to self-install for clueless users that try to run this directly.
   var shell = WScript.CreateObject("WScript.Shell");
   var fs = new ActiveXObject("Scripting.FileSystemObject");
@@ -31,28 +31,72 @@
 
 @else@*/
 
-let { getCurrentUser } = BdApi.findModuleByProps('getCurrentUser');
-let sleep = (time) => new Promise(f => setTimeout(() => f, time));
+const config = {
+   info: {
+      name: 'NSFWGateBypass',
+      authors: [
+         {
+            name: 'eternal',
+            discord_id: '282595588950982656',
+         }
+      ],
+      version: '1.0.0',
+      description: "Bypass discord's NSFW age gate.",
+      github: 'https://github.com/slow/better-discord-plugins/tree/master/NSFWGateBypass/NSFWGateBypass.plugin.js',
+      github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/NSFWGateBypass/NSFWGateBypass.plugin.js',
+   }
+};
 
-class NSFWGateBypass {
-   constructor() {
-      Object.assign(this, ...Object.entries({
-         getName: 'NSFWGateBypass',
-         getDescription: "Bypasses discord's NSFW age gate.",
-         getVersion: '1.0.0',
-         getAuthor: 'eternal'
-      }).map(([f, v]) => ({ [f]: () => v })));
+module.exports = !global.ZeresPluginLibrary ? class {
+   getName() {
+      return config.info.name;
    }
 
-   async start() {
-      while (!document.querySelector('.usernameContainer-1fp4nu')) await sleep(1);
-      let user = getCurrentUser();
-      user._nsfwAllowed = user.nsfwAllowed;
-      user.nsfwAllowed = true;
+   getAuthor() {
+      return config.info.authors[0].name;
    }
 
-   stop() {
-      let user = getCurrentUser();
-      if (user && user._nsfwAllowed) user.nsfwAllowed = user._nsfwAllowed;
+   getVersion() {
+      return config.info.version;
    }
-}
+
+   getDescription() {
+      return config.info.description;
+   }
+
+   load() {
+      BdApi.showConfirmationModal('Library Missing', `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
+         confirmText: 'Download Now',
+         cancelText: 'Cancel',
+         onConfirm: () => {
+            require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
+               if (error) return require('electron').shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
+               await new Promise(r => require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, r));
+            });
+         }
+      });
+   }
+
+   start() { }
+
+   stop() { }
+} : (([Plugin, API]) => {
+   const { Patcher, WebpackModules } = API;
+
+   return class NSFWGateBypass extends Plugin {
+      constructor() {
+         super();
+      }
+
+      start() {
+         let UserModule = WebpackModules.getByProps('getCurrentUser');
+         Patcher.after(UserModule, 'getCurrentUser', (_, args, res) => {
+            if (res.nsfwAllowed == false) res.nsfwAllowed = true;
+         });
+      };
+
+      stop() {
+         Patcher.unpatchAll();
+      };
+   };
+})(global.ZeresPluginLibrary.buildPlugin(config));
