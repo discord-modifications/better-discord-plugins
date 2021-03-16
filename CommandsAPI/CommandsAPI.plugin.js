@@ -41,7 +41,7 @@ module.exports = (() => {
                discord_id: '282595588950982656',
             }
          ],
-         version: '1.0.3',
+         version: '1.0.4',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize.',
          github: 'https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
@@ -148,7 +148,6 @@ module.exports = (() => {
 
                register(command) {
                   const stackTrace = (new Error()).stack;
-                  const [, origin] = stackTrace.match(new RegExp(`${global._.escapeRegExp(BdApi.Plugins.folder)}.([-\\w]+)`));
 
                   if (typeof command === 'string') return;
 
@@ -156,10 +155,7 @@ module.exports = (() => {
                      throw new Error(`Command ${command.command} is already registered!`);
                   }
 
-                  this.commands[command.command] = {
-                     ...command,
-                     origin
-                  };
+                  this.commands[command.command] = command;
                }
 
                unregister(command) {
@@ -239,10 +235,7 @@ module.exports = (() => {
                                  name: 'Usage',
                                  value: `\`${command.usage.replace('{c}', window.commands.prefix + command.command)}\n\``,
                                  inline: false
-                              }],
-                              footer: {
-                                 text: `Inherited from "${command.origin}".`
-                              }
+                              }]
                            };
                         }
                      }
