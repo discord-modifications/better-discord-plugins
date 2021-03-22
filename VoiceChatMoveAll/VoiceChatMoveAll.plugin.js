@@ -33,9 +33,9 @@
 
 const { findModuleByProps, findAllModules } = BdApi;
 const VCContextMenu = findAllModules(m => m.default && m.default.displayName == 'ChannelListVoiceChannelContextMenu')[0];
+const { getVoiceStatesForChannel } = findModuleByProps('getVoiceStatesForChannel');
 const DiscordPermissions = findModuleByProps('Permissions').Permissions;
 const { getVoiceChannelId } = findModuleByProps('getVoiceChannelId');
-const { getVoiceStates } = findModuleByProps('getVoiceStates');
 const { patch } = findModuleByProps('APIError', 'patch');
 const Menu = findModuleByProps('MenuGroup', 'MenuItem');
 const Permissions = findModuleByProps('getHighestRole');
@@ -93,7 +93,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
    stop() { }
 } : (([Plugin, API]) => {
-   const { Patcher, WebpackModules, DiscordModules: { React } } = API;
+   const { Patcher, DiscordModules: { React } } = API;
 
    return class VoiceChatMoveAll extends Plugin {
       constructor() {
@@ -102,7 +102,6 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
       start() {
          Patcher.after(VCContextMenu, 'default', (_, args, res) => {
-            console.log(_, args, res);
             let channel = args[0].channel;
             if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
             let currentChannel = this.getVoiceChannel();
@@ -120,7 +119,6 @@ module.exports = !global.ZeresPluginLibrary ? class {
                         await sleep(e.body.retry_after * 1000);
                         currentChannel.members.unshift(member);
                      });
-                     await sleep(350);
                   }
                },
                id: 'move-all-vc',
@@ -137,18 +135,18 @@ module.exports = !global.ZeresPluginLibrary ? class {
          Patcher.unpatchAll();
       };
 
-      getVoiceUserIds(guild, channel) {
-         return Object.values(getVoiceStates(guild)).filter((c) => c.channelId == channel).map((a) => a.userId);
+      getVoiceUserIds(channel) {
+         return Object.keys(getVoiceStatesForChannel(channel));
       }
 
       canMoveAll(channel) {
-         let currentChannel = this.getVoiceChannel();
-         let channelCount = this.getVoiceCount(channel);
+         let instance = this.getVoiceChannel();
+
          if (
-            this.canJoinAndMove(channel) && (Permissions.can(DiscordPermissions.CONNECT, channel) ||
-               channel.userLimit == 0 || channel.userLimit - currentChannel.count > channelCount + currentChannel.count
-            )
+            (instance && instance.channel.id != channel.id && this.canJoinAndMove(channel)) &&
+            (channel.userLimit == 0 || channel.userLimit - instance.count >= 0)
          ) return true;
+
          return false;
       }
 
@@ -156,13 +154,10 @@ module.exports = !global.ZeresPluginLibrary ? class {
          return Permissions.can(DiscordPermissions.CONNECT, channel) && Permissions.can(DiscordPermissions.MOVE_MEMBERS, channel);
       }
 
-      getVoiceCount(guild, channel) {
-         return Object.values(getVoiceStates(guild)).filter((c) => c.channelId == channel).length;
-      }
-
       getVoiceChannel() {
          let channel = getChannel(getVoiceChannelId());
-         if (channel) return { channel: channel, members: this.getVoiceUserIds(channel.guild_id, channel.id) };
+         let members = this.getVoiceUserIds(channel.id);
+         if (channel) return { channel, members, count: members.length };
          return null;
       }
    };
