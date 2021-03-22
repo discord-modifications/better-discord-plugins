@@ -52,7 +52,7 @@ const config = {
             discord_id: '282595588950982656',
          }
       ],
-      version: '1.0.2',
+      version: '1.0.3',
       description: 'A context menu utility to move everyone to a certain voice channel.',
       github: 'https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js',
       github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js',
