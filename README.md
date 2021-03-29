@@ -37,3 +37,6 @@ Adds the command "read" that reads channels, DMs and removes pings.
 
 ## [BegoneAutoPause](https://github.com/slow/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause")
 Stops Discord from automatically pausing your music after 30 seconds.
+
+## [NoBandwidthKick](https://github.com/slow/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick")
+Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
