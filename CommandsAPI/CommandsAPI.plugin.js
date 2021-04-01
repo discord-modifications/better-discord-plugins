@@ -41,7 +41,7 @@ module.exports = (() => {
                discord_id: '282595588950982656',
             }
          ],
-         version: '1.0.4',
+         version: '1.0.5',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize.',
          github: 'https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
@@ -173,9 +173,7 @@ module.exports = (() => {
             return this.buildSettingsPanel().getElement();
          }
 
-         start() {
-            console.log(this);
-         }
+         start() { }
 
          stop() { }
 
