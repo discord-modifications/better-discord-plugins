@@ -113,10 +113,15 @@ module.exports = (() => {
          }
 
          async load() {
+            const path = require('path');
+            const fileName = path.join(__dirname, path.basename(__filename));
+            this.changeName(fileName, '2CommandsAPI');
+
             const settings = this.settings = PluginUtilities.loadSettings(this.name, {
                prefix: '-',
                replaceClyde: true
             });
+
             window.commands = new class API {
                constructor() {
                   this.commands = {};
@@ -171,6 +176,26 @@ module.exports = (() => {
 
          getSettingsPanel() {
             return this.buildSettingsPanel().getElement();
+         }
+
+         changeName(currentName, newName) {
+            try {
+               const path = require('path');
+               const fs = require('fs');
+               const pluginsFolder = path.dirname(currentName);
+               const pluginName = path.basename(currentName).match(/^[^\.]+/)[0];
+               if (pluginName === newName) return true;
+               const wasEnabled = BdApi.Plugins && BdApi.Plugins.isEnabled ? BdApi.Plugins.isEnabled(pluginName) : global.pluginCookie && pluginCookie[pluginName];
+               fs.accessSync(currentName, fs.constants.W_OK | fs.constants.R_OK);
+               const files = fs.readdirSync(pluginsFolder);
+               files.forEach(file => {
+                  if (!file.startsWith(pluginName) || file.startsWith(newName) || file.indexOf('.plugin.js') !== -1) return;
+                  fs.renameSync(path.resolve(pluginsFolder, file), path.resolve(pluginsFolder, `${newName}${file.match(new RegExp(`^${pluginName}(.*)`))[1]}`));
+               });
+               fs.renameSync(currentName, path.resolve(pluginsFolder, `${newName}.plugin.js`));
+               if (!wasEnabled) return;
+               setTimeout(() => (BdApi.Plugins && BdApi.Plugins.enable ? BdApi.Plugins.enable(newName) : pluginModule.enablePlugin(newName)), 1000);
+            } catch (e) { }
          }
 
          start() { }

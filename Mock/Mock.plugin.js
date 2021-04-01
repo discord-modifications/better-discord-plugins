@@ -44,7 +44,7 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '1.0.3',
+         version: '1.0.4',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'
@@ -132,7 +132,7 @@ module.exports = (() => {
                         if (error) {
                            return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js');
                         }
-                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, 'CommandsAPI.plugin.js'), body, fulfill);
+                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '2CommandsAPI.plugin.js'), body, fulfill);
                      });
                   });
                }

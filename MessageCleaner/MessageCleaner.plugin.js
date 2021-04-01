@@ -44,9 +44,8 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '1.0.3',
          description: 'Clears messages in the current channel.',
-         version: '1.0.4',
+         version: '1.0.5',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
@@ -445,7 +444,7 @@ module.exports = (() => {
                         if (error) {
                            return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js');
                         }
-                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, 'CommandsAPI.plugin.js'), body, fulfill);
+                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '2CommandsAPI.plugin.js'), body, fulfill);
                      });
                   });
                }
