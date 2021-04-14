@@ -40,3 +40,6 @@ Stops Discord from automatically pausing your music after 30 seconds.
 
 ## [NoBandwidthKick](https://github.com/slow/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick")
 Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
+
+## [UploadFromLinks](https://github.com/slow/better-discord-plugins/tree/master/UploadFromLinks "UploadFromLinks")
+Allows you to upload from links by surrounding the link in brackets.
