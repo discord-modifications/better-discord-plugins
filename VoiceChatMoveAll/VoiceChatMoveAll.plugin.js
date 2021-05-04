@@ -41,6 +41,7 @@ const Menu = findModuleByProps('MenuGroup', 'MenuItem');
 const Permissions = findModuleByProps('getHighestRole');
 const { getChannel } = findModuleByProps('getChannel');
 const { Endpoints } = findModuleByProps('Endpoints');
+const { getGuild } = findModuleByProps('getGuild');
 const sleep = (time) => new Promise((f) => setTimeout(f, time));
 
 const config = {
@@ -143,8 +144,10 @@ module.exports = !global.ZeresPluginLibrary ? class {
          let instance = this.getVoiceChannel();
 
          if (
-            (instance && instance.channel.id != channel.id && this.canJoinAndMove(channel)) &&
-            (channel.userLimit == 0 || channel.userLimit - instance.count >= 0)
+            instance?.channel.id !== channel.id &&
+            instance?.channel.guild_id === channel.guild_id &&
+            (Permissions.can(DiscordPermissions.ADMINISTRATOR, getGuild(channel.guild_id)) ||
+            (this.canJoinAndMove(channel) && (channel.userLimit == 0 || channel.userLimit - instance.count >= 0)))
          ) return true;
 
          return false;
