@@ -137,6 +137,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
       };
 
       getVoiceUserIds(channel) {
+         if (!channel) return null;
          return Object.keys(getVoiceStatesForChannel(channel));
       }
 
@@ -159,8 +160,8 @@ module.exports = !global.ZeresPluginLibrary ? class {
 
       getVoiceChannel() {
          let channel = getChannel(getVoiceChannelId());
-         let members = this.getVoiceUserIds(channel.id);
-         if (channel) return { channel, members, count: members.length };
+         let members = this.getVoiceUserIds(channel?.id);
+         if (channel && members) return { channel, members, count: members.length };
          return null;
       }
    };
