@@ -36,7 +36,7 @@ const VCContextMenu = findAllModules(m => m.default && m.default.displayName == 
 const { getVoiceStatesForChannel } = findModuleByProps('getVoiceStatesForChannel');
 const DiscordPermissions = findModuleByProps('Permissions').Permissions;
 const { getVoiceChannelId } = findModuleByProps('getVoiceChannelId');
-const { patch } = findModuleByProps('APIError', 'patch');
+const { patch } = findModuleByProps('patch');
 const Menu = findModuleByProps('MenuGroup', 'MenuItem');
 const Permissions = findModuleByProps('getHighestRole');
 const { getChannel } = findModuleByProps('getChannel');
@@ -53,7 +53,7 @@ const config = {
             discord_id: '282595588950982656',
          }
       ],
-      version: '1.0.3',
+      version: '1.0.4',
       description: 'A context menu utility to move everyone to a certain voice channel.',
       github: 'https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js',
       github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js',
