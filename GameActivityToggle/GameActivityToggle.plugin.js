@@ -44,7 +44,7 @@ const config = {
             discord_id: '282595588950982656',
          }
       ],
-      version: '1.0.2',
+      version: '1.0.3',
       description: 'Adds an entry in the status picker to toggle game activity.',
       github: 'https://github.com/slow/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js',
       github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js',
@@ -96,7 +96,7 @@ module.exports = !global.ZeresPluginLibrary ? class {
          let showCurrentGame;
          const g = WebpackModules.getByProps('showCurrentGame');
          const settings = WebpackModules.getByProps('updateRemoteSettings');
-         const classes = WebpackModules.getByProps('status', 'description');
+         const classes = WebpackModules.getByProps('status', 'statusItem');
          const Menu = WebpackModules.getByProps('MenuItem');
          const enabledIcon = w => React.createElement('svg', {
             viewBox: '0 0 24 24', width: w, height: w, style: { 'margin-left': '-2px' }
