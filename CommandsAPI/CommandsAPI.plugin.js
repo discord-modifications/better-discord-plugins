@@ -373,7 +373,7 @@ module.exports = (() => {
                res.props.children[0] = React.createElement(Text, {
                   children: this.props.prefix ? this.props.prefix : window.commands.prefix,
                   style: {
-                     color: '#72767d',
+                     color: 'var(--text-muted)',
                      marginRight: 2.5
                   }
                });
