@@ -32,7 +32,7 @@
 @else@*/
 
 module.exports = (() => {
-    const config = {"main":"index.js","info":{"name":"CommandsAPI","website":"https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js","authors":[{"name":"eternal","discord_id":"282595588950982656"}],"version":"1.0.6","description":"Adds a command system to BetterDiscord for other plugins to utilize.","github":"https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js","github_raw":"https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js","donate":"https://paypal.me/eternal404","updateUrl":"https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js"},"defaultConfig":[{"name":"Prefix","note":"Command Prefix","id":"prefix","type":"textbox","value":"-"},{"name":"Eradicate Clyde","note":"Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.","id":"replaceClyde","type":"switch","value":true}],"changelog":[{"title":"Fixed","type":"fixed","items":["Autocomplete not working."]}]};
+    const config = {"main":"index.js","info":{"name":"CommandsAPI","website":"https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js","authors":[{"name":"eternal","discord_id":"282595588950982656"}],"version":"1.0.7","description":"Adds a command system to BetterDiscord for other plugins to utilize.","github":"https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js","github_raw":"https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js","donate":"https://paypal.me/eternal404","updateUrl":"https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js"},"defaultConfig":[{"name":"Prefix","note":"Command Prefix","id":"prefix","type":"textbox","value":"-"},{"name":"Eradicate Clyde","note":"Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.","id":"replaceClyde","type":"switch","value":true}],"changelog":[{"title":"Fixed","type":"fixed","items":["Autocomplete not working."]}]};
 
     return !global.ZeresPluginLibrary ? class {
         constructor() {this._config = config;}
@@ -63,7 +63,7 @@ module.exports = (() => {
       DiscordModules: { React },
       ReactTools
    } = API;
-   const { Messages } = WebpackModules.getByProps('Messages', 'languages');
+   const { Messages } = WebpackModules.getByProps('Messages', 'getLocale');
 
    return class CommandsAPI extends Plugin {
       constructor() {
