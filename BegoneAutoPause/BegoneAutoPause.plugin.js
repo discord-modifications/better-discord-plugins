@@ -34,8 +34,8 @@
 @else@*/
 
 const { findModuleByProps, Patcher } = BdApi;
-const Modules = BdApi.findModuleByProps('initialize', 'wasAutoPaused');
-const Spotify = BdApi.findModuleByProps('fetchIsSpotifyProtocolRegistered');
+const Modules = findModuleByProps('initialize', 'wasAutoPaused');
+const Spotify = findModuleByProps('fetchIsSpotifyProtocolRegistered');
 
 class BegoneAutoPause {
    start() {
