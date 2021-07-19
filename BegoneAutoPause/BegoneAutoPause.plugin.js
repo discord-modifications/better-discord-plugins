@@ -39,7 +39,6 @@ const Spotify = BdApi.findModuleByProps('fetchIsSpotifyProtocolRegistered');
 
 class BegoneAutoPause {
    start() {
-      Patcher.instead('');
       Patcher.instead('begone-auto-pause', Modules.__proto__, 'wasAutoPaused', () => false);
       Patcher.instead('begone-auto-pause', Spotify, 'pause', () => { });
    }
