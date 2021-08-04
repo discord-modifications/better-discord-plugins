@@ -46,8 +46,8 @@ class MarkAllRead {
          this.avatars = BdApi.findModuleByProps('BOT_AVATARS');
 
          const DiscordCommands = BdApi.findModuleByProps('BUILT_IN_COMMANDS');
-         if (!DiscordCommands.BUILT_IN_SECTIONS.some(e => e.id === 'betterdiscord')) {
-            DiscordCommands.BUILT_IN_SECTIONS.push({
+         if (!DiscordCommands.BUILT_IN_SECTIONS['betterdiscord']) {
+            DiscordCommands.BUILT_IN_SECTIONS['betterdiscord'] = ({
                icon: 'https://github.com/BetterDiscord.png',
                id: 'betterdiscord',
                name: 'BetterDiscord',
