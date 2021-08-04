@@ -1,5 +1,5 @@
 # Upload From Links [![Download][download-badge]][download-link] [![PayPal][paypal-badge]][paypal-link]
-A context menu utility to move everyone to a certain voice channel.
+Allows you to upload from links by surrounding the link in brackets.
 
 # Usage
 - `[link, filename.png]`
