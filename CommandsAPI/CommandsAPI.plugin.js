@@ -75,7 +75,7 @@ module.exports = (() => {
          const fileName = path.join(__dirname, path.basename(__filename));
          this.changeName(fileName, '2CommandsAPI');
 
-         const settings = this.settings = PluginUtilities.loadSettings(this.name, {
+         const settings = this.settings = PluginUtilities.loadSettings(this.getName(), {
             prefix: '-',
             replaceClyde: true
          });
