@@ -1,7 +1,7 @@
 /**
  * @name VoiceChatMoveAll
  * @description A context menu utility to move everyone to a certain voice channel.
- * @version 2.0.0
+ * @version 2.0.1
  * @source https://github.com/slow/better-discord-plugins/blob/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @author eternal
@@ -40,12 +40,12 @@ const VCContextMenu = findModule(m => m.default && m.default.displayName == 'Cha
 const { getVoiceStatesForChannel } = findModuleByProps('getVoiceStatesForChannel');
 const DiscordPermissions = findModuleByProps('Permissions').Permissions;
 const { getVoiceChannelId } = findModuleByProps('getVoiceChannelId');
+const { patch } = findModule(m => typeof m == 'object' && m.patch);
 const Menu = findModuleByProps('MenuGroup', 'MenuItem');
 const Permissions = findModuleByProps('getHighestRole');
 const { getChannel } = findModuleByProps('getChannel');
 const { Endpoints } = findModuleByProps('Endpoints');
 const { getGuild } = findModuleByProps('getGuild');
-const { patch } = findModuleByProps('patch');
 
 class VoiceChatMoveAll {
    start() {
