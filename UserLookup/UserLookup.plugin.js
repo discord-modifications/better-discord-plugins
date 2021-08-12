@@ -3,6 +3,7 @@
  * @source https://github.com/slow/better-discord-plugins/blob/master/UserLookup/UserLookup.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup/UserLookup.plugin.js
  * @website https://github.com/slow/better-discord-plugins/tree/master/UserLookup/UserLookup.plugin.js
+ * @invite shnvz5ryAt
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -46,7 +47,7 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.0',
+         version: '3.0.1',
          description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup.plugin.js'

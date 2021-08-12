@@ -1,8 +1,9 @@
 /**
  * @name UploadFromLinks
  * @description Allows you to upload from links by surrounding the link in brackets.
- * @version 2.0.0
+ * @version 2.0.1
  * @source https://github.com/slow/better-discord-plugins/blob/master/UploadFromLinks/UploadFromLinks.plugin.js
+ * @invite shnvz5ryAt
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/UploadFromLinks/UploadFromLinks.plugin.js
  * @author eternal
  * @authorId 282595588950982656

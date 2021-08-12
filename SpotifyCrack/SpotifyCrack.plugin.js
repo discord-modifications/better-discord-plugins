@@ -1,7 +1,8 @@
 /**
  * @name SpotifyCrack
  * @description Allows you to listen along with discord users without premium.
- * @version 2.0.0
+ * @version 2.0.1
+ * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/SpotifyCrack/SpotifyCrack.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/SpotifyCrack/SpotifyCrack.plugin.js
  * @author eternal

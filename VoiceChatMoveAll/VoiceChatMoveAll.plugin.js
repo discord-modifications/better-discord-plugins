@@ -1,7 +1,8 @@
 /**
  * @name VoiceChatMoveAll
  * @description A context menu utility to move everyone to a certain voice channel.
- * @version 2.0.1
+ * @version 2.0.2
+ * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @author eternal

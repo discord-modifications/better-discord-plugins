@@ -4,6 +4,7 @@
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js
  * @website https://github.com/slow/better-discord-plugins/tree/master/Mock/Mock.plugin.js
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
@@ -44,7 +45,7 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.0',
+         version: '3.0.1',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'

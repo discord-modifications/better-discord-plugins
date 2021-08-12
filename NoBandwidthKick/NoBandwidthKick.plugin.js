@@ -1,7 +1,8 @@
 /**
  * @name NoBandwidthKick
  * @description Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
- * @version 2.0.0
+ * @version 2.0.1
+ * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/NoBandwidthKick/NoBandwidthKick.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/NoBandwidthKick/NoBandwidthKick.plugin.js
  * @author eternal

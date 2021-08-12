@@ -3,6 +3,7 @@
  * @source https://github.com/slow/better-discord-plugins/blob/master/MessageCleaner/MessageCleaner.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js
  * @website https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner/MessageCleaner.plugin.js
+ * @invite shnvz5ryAt
  * @authorId 282595588950982656
  * @donate https://paypal.me/eternal404
  */
@@ -45,7 +46,7 @@ module.exports = (() => {
             }
          ],
          description: 'Clears messages in the current channel.',
-         version: '1.0.5',
+         version: '1.0.6',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },

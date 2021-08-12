@@ -1,7 +1,8 @@
 /**
  * @name SilentTyping
  * @description Silences your typing indicator/status.
- * @version 2.0.0
+ * @version 2.0.1
+ * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/SilentTyping/SilentTyping.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js
  * @author eternal

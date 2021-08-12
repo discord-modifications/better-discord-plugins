@@ -1,7 +1,8 @@
 /**
  * @name NSFWGateBypass
  * @description Bypasses discord's NSFW age gate.
- * @version 2.0.0
+ * @version 2.0.1
+ * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/NSFWGateBypass/NSFWGateBypass.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/NSFWGateBypass/NSFWGateBypass.plugin.js
  * @author eternal
