@@ -4,6 +4,7 @@
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver/DataSaver.plugin.js
  * @website https://github.com/slow/better-discord-plugins/tree/master/DataSaver/DataSaver.plugin.js
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
