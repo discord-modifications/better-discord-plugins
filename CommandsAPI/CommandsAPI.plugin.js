@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.2',
+         version: '1.1.3',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
@@ -160,18 +160,16 @@ module.exports = (() => {
       return class extends Plugin {
          constructor() {
             super();
-
-            this.start = this.load;
-            this.stop = this.unload;
          }
 
          async load() {
             super.load();
+
             // Rename file
             const path = require('path');
             this.changeName(path.join(__dirname, path.basename(__filename)), '2CommandsAPI');
 
-            const settings = this.settings = PluginUtilities.loadSettings('2CommandsAPI', {
+            const settings = this.settings = PluginUtilities.loadSettings('CommandsAPI', {
                prefix: '-',
                replaceClyde: true
             });
@@ -208,13 +206,16 @@ module.exports = (() => {
          };
 
          unload() {
-            super.unload();
             delete window.CommandsAPI;
             for (const cmd of ['echo', 'help', 'say']) {
                delete window.commands[cmd];
             }
             Patcher.unpatchAll();
          };
+
+         getSettingsPanel() {
+            return this.buildSettingsPanel().getElement();
+         }
 
          async patchMessages() {
             const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
