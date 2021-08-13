@@ -71,14 +71,17 @@ module.exports = (() => {
          }
 
          start() {
-            commands.register({
-               command: 'whois',
-               aliases: ['id', 'lookup'],
-               label: 'User ID Info',
-               usage: '{c} <id>',
-               description: 'Lookup user info from a user id',
-               executor: this.getInfo
-            });
+            if (!window.commands) window.commands = {};
+            if (!window.commands['whois']) {
+               window.commands['whois'] = {
+                  command: 'whois',
+                  aliases: ['id', 'lookup'],
+                  label: 'User ID Info',
+                  usage: '{c} <id>',
+                  description: 'Lookup user info from a user id',
+                  executor: this.getInfo
+               };
+            }
          };
 
          async getInfo(id) {
@@ -145,14 +148,13 @@ module.exports = (() => {
          }
 
          stop() {
-            commands.unregister('whois');
+            delete window.commands?.['whois'];
          };
       };
    };
 
-   return !global.ZeresPluginLibrary || !global.commands ? class {
+   return !global.ZeresPluginLibrary || !global.CommandsAPI ? class {
       constructor() {
-         this._XL_PLUGIN = true;
          this.start = this.load = this.handleMissingLib;
       }
 
@@ -177,63 +179,62 @@ module.exports = (() => {
       stop() { }
 
       async handleMissingLib() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            },
+            {
+               global: 'CommandsAPI',
+               filename: '2CommandsAPI.plugin.js',
+               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
+               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
+            }
+         ];
+
          if (global.eternalModal) {
             while (global.eternalModal) {
                await new Promise(f => setTimeout(f, 1000));
             }
 
-            if (global.commands) return BdApi.Plugins.reload(this.getName());
+            if (!dependencies.map(d => !window.hasOwnProperty(d.global)).includes(true)) return;
          };
 
          global.eternalModal = true;
-         let missing = {
-            ZeresPluginLibrary: false,
-            CommandsAPI: false
+
+         if (dependencies.map(d => !window.hasOwnProperty(d.global)).includes(true)) {
+            BdApi.showConfirmationModal(
+               'Dependencies needed',
+               `Dependencies needed for ${this.getName()} is missing. Please click download to install the dependecies.`,
+               {
+                  confirmText: 'Download',
+                  cancelText: 'Cancel',
+                  onCancel: () => delete global.eternalModal,
+                  onConfirm: async () => {
+                     for (const dependency of dependencies) {
+                        if (!window.hasOwnProperty(dependency.global)) {
+                           await new Promise((resolve) => {
+                              request.get(dependency.url, (error, res, body) => {
+                                 if (error) return electron.shell.openExternal(dependency.external);
+                                 fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                              });
+                           });
+                        }
+                     }
+
+                     delete global.eternalModal;
+                  }
+               }
+            );
          };
-         if (!global.ZeresPluginLibrary) missing.ZeresPluginLibrary = true;
-         if (!global.commands) missing.CommandsAPI = true;
-         let missingCount = 0;
-         Object.values(missing).map(m => m ? missingCount++ : '');
-
-         BdApi.showConfirmationModal(missingCount == 1 ? 'Library plugin needed' : 'Library plugins needed',
-            `The library plugin${missingCount > 1 ? 's' : ''} needed for ${config.info.name} is missing. Please click Download to install the dependecies.`, {
-            confirmText: 'Download',
-            cancelText: 'Cancel',
-            onCancel: () => {
-               delete global.eternalModal;
-            },
-            onConfirm: async () => {
-               if (missing.ZeresPluginLibrary) {
-                  await new Promise((fulfill, reject) => {
-                     require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
-                        if (error) {
-                           return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
-                        }
-                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, fulfill);
-                     });
-                  });
-               }
-               if (missing.CommandsAPI) {
-                  await new Promise((fulfill, reject) => {
-                     require('request').get('https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js', async (error, response, body) => {
-                        if (error) {
-                           return electron.shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js');
-                        }
-                        require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '2CommandsAPI.plugin.js'), body, fulfill);
-                     });
-                  });
-               }
-
-               while (!window.commands?.register) {
-                  await new Promise(f => setTimeout(f, 1000));
-                  BdApi.Plugins.reload(this.getName());
-               }
-
-
-               delete global.eternalModal;
-            }
-         });
       }
+
 
       get [Symbol.toStringTag]() {
          return 'Plugin';

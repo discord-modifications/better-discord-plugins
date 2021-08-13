@@ -33,7 +33,40 @@
 @else@*/
 
 module.exports = (() => {
-   const config = { "main": "index.js", "info": { "name": "CommandsAPI", "website": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js", "authors": [{ "name": "eternal", "discord_id": "282595588950982656" }], "version": "1.0.8", "description": "Adds a command system to BetterDiscord for other plugins to utilize.", "github": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js", "github_raw": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js", "donate": "https://paypal.me/eternal404", "updateUrl": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js" }, "defaultConfig": [{ "name": "Prefix", "note": "Command Prefix", "id": "prefix", "type": "textbox", "value": "-" }, { "name": "Eradicate Clyde", "note": "Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.", "id": "replaceClyde", "type": "switch", "value": true }], "changelog": [{ "title": "Fixed", "type": "fixed", "items": ["Autocomplete not working."] }] };
+   const config = {
+      "main": "index.js",
+      "info": {
+         "name": "CommandsAPI",
+         "website": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
+         "authors": [
+            {
+               "name": "eternal",
+               "discord_id": "282595588950982656"
+            }
+         ],
+         "version": "1.0.9",
+         "description": "Adds a command system to BetterDiscord for other plugins to utilize.",
+         "github": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
+         "github_raw": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js",
+         "donate": "https://paypal.me/eternal404",
+         "updateUrl": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js"
+      },
+      "defaultConfig": [
+         {
+            "name": "Prefix",
+            "note": "Command Prefix", "id": "prefix", "type": "textbox", "value": "-"
+         }, {
+            "name": "Eradicate Clyde",
+            "note": "Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.", "id": "replaceClyde", "type": "switch", "value": true
+         }
+      ],
+      "changelog": [
+         {
+            "title": "Fixed",
+            "type": "fixed",
+            "items": ["Autocomplete not working."]
+         }]
+   };
 
    return !global.ZeresPluginLibrary ? class {
       constructor() { this._config = config; }
@@ -41,17 +74,65 @@ module.exports = (() => {
       getAuthor() { return config.info.authors.map(a => a.name).join(", "); }
       getDescription() { return config.info.description; }
       getVersion() { return config.info.version; }
-      load() {
-         BdApi.showConfirmationModal("Library Missing", `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-            confirmText: "Download Now",
-            cancelText: "Cancel",
-            onConfirm: () => {
-               require("request").get("https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js", async (error, response, body) => {
-                  if (error) return require("electron").shell.openExternal("https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js");
-                  await new Promise(r => require("fs").writeFile(require("path").join(BdApi.Plugins.folder, "0PluginLibrary.plugin.js"), body, r));
-               });
+      async load() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            },
+            {
+               global: 'commands',
+               filename: '2CommandsAPI.plugin.js',
+               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
+               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
+            },
+            {
+               global: 'XenoLib',
+               filename: '1XenoLib.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js',
+               url: 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js'
             }
-         });
+         ];
+
+         if (global.eternalModal && dependencies.find(d => d.global == 'commands')) {
+            while (global.eternalModal) {
+               await new Promise(f => setTimeout(f, 1000));
+            }
+
+            return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
+
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} is missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                           });
+                        });
+                     }
+                  }
+
+                  delete global.eternalModal;
+               }
+            }
+         );
       }
       start() { }
       stop() { }
@@ -81,49 +162,29 @@ module.exports = (() => {
                   replaceClyde: true
                });
 
-               window.commands = new class API {
-                  constructor() {
-                     this.commands = {};
-                  }
-
+               window.CommandsAPI = new class API {
                   get prefix() {
                      return settings.prefix;
                   }
 
                   get find() {
-                     const arr = Object.values(this.commands);
+                     const arr = Object.values(window.commands || {});
                      return arr.find.bind(arr);
                   }
 
                   get filter() {
-                     const arr = Object.values(this.commands);
+                     const arr = Object.values(window.commands || {});
                      return arr.filter.bind(arr);
                   }
 
                   get map() {
-                     const arr = Object.values(this.commands);
+                     const arr = Object.values(window.commands || {});
                      return arr.map.bind(arr);
                   }
 
                   get sort() {
-                     const arr = Object.values(this.commands);
+                     const arr = Object.values(window.commands || {});
                      return arr.sort.bind(arr);
-                  }
-
-                  register(command) {
-                     if (typeof command === 'string') return;
-
-                     if (this.commands[command.command]) {
-                        throw new Error(`Command ${command.command} is already registered!`);
-                     }
-
-                     this.commands[command.command] = command;
-                  }
-
-                  unregister(command) {
-                     if (this.commands[command]) {
-                        delete this.commands[command];
-                     }
                   }
                }();
 
@@ -161,13 +222,17 @@ module.exports = (() => {
             stop() { }
 
             unload() {
-               delete window.commands;
+               delete window.CommandsAPI;
+               for (const cmd of ['echo', 'help', 'say']) {
+                  delete window.commands[cmd];
+               }
                Patcher.unpatchAll();
             }
 
             async registerDefaults() {
-               let defaults = [
-                  {
+               window.commands = {
+                  ...(window.commands || {}),
+                  echo: {
                      command: 'echo',
                      description: 'Returns the specified arguments.',
                      usage: '{c} [ ...arguments ]',
@@ -176,7 +241,7 @@ module.exports = (() => {
                         result: args.join(' ')
                      })
                   },
-                  {
+                  help: {
                      command: 'help',
                      aliases: ['h'],
                      description: 'Gives you a list of commands or information on a specific command.',
@@ -188,23 +253,23 @@ module.exports = (() => {
                            const getPropLength = (command) => command.command.length;
 
                            const longestCommandName = getPropLength(
-                              window.commands.sort((a, b) => getPropLength(b) - getPropLength(a))[0]
+                              window.CommandsAPI.sort((a, b) => getPropLength(b) - getPropLength(a))[0]
                            );
 
                            result = {
                               type: 'rich',
                               title: 'List of Commands',
-                              description: window.commands
+                              description: window.CommandsAPI
                                  .map(({ command, description }) =>
                                     `\`${command.padEnd((longestCommandName * 2) - command.length, ' \u200b')} |\` \u200b \u200b*${description}*`
                                  )
                                  .join('\n'),
                               footer: {
-                                 text: `Run ${window.commands.prefix}help <commandName> for more information regarding a specific command.`
+                                 text: `Run ${window.CommandsAPI.prefix}help <commandName> for more information regarding a specific command.`
                               }
                            };
                         } else {
-                           const command = window.commands.find(c => [c.command, ...(c.aliases || [])].includes(commandName));
+                           const command = window.CommandsAPI.find(c => [c.command, ...(c.aliases || [])].includes(commandName));
                            if (!command) {
                               result = `Command \`${commandName}\` not found.`;
                            } else {
@@ -214,7 +279,7 @@ module.exports = (() => {
                                  description: command.description,
                                  fields: [{
                                     name: 'Usage',
-                                    value: `\`${command.usage.replace('{c}', window.commands.prefix + command.command)}\n\``,
+                                    value: `\`${command.usage.replace('{c}', window.CommandsAPI.prefix + command.command)}\n\``,
                                     inline: false
                                  }]
                               };
@@ -232,7 +297,7 @@ module.exports = (() => {
                         }
 
                         return {
-                           commands: window.commands.filter(command =>
+                           commands: window.CommandsAPI.filter(command =>
                               [command.command, ...(command.aliases || [])].some(commandName =>
                                  commandName.includes(args[0])
                               )
@@ -241,7 +306,7 @@ module.exports = (() => {
                         };
                      }
                   },
-                  {
+                  say: {
                      command: 'say',
                      description: 'Sends the specified arguments.',
                      usage: '{c} [ ...arguments ]',
@@ -251,11 +316,7 @@ module.exports = (() => {
                         result: args.join(' ')
                      })
                   }
-               ];
-
-               for (const command of defaults) {
-                  commands.register(command);
-               }
+               };
             }
 
             async patchMessages() {
@@ -267,12 +328,12 @@ module.exports = (() => {
                BOT_AVATARS.CommandsAPI = 'https://cdn.discordapp.com/icons/86004744966914048/babd1af3fa6011a50e418a80f4970ceb.png?size=2048';
 
                messages.sendMessage = (sendMessage => async (id, message, ...params) => {
-                  if (!message.content.startsWith(window.commands.prefix)) {
+                  if (!message.content.startsWith(window.CommandsAPI.prefix)) {
                      return sendMessage(id, message, ...params).catch(() => void 0);
                   }
 
-                  const [cmd, ...args] = message.content.slice(window.commands.prefix.length).split(' ');
-                  const command = window.commands.find(c => [c.command.toLowerCase(), ...(c.aliases?.map(alias => alias.toLowerCase()) || [])].includes(cmd.toLowerCase()));
+                  const [cmd, ...args] = message.content.slice(window.CommandsAPI.prefix.length).split(' ');
+                  const command = window.CommandsAPI.find(c => [c.command.toLowerCase(), ...(c.aliases?.map(alias => alias.toLowerCase()) || [])].includes(cmd.toLowerCase()));
                   if (!command) {
                      return sendMessage(id, message, ...params).catch(() => void 0);
                   }
@@ -372,7 +433,7 @@ module.exports = (() => {
                   renderContent() {
                      const res = super.renderContent();
                      res.props.children[0] = React.createElement(Text, {
-                        children: this.props.prefix ? this.props.prefix : window.commands.prefix,
+                        children: this.props.prefix ? this.props.prefix : window.CommandsAPI.prefix,
                         style: {
                            color: 'var(--text-muted)',
                            marginRight: 2.5
@@ -417,10 +478,10 @@ module.exports = (() => {
                   AutocompletePriority.unshift('BETTERDISCORD_AUTOCOMPLETE');
                }
                AutocompleteTypes.BETTERDISCORD_AUTOCOMPLETE = {
-                  get sentintel() { return window.commands.prefix; },
-                  matches: (_channel, _guild, value, start) => start && value.includes(' ') && window.commands.find(c => (getMatchingCommand(c)).includes(value.split(' ')[0])),
+                  get sentintel() { return window.CommandsAPI.prefix; },
+                  matches: (_channel, _guild, value, start) => start && value.includes(' ') && window.CommandsAPI.find(c => (getMatchingCommand(c)).includes(value.split(' ')[0])),
                   queryResults: (_channel, _guild, value) => {
-                     const currentCommand = window.commands.find(c => (getMatchingCommand(c)).includes(value.split(' ')[0]));
+                     const currentCommand = window.CommandsAPI.find(c => (getMatchingCommand(c)).includes(value.split(' ')[0]));
                      if (currentCommand.autocomplete) {
                         const autocompleteRows = currentCommand.autocomplete(value.split(' ').slice(1));
                         if (autocompleteRows) {
@@ -451,27 +512,27 @@ module.exports = (() => {
                   onSelect: (result, selected, isEnter, props) => {
                      if (result.commands[selected].instruction) {
                         if (isEnter) {
-                           const msg = `${window.commands.prefix}${result.value}`;
+                           const msg = `${window.CommandsAPI.prefix}${result.value}`;
                            messages.sendMessage('0', { content: msg });
                            this.instance.clearValue();
                         } else if (!result.value.endsWith(' ')) {
-                           props.insertText(`${window.commands.prefix}${result.value}`);
+                           props.insertText(`${window.CommandsAPI.prefix}${result.value}`);
                         }
 
                         return {};
                      }
                      const value = result.value.split(' ').slice(0, -1).join(' ');
-                     props.insertText(`${window.commands.prefix}${value} ${result.commands[selected].command}`);
+                     props.insertText(`${window.CommandsAPI.prefix}${value} ${result.commands[selected].command}`);
                      return {};
                   }
                };
 
                AutocompleteTypes.BETTERDISCORD = {
-                  get sentinel() { return window.commands.prefix; },
-                  matches: (_channel, _guild, value, start) => start && window.commands.filter(c => (getMatchingCommand(c)).some(commandName => commandName.includes(value))).length,
+                  get sentinel() { return window.CommandsAPI.prefix; },
+                  matches: (_channel, _guild, value, start) => start && window.CommandsAPI.filter(c => (getMatchingCommand(c)).some(commandName => commandName.includes(value))).length,
                   queryResults: (_channel, _guild, value) => ({
                      results: {
-                        commands: window.commands.filter(c => (getMatchingCommand(c)).some(commandName => commandName.includes(value)))
+                        commands: window.CommandsAPI.filter(c => (getMatchingCommand(c)).some(commandName => commandName.includes(value)))
                      }
                   }),
                   renderResults: (result, selected, _channel, _guild, value, _props, onHover, onClick) => {
@@ -482,11 +543,11 @@ module.exports = (() => {
                               name: c.command,
                               ...c
                            }
-                        }), (value) => `${window.commands.prefix}${value}`);
+                        }), (value) => `${window.CommandsAPI.prefix}${value}`);
                      }
                   },
                   onSelect: (result, selected, _, props) => {
-                     props.insertText(`${window.commands.prefix}${result.commands[selected].command}`);
+                     props.insertText(`${window.CommandsAPI.prefix}${result.commands[selected].command}`);
                      return {};
                   }
                };
@@ -500,8 +561,8 @@ module.exports = (() => {
                typing.startTyping = (startTyping => (channel) => setImmediate(() => {
                   if (this.instance && this.instance.props) {
                      const { textValue } = this.instance.props;
-                     const currentCommand = window.commands.find(c => (getMatchingCommand(c)).includes(textValue.slice(window.commands.prefix.length).split(' ')[0]));
-                     if (textValue.startsWith(window.commands.prefix) && (!currentCommand || (currentCommand && !currentCommand.showTyping))) {
+                     const currentCommand = window.CommandsAPI.find(c => (getMatchingCommand(c)).includes(textValue.slice(window.CommandsAPI.prefix.length).split(' ')[0]));
+                     if (textValue.startsWith(window.CommandsAPI.prefix) && (!currentCommand || (currentCommand && !currentCommand.showTyping))) {
                         return typing.stopTyping(channel);
                      }
                      startTyping(channel);
@@ -511,7 +572,7 @@ module.exports = (() => {
                const PlainTextArea = WebpackModules.getByDisplayName('PlainTextArea');
                Patcher.after(PlainTextArea.prototype, 'getCurrentWord', function (ctx, args, res) {
                   const { value } = ctx.props;
-                  if (new RegExp(`^\\${window.commands.prefix}\\S+ `).test(value)) {
+                  if (new RegExp(`^\\${window.CommandsAPI.prefix}\\S+ `).test(value)) {
                      if ((/^@|#|:/).test(res.word)) {
                         return res;
                      }
@@ -528,7 +589,7 @@ module.exports = (() => {
                Patcher.after(SlateChannelTextArea.prototype, 'getCurrentWord', function (ctx, args, res) {
                   const { value } = ctx.editorRef;
                   const { selection, document } = value;
-                  if (new RegExp(`^\\${window.commands.prefix}\\S+ `).test(document.text)) {
+                  if (new RegExp(`^\\${window.CommandsAPI.prefix}\\S+ `).test(document.text)) {
                      if ((/^@|#|:/).test(res.word)) {
                         return res;
                      }
