@@ -47,21 +47,12 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.3',
+         version: '3.0.4',
          description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup.plugin.js'
       },
-      changelog: [
-         {
-            title: 'Fixed',
-            type: 'fixed',
-            items: [
-               'CommandsAPI boot priority.',
-               'Multiple modals popping up when libraries are missing'
-            ]
-         }
-      ],
+      changelog: [],
    };
 
    const buildPlugin = ([Plugin, API]) => {
@@ -198,41 +189,41 @@ module.exports = (() => {
             }
          ];
 
-         if (global.eternalModal) {
-            while (global.eternalModal) {
-               await new Promise(f => setTimeout(f, 1000));
-            }
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
 
-            if (!dependencies.map(d => !window.hasOwnProperty(d.global)).includes(true)) return;
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
          };
 
          global.eternalModal = true;
 
-         if (dependencies.map(d => !window.hasOwnProperty(d.global)).includes(true)) {
-            BdApi.showConfirmationModal(
-               'Dependencies needed',
-               `Dependencies needed for ${this.getName()} is missing. Please click download to install the dependecies.`,
-               {
-                  confirmText: 'Download',
-                  cancelText: 'Cancel',
-                  onCancel: () => delete global.eternalModal,
-                  onConfirm: async () => {
-                     for (const dependency of dependencies) {
-                        if (!window.hasOwnProperty(dependency.global)) {
-                           await new Promise((resolve) => {
-                              request.get(dependency.url, (error, res, body) => {
-                                 if (error) return electron.shell.openExternal(dependency.external);
-                                 fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
-                              });
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
                            });
-                        }
+                        });
                      }
-
-                     delete global.eternalModal;
                   }
+
+                  delete global.eternalModal;
+
+                  while (dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 10));
+                  BdApi.Plugins.reload(this.getName());
                }
-            );
-         };
+            }
+         );
       }
 
 

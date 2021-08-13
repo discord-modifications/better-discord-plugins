@@ -44,7 +44,7 @@ module.exports = (() => {
                "discord_id": "282595588950982656"
             }
          ],
-         "version": "1.0.9",
+         "version": "1.1.0",
          "description": "Adds a command system to BetterDiscord for other plugins to utilize.",
          "github": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
          "github_raw": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js",
@@ -60,12 +60,7 @@ module.exports = (() => {
             "note": "Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.", "id": "replaceClyde", "type": "switch", "value": true
          }
       ],
-      "changelog": [
-         {
-            "title": "Fixed",
-            "type": "fixed",
-            "items": ["Autocomplete not working."]
-         }]
+      "changelog": []
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -85,34 +80,21 @@ module.exports = (() => {
                filename: '0PluginLibrary.plugin.js',
                external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
                url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
-            },
-            {
-               global: 'commands',
-               filename: '2CommandsAPI.plugin.js',
-               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
-               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
-            },
-            {
-               global: 'XenoLib',
-               filename: '1XenoLib.plugin.js',
-               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js',
-               url: 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js'
             }
          ];
 
-         if (global.eternalModal && dependencies.find(d => d.global == 'commands')) {
-            while (global.eternalModal) {
-               await new Promise(f => setTimeout(f, 1000));
-            }
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
 
-            return BdApi.Plugins.reload(this.getName());
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
          };
 
          global.eternalModal = true;
 
          BdApi.showConfirmationModal(
             'Dependencies needed',
-            `Dependencies needed for ${this.getName()} is missing. Please click download to install the dependecies.`,
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
             {
                confirmText: 'Download',
                cancelText: 'Cancel',
@@ -130,6 +112,9 @@ module.exports = (() => {
                   }
 
                   delete global.eternalModal;
+
+                  while (dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 10));
+                  BdApi.Plugins.reload(this.getName());
                }
             }
          );
