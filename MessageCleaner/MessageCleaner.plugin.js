@@ -46,11 +46,21 @@ module.exports = (() => {
             }
          ],
          description: 'Clears messages in the current channel.',
-         version: '1.0.9',
+         version: '1.1.0',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
-      changelog: [],
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Commands should persist through reloads of CommandsAPI.',
+               'This means when you turn the plugin off then on the commands from other plugins will still be registered.'
+            ]
+         }
+      ],
       defaultConfig: [
          {
             name: 'Deletion Mode',
@@ -458,9 +468,6 @@ module.exports = (() => {
                   }
 
                   delete global.eternalModal;
-
-                  while (dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 10));
-                  BdApi.Plugins.reload(this.getName());
                }
             }
          );

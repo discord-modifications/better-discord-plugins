@@ -47,12 +47,22 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.4',
+         version: '3.0.5',
          description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup.plugin.js'
       },
-      changelog: [],
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Commands should persist through reloads of CommandsAPI.',
+               'This means when you turn the plugin off then on the commands from other plugins will still be registered.'
+            ]
+         }
+      ],
    };
 
    const buildPlugin = ([Plugin, API]) => {
@@ -218,9 +228,6 @@ module.exports = (() => {
                   }
 
                   delete global.eternalModal;
-
-                  while (dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 10));
-                  BdApi.Plugins.reload(this.getName());
                }
             }
          );

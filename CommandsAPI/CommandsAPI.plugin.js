@@ -34,33 +34,49 @@
 
 module.exports = (() => {
    const config = {
-      "main": "index.js",
-      "info": {
-         "name": "CommandsAPI",
-         "website": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
-         "authors": [
+      info: {
+         name: "CommandsAPI",
+         website: "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
+         authors: [
             {
-               "name": "eternal",
-               "discord_id": "282595588950982656"
+               name: "eternal",
+               discord_id: "282595588950982656"
             }
          ],
-         "version": "1.1.0",
-         "description": "Adds a command system to BetterDiscord for other plugins to utilize.",
-         "github": "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
-         "github_raw": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js",
-         "donate": "https://paypal.me/eternal404",
-         "updateUrl": "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js"
+         version: "1.1.1",
+         description: "Adds a command system to BetterDiscord for other plugins to utilize.",
+         github: "https://github.com/slow/better-discord-plugins/tree/master/CommandsAPI/CommandsAPI.plugin.js",
+         github_raw: "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js",
+         donate: "https://paypal.me/eternal404",
+         updateUrl: "https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js"
       },
-      "defaultConfig": [
+      defaultConfig: [
          {
-            "name": "Prefix",
-            "note": "Command Prefix", "id": "prefix", "type": "textbox", "value": "-"
-         }, {
-            "name": "Eradicate Clyde",
-            "note": "Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.", "id": "replaceClyde", "type": "switch", "value": true
+            name: "Prefix",
+            note: "Command Prefix",
+            id: "prefix",
+            type: "textbox",
+            value: "-"
+         },
+         {
+            name: "Eradicate Clyde",
+            note: "Replaces Clyde in commands with a mixed range of avatars and usernames selected by plug-in developers - fallbacks to 'Commands' by default.",
+            id: "replaceClyde",
+            type: "switch",
+            value: true
          }
       ],
-      "changelog": []
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Commands should persist through reloads of CommandsAPI.',
+               'This means when you turn the plugin off then on the commands from other plugins will still be registered.'
+            ]
+         }
+      ],
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -112,9 +128,6 @@ module.exports = (() => {
                   }
 
                   delete global.eternalModal;
-
-                  while (dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 10));
-                  BdApi.Plugins.reload(this.getName());
                }
             }
          );
