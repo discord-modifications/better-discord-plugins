@@ -47,21 +47,21 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.2',
-         changelog: [
-            {
-               title: 'Fixed',
-               type: 'fixed',
-               items: [
-                  'CommandsAPI boot priority.',
-                  'Multiple modals popping up when libraries are missing'
-               ]
-            }
-         ],
+         version: '3.0.3',
          description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Multiple modals popping up when libraries are missing'
+            ]
+         }
+      ],
    };
 
    const buildPlugin = ([Plugin, API]) => {

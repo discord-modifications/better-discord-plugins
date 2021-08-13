@@ -45,21 +45,21 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.2',
-         changelog: [
-            {
-               title: 'Fixed',
-               type: 'fixed',
-               items: [
-                  'CommandsAPI boot priority.',
-                  'Multiple modals popping up when libraries are missing'
-               ]
-            }
-         ],
+         version: '3.0.3',
          description: 'Adds the command "read" that reads channels, DMs and removes pings.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MarkAllRead/MarkAllRead.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Multiple modals popping up when libraries are missing'
+            ]
+         }
+      ],
    };
 
    const buildPlugin = ([Plugin, API]) => {

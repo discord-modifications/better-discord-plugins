@@ -46,20 +46,20 @@ module.exports = (() => {
             }
          ],
          description: 'Clears messages in the current channel.',
-         version: '1.0.7',
-         changelog: [
-            {
-               title: 'Fixed',
-               type: 'fixed',
-               items: [
-                  'CommandsAPI boot priority.',
-                  'Multiple modals popping up when libraries are missing'
-               ]
-            }
-         ],
+         version: '1.0.8',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Multiple modals popping up when libraries are missing'
+            ]
+         }
+      ],
       defaultConfig: [
          {
             name: 'Deletion Mode',

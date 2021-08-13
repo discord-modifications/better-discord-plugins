@@ -45,21 +45,21 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.3',
-         changelog: [
-            {
-               title: 'Fixed',
-               type: 'fixed',
-               items: [
-                  'CommandsAPI boot priority.',
-                  'Multiple modals popping up when libraries are missing'
-               ]
-            }
-         ],
+         version: '3.0.4',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'CommandsAPI boot priority.',
+               'Multiple modals popping up when libraries are missing'
+            ]
+         }
+      ],
    };
 
    const buildPlugin = ([Plugin, API]) => {
