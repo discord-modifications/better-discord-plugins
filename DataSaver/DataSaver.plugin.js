@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.4',
+         version: '1.0.5',
          description: 'Saves friends & Servers every 30 minutes to a file.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver/DataSaver.plugin.js'
@@ -56,19 +56,19 @@ module.exports = (() => {
       }
 
       getName() {
-         return this.name.replace(/\s+/g, '');
+         return config.info.name.replace(/\s+/g, '');
       }
 
       getAuthor() {
-         return this.author;
+         return config.info.authors.map(a => a.name).join(', ');
       }
 
       getVersion() {
-         return this.version;
+         return config.info.version;
       }
 
       getDescription() {
-         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+         return config.info.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
       }
 
       start() { }

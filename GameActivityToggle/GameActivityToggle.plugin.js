@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.5',
+         version: '1.0.6',
          description: 'Adds an entry in the status picker to toggle game activity.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js'
@@ -56,19 +56,19 @@ module.exports = (() => {
       }
 
       getName() {
-         return this.name.replace(/\s+/g, '');
+         return config.info.name.replace(/\s+/g, '');
       }
 
       getAuthor() {
-         return this.author;
+         return config.info.authors.map(a => a.name).join(', ');
       }
 
       getVersion() {
-         return this.version;
+         return config.info.version;
       }
 
       getDescription() {
-         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+         return config.info.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
       }
 
       start() { }

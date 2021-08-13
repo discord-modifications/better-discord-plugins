@@ -56,19 +56,19 @@ module.exports = (() => {
       }
 
       getName() {
-         return this.name.replace(/\s+/g, '');
+         return config.info.name.replace(/\s+/g, '');
       }
 
       getAuthor() {
-         return this.author;
+         return config.info.authors.map(a => a.name).join(', ');
       }
 
       getVersion() {
-         return this.version;
+         return config.info.version;
       }
 
       getDescription() {
-         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+         return config.info.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
       }
 
       start() { }

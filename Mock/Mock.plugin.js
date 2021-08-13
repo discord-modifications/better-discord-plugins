@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '3.0.6',
+         version: '3.0.7',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'
@@ -56,19 +56,19 @@ module.exports = (() => {
       }
 
       getName() {
-         return this.name.replace(/\s+/g, '');
+         return config.info.name.replace(/\s+/g, '');
       }
 
       getAuthor() {
-         return this.author;
+         return config.info.authors.map(a => a.name).join(', ');
       }
 
       getVersion() {
-         return this.version;
+         return config.info.version;
       }
 
       getDescription() {
-         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+         return config.info.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
       }
 
       start() { }
