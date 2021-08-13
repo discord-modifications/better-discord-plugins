@@ -1,12 +1,10 @@
 /**
  * @name VoiceChatMoveAll
- * @description A context menu utility to move everyone to a certain voice channel.
- * @version 2.0.2
- * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
- * @author eternal
+ * @website https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
@@ -34,84 +32,184 @@
 
 @else@*/
 
-const { findModuleByProps, findModule, Patcher, React } = BdApi;
-const sleep = (time) => new Promise((f) => setTimeout(f, time));
+module.exports = (() => {
+   const config = {
+      info: {
+         name: 'VoiceChatMoveAll',
+         authors: [
+            {
+               name: 'eternal',
+               discord_id: '282595588950982656',
+               github_username: 'slow'
+            }
+         ],
+         version: '2.0.2',
+         description: 'A context menu utility to move everyone to a certain voice channel.',
+         github: 'https://github.com/slow',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
+      },
+   };
 
-const VCContextMenu = findModule(m => m.default && m.default.displayName == 'ChannelListVoiceChannelContextMenu');
-const { getVoiceStatesForChannel } = findModuleByProps('getVoiceStatesForChannel');
-const DiscordPermissions = findModuleByProps('Permissions').Permissions;
-const { getVoiceChannelId } = findModuleByProps('getVoiceChannelId');
-const { patch } = findModule(m => typeof m == 'object' && m.patch);
-const Menu = findModuleByProps('MenuGroup', 'MenuItem');
-const Permissions = findModuleByProps('getHighestRole');
-const { getChannel } = findModuleByProps('getChannel');
-const { Endpoints } = findModuleByProps('Endpoints');
-const { getGuild } = findModuleByProps('getGuild');
+   return !global.ZeresPluginLibrary ? class {
+      constructor() {
+         this.start = this.load = this.handleMissingLib;
+      }
 
-class VoiceChatMoveAll {
-   start() {
-      Patcher.after('voice-chat-move-all', VCContextMenu, 'default', (_, args, res) => {
-         let channel = args[0].channel;
-         if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
-         let currentChannel = this.getVoiceChannel();
-         if (!currentChannel || currentChannel.members.length < 2) return res;
+      getName() {
+         return this.name.replace(/\s+/g, '');
+      }
 
-         let item = React.createElement(Menu.MenuItem, {
-            action: async () => {
-               for (const member of currentChannel.members) {
-                  await patch({
-                     url: Endpoints.GUILD_MEMBER(channel.guild_id, member),
-                     body: {
-                        channel_id: channel.id
+      getAuthor() {
+         return this.author;
+      }
+
+      getVersion() {
+         return this.version;
+      }
+
+      getDescription() {
+         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+      }
+
+      start() { }
+
+      stop() { }
+
+      async handleMissingLib() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            }
+         ];
+
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
+
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
+
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                           });
+                        });
                      }
-                  }).catch(async (e) => {
-                     await sleep(e.body.retry_after * 1000);
-                     currentChannel.members.unshift(member);
-                  });
+                  }
+
+                  delete global.eternalModal;
                }
-            },
-            id: 'move-all-vc',
-            label: 'Move All'
-         });
+            }
+         );
+      }
+   } : (([Plugin, API]) => {
+      const { WebpackModules, Patcher } = API;
 
-         let element = React.createElement(Menu.MenuGroup, null, item);
-         res.props.children.push(element);
-         return res;
-      });
-   }
+      const sleep = (time) => new Promise((f) => setTimeout(f, time));
 
-   stop() {
-      Patcher.unpatchAll('voice-chat-move-all');
-   }
+      const VCContextMenu = WebpackModules.find(m => m.default && m.default.displayName == 'ChannelListVoiceChannelContextMenu');
+      const { getVoiceStatesForChannel } = WebpackModules.getByProps('getVoiceStatesForChannel');
+      const DiscordPermissions = WebpackModules.getByProps('Permissions').Permissions;
+      const { getVoiceChannelId } = WebpackModules.getByProps('getVoiceChannelId');
+      const { patch } = WebpackModules.find(m => typeof m == 'object' && m.patch);
+      const Menu = WebpackModules.getByProps('MenuGroup', 'MenuItem');
+      const Permissions = WebpackModules.getByProps('getHighestRole');
+      const { getChannel } = WebpackModules.getByProps('getChannel');
+      const { Endpoints } = WebpackModules.getByProps('Endpoints');
+      const { getGuild } = WebpackModules.getByProps('getGuild');
 
-   getVoiceUserIds(channel) {
-      if (!channel) return null;
-      return Object.keys(getVoiceStatesForChannel(channel));
-   }
+      return class extends Plugin {
+         constructor() {
+            super();
+         }
 
-   canMoveAll(channel) {
-      let instance = this.getVoiceChannel();
+         start() {
+            Patcher.after(VCContextMenu, 'default', (_, args, res) => {
+               let channel = args[0].channel;
+               if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
+               let currentChannel = this.getVoiceChannel();
+               if (!currentChannel || currentChannel.members.length < 2) return res;
 
-      if (
-         instance?.channel.id !== channel.id &&
-         instance?.channel.guild_id === channel.guild_id &&
-         (
-            Permissions.can(DiscordPermissions.ADMINISTRATOR, getGuild(channel.guild_id)) ||
-            (this.canJoinAndMove(channel) && (channel.userLimit == 0 || channel.userLimit - instance.count >= 0))
-         )
-      ) return true;
+               let item = React.createElement(Menu.MenuItem, {
+                  action: async () => {
+                     for (const member of currentChannel.members) {
+                        await patch({
+                           url: Endpoints.GUILD_MEMBER(channel.guild_id, member),
+                           body: {
+                              channel_id: channel.id
+                           }
+                        }).catch(async (e) => {
+                           await sleep(e.body.retry_after * 1000);
+                           currentChannel.members.unshift(member);
+                        });
+                     }
+                  },
+                  id: 'move-all-vc',
+                  label: 'Move All'
+               });
 
-      return false;
-   }
+               let element = React.createElement(Menu.MenuGroup, null, item);
+               res.props.children.push(element);
+               return res;
+            });
+         }
 
-   canJoinAndMove(channel) {
-      return Permissions.can(DiscordPermissions.CONNECT, channel) && Permissions.can(DiscordPermissions.MOVE_MEMBERS, channel);
-   }
+         stop() {
+            Patcher.unpatchAll();
+         }
 
-   getVoiceChannel() {
-      let channel = getChannel(getVoiceChannelId());
-      let members = this.getVoiceUserIds(channel?.id);
-      if (channel && members) return { channel, members, count: members.length };
-      return null;
-   }
-};
+         getVoiceUserIds(channel) {
+            if (!channel) return null;
+            return Object.keys(getVoiceStatesForChannel(channel));
+         }
+
+         canMoveAll(channel) {
+            let instance = this.getVoiceChannel();
+
+            if (
+               instance?.channel.id !== channel.id &&
+               instance?.channel.guild_id === channel.guild_id &&
+               (
+                  Permissions.can(DiscordPermissions.ADMINISTRATOR, getGuild(channel.guild_id)) ||
+                  (this.canJoinAndMove(channel) && (channel.userLimit == 0 || channel.userLimit - instance.count >= 0))
+               )
+            ) return true;
+
+            return false;
+         }
+
+         canJoinAndMove(channel) {
+            return Permissions.can(DiscordPermissions.CONNECT, channel) && Permissions.can(DiscordPermissions.MOVE_MEMBERS, channel);
+         }
+
+         getVoiceChannel() {
+            let channel = getChannel(getVoiceChannelId());
+            let members = this.getVoiceUserIds(channel?.id);
+            if (channel && members) return { channel, members, count: members.length };
+            return null;
+         }
+      };
+   })(ZLibrary.buildPlugin(config));
+})();
+
+/*@end@*/

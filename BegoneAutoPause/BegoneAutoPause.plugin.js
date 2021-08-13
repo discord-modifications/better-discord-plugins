@@ -1,12 +1,10 @@
 /**
  * @name BegoneAutoPause
- * @description Stops Discord from automatically pausing your music after 30 seconds.
- * @version 2.0.1
- * @invite shnvz5ryAt
  * @source https://github.com/slow/better-discord-plugins/blob/master/BegoneAutoPause/BegoneAutoPause.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js
- * @author eternal
+ * @website https://github.com/slow/better-discord-plugins/tree/master/BegoneAutoPause/BegoneAutoPause.plugin.js
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
@@ -34,17 +32,116 @@
 
 @else@*/
 
-const { findModuleByProps, Patcher } = BdApi;
-const Modules = findModuleByProps('initialize', 'wasAutoPaused');
-const Spotify = findModuleByProps('fetchIsSpotifyProtocolRegistered');
+module.exports = (() => {
+   const config = {
+      info: {
+         name: 'BegoneAutoPause',
+         authors: [
+            {
+               name: 'eternal',
+               discord_id: '282595588950982656',
+               github_username: 'slow'
+            }
+         ],
+         version: '2.0.2',
+         description: 'Stops Discord from automatically pausing your music after 30 seconds.',
+         github: 'https://github.com/slow',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js'
+      },
+   };
 
-class BegoneAutoPause {
-   start() {
-      Patcher.instead('begone-auto-pause', Modules.__proto__, 'wasAutoPaused', () => false);
-      Patcher.instead('begone-auto-pause', Spotify, 'pause', () => { });
-   }
+   return !global.ZeresPluginLibrary ? class {
+      constructor() {
+         this.start = this.load = this.handleMissingLib;
+      }
 
-   stop() {
-      Patcher.unpatchAll('begone-auto-pause');
-   }
-};
+      getName() {
+         return this.name.replace(/\s+/g, '');
+      }
+
+      getAuthor() {
+         return this.author;
+      }
+
+      getVersion() {
+         return this.version;
+      }
+
+      getDescription() {
+         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+      }
+
+      start() { }
+
+      stop() { }
+
+      async handleMissingLib() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            }
+         ];
+
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
+
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
+
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                           });
+                        });
+                     }
+                  }
+
+                  delete global.eternalModal;
+               }
+            }
+         );
+      }
+   } : (([Plugin, API]) => {
+      const { WebpackModules, Patcher } = API;
+      const Modules = WebpackModules.getByProps('initialize', 'wasAutoPaused');
+      const Spotify = WebpackModules.getByProps('fetchIsSpotifyProtocolRegistered');
+
+      return class extends Plugin {
+         constructor() {
+            super();
+         }
+
+         start() {
+            Patcher.instead(Modules.__proto__, 'wasAutoPaused', () => false);
+            Patcher.instead(Spotify, 'pause', () => { });
+         };
+
+         stop() {
+            Patcher.unpatchAll();
+         };
+      };
+   })(ZLibrary.buildPlugin(config));
+})();
+
+/*@end@*/

@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.3',
+         version: '1.1.4',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
@@ -63,16 +63,7 @@ module.exports = (() => {
             type: 'switch',
             value: true
          }
-      ],
-      changelog: [
-         {
-            title: 'Fixed',
-            type: 'fixed',
-            items: [
-               'Updating.'
-            ]
-         }
-      ],
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -249,6 +240,8 @@ module.exports = (() => {
                   };
                   console.error('An error occurred while executing command %s: %o', command.command, e);
                }
+
+               if (!result) return;
 
                if (result.send) {
                   message.content = result.result;

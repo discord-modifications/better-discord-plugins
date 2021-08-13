@@ -1,12 +1,10 @@
 /**
  * @name UploadFromLinks
- * @description Allows you to upload from links by surrounding the link in brackets.
- * @version 2.0.1
  * @source https://github.com/slow/better-discord-plugins/blob/master/UploadFromLinks/UploadFromLinks.plugin.js
- * @invite shnvz5ryAt
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/UploadFromLinks/UploadFromLinks.plugin.js
- * @author eternal
+ * @website https://github.com/slow/better-discord-plugins/tree/master/UploadFromLinks/UploadFromLinks.plugin.js
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
@@ -34,71 +32,170 @@
 
 @else@*/
 
-const { findModuleByProps, Patcher } = BdApi;
-const { get } = require('request');
+module.exports = (() => {
+   const config = {
+      info: {
+         name: 'UploadFromLinks',
+         authors: [
+            {
+               name: 'eternal',
+               discord_id: '282595588950982656',
+               github_username: 'slow'
+            }
+         ],
+         version: '2.0.2',
+         description: 'Allows you to upload from links by surrounding the link in brackets.',
+         github: 'https://github.com/slow',
+         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UploadFromLinks/UploadFromLinks.plugin.js'
+      },
+   };
 
-const messages = findModuleByProps('sendMessage', 'editMessage', 'deleteMessage');
-const { upload } = findModuleByProps('cancel', 'upload');
-
-class UploadFromLinks {
-   start() {
-      Patcher.before('upload-from-links', messages, 'sendMessage', (_, args) => {
-         if (this.processMessage(args[0], args[1])) return false;
-         return args;
-      });
-   }
-
-   stop() {
-      Patcher.unpatchAll('upload-from-links');
-   }
-
-   processMessage(cid, msg) {
-      if (!msg.content) return;
-      const files = [];
-      const search = msg.content.split('[').join('][').split(']');
-
-      for (let i = 0; i < search.length; i++) {
-         const arr = search[i].replace('[', '').split(',');
-         let name = arr[1] || arr[0].split('/').pop().split('?')[0];
-
-         if (search[i].startsWith('[http')) {
-            files.push({ url: arr[0], name });
-            msg.content = msg.content.replace(search[i] + ']', '');
-         } else if ((process.platform == 'win32' && search[i].match(/^[A-Z]:(\/|\\)/)) ||
-            (process.platform != 'win32' && search[i].startsWith('[/'))) {
-            if (name.includes('\\')) name = name.split('\\').pop();
-            files.push({ path: arr[0], name });
-            msg.content = msg.content.replace(search[i] + ']', '');
-         }
+   return !global.ZeresPluginLibrary ? class {
+      constructor() {
+         this.start = this.load = this.handleMissingLib;
       }
 
-      if (files.length) this.uploadFiles(cid, msg, files);
+      getName() {
+         return this.name.replace(/\s+/g, '');
+      }
 
-      return files.length;
-   }
+      getAuthor() {
+         return this.author;
+      }
 
+      getVersion() {
+         return this.version;
+      }
 
-   async uploadFiles(cid, msg, files) {
-      for (let i = 0; i < files.length; i++) {
-         let file;
+      getDescription() {
+         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+      }
 
-         if (files[i].url) {
-            file = new File([await this.getFile(encodeURI(files[i].url))], files[i].name);
-         } else {
-            file = new File([readFileSync(files[i].path)], files[i].name);
+      start() { }
+
+      stop() { }
+
+      async handleMissingLib() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            }
+         ];
+
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
+
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
          };
 
-         upload(cid, file, msg);
-         msg.content = '';
-      }
-   }
+         global.eternalModal = true;
 
-   async getFile(url) {
-      return new Promise(async (resolve, reject) => {
-         get(url, { encoding: null }, (err, res, body) => {
-            if (err) reject(err);
-            resolve(body);
-         });
-      });
-   }
-};
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                           });
+                        });
+                     }
+                  }
+
+                  delete global.eternalModal;
+               }
+            }
+         );
+      }
+   } : (([Plugin, API]) => {
+      const { WebpackModules, Patcher } = API;
+      const { get } = require('request');
+
+      const messages = WebpackModules.getByProps('sendMessage', 'editMessage', 'deleteMessage');
+      const { upload } = WebpackModules.getByProps('cancel', 'upload');
+
+      return class extends Plugin {
+         constructor() {
+            super();
+         }
+
+         start() {
+            Patcher.before(messages, 'sendMessage', (_, args) => {
+               if (this.processMessage(args[0], args[1])) return false;
+               return args;
+            });
+         };
+
+         stop() {
+            Patcher.unpatchAll();
+         };
+
+         processMessage(cid, msg) {
+            if (!msg.content) return;
+            const files = [];
+            const search = msg.content.split('[').join('][').split(']');
+
+            for (let i = 0; i < search.length; i++) {
+               const arr = search[i].replace('[', '').split(',');
+               let name = arr[1] || arr[0].split('/').pop().split('?')[0];
+
+               if (search[i].startsWith('[http')) {
+                  files.push({ url: arr[0], name });
+                  msg.content = msg.content.replace(search[i] + ']', '');
+               } else if ((process.platform == 'win32' && search[i].match(/^[A-Z]:(\/|\\)/)) ||
+                  (process.platform != 'win32' && search[i].startsWith('[/'))) {
+                  if (name.includes('\\')) name = name.split('\\').pop();
+                  files.push({ path: arr[0], name });
+                  msg.content = msg.content.replace(search[i] + ']', '');
+               }
+            }
+
+            if (files.length) this.uploadFiles(cid, msg, files);
+
+            return files.length;
+         }
+
+
+         async uploadFiles(cid, msg, files) {
+            for (let i = 0; i < files.length; i++) {
+               let file;
+
+               if (files[i].url) {
+                  file = new File([await this.getFile(encodeURI(files[i].url))], files[i].name);
+               } else {
+                  file = new File([readFileSync(files[i].path)], files[i].name);
+               };
+
+               upload(cid, file, msg);
+               msg.content = '';
+            }
+         }
+
+         async getFile(url) {
+            return new Promise(async (resolve, reject) => {
+               get(url, { encoding: null }, (err, res, body) => {
+                  if (err) reject(err);
+                  resolve(body);
+               });
+            });
+         }
+      };
+   })(ZLibrary.buildPlugin(config));
+})();
+
+/*@end@*/

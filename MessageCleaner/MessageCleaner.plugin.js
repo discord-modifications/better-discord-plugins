@@ -3,64 +3,51 @@
  * @source https://github.com/slow/better-discord-plugins/blob/master/MessageCleaner/MessageCleaner.plugin.js
  * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js
  * @website https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner/MessageCleaner.plugin.js
- * @invite shnvz5ryAt
  * @authorId 282595588950982656
+ * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
  */
 
 /*@cc_on
 @if (@_jscript)
-	
-  // Offer to self-install for clueless users that try to run this directly.
-  var shell = WScript.CreateObject("WScript.Shell");
-  var fs = new ActiveXObject("Scripting.FileSystemObject");
-  var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%\BetterDiscord\plugins");
-  var pathSelf = WScript.ScriptFullName;
-  // Put the user at ease by addressing them in the first person
-  shell.Popup("It looks like you've mistakenly tried to run me directly. \n(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30);
-  if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
-     shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40);
-  } else if (!fs.FolderExists(pathPlugins)) {
-     shell.Popup("I can't find the BetterDiscord plugins folder.\nAre you sure it's even installed?", 0, "Can't install myself", 0x10);
-  } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
-     fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true);
-     // Show the user where to put plugins in the future
-     shell.Exec("explorer " + pathPlugins);
-     shell.Popup("I'm installed!", 0, "Successfully installed", 0x40);
-  }
-  WScript.Quit();
+
+    // Offer to self-install for clueless users that try to run this directly.
+    var shell = WScript.CreateObject("WScript.Shell");
+    var fs = new ActiveXObject("Scripting.FileSystemObject");
+    var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%\\BetterDiscord\\plugins");
+    var pathSelf = WScript.ScriptFullName;
+    // Put the user at ease by addressing them in the first person
+    shell.Popup("It looks like you've mistakenly tried to run me directly. \n(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30);
+    if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
+        shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40);
+    } else if (!fs.FolderExists(pathPlugins)) {
+        shell.Popup("I can't find the BetterDiscord plugins folder.\nAre you sure it's even installed?", 0, "Can't install myself", 0x10);
+    } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
+        fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true);
+        // Show the user where to put plugins in the future
+        shell.Exec("explorer " + pathPlugins);
+        shell.Popup("I'm installed!", 0, "Successfully installed", 0x40);
+    }
+    WScript.Quit();
 
 @else@*/
 
 module.exports = (() => {
    const config = {
-      main: 'index.js',
       info: {
          name: 'MessageCleaner',
          authors: [
             {
                name: 'eternal',
                discord_id: '282595588950982656',
-               github_username: 'slow',
-               twitter_username: ''
+               github_username: 'slow'
             }
          ],
+         version: '1.1.1',
          description: 'Clears messages in the current channel.',
-         version: '1.1.0',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
-      changelog: [
-         {
-            title: 'Fixed',
-            type: 'fixed',
-            items: [
-               'CommandsAPI boot priority.',
-               'Commands should persist through reloads of CommandsAPI.',
-               'This means when you turn the plugin off then on the commands from other plugins will still be registered.'
-            ]
-         }
-      ],
       defaultConfig: [
          {
             name: 'Deletion Mode',
@@ -108,7 +95,79 @@ module.exports = (() => {
       ]
    };
 
-   const buildPlugin = ([Plugin, API]) => {
+   return !global.ZeresPluginLibrary ? class {
+      constructor() {
+         this.start = this.load = this.handleMissingLib;
+      }
+
+      getName() {
+         return this.name.replace(/\s+/g, '');
+      }
+
+      getAuthor() {
+         return this.author;
+      }
+
+      getVersion() {
+         return this.version;
+      }
+
+      getDescription() {
+         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
+      }
+
+      start() { }
+
+      stop() { }
+
+      async handleMissingLib() {
+         const request = require('request');
+         const path = require('path');
+         const fs = require('fs');
+
+         const dependencies = [
+            {
+               global: 'ZeresPluginLibrary',
+               filename: '0PluginLibrary.plugin.js',
+               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
+               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
+            }
+         ];
+
+         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
+
+         if (global.eternalModal) {
+            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
+            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
+
+         BdApi.showConfirmationModal(
+            'Dependencies needed',
+            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
+            {
+               confirmText: 'Download',
+               cancelText: 'Cancel',
+               onCancel: () => delete global.eternalModal,
+               onConfirm: async () => {
+                  for (const dependency of dependencies) {
+                     if (!window.hasOwnProperty(dependency.global)) {
+                        await new Promise((resolve) => {
+                           request.get(dependency.url, (error, res, body) => {
+                              if (error) return electron.shell.openExternal(dependency.external);
+                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
+                           });
+                        });
+                     }
+                  }
+
+                  delete global.eternalModal;
+               }
+            }
+         );
+      }
+   } : (([Plugin, API]) => {
       const { WebpackModules, Patcher, Logger, PluginUtilities } = API;
       const { getToken } = WebpackModules.getByProps('getToken');
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
@@ -120,32 +179,20 @@ module.exports = (() => {
       const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
       const sleep = (time) => new Promise((f) => setTimeout(() => f(), time));
 
-      return class MessageCleaner extends Plugin {
+      return class extends Plugin {
          constructor() {
             super();
 
             this.pruning = {};
          }
 
-         async start() {
+         start() {
             const settings = this.settings = PluginUtilities.loadSettings(this.name, {
                mode: 0,
                normalDelay: 150,
                burstDelay: 1000,
                chunkSize: 3
             });
-
-            if (!Array.prototype.chunk) {
-               Object.defineProperty(Array.prototype, 'chunk', {
-                  value: function (size) {
-                     var array = [];
-                     for (var i = 0; i < this.length; i += size) {
-                        array.push(this.slice(i, i + size));
-                     }
-                     return array;
-                  }
-               });
-            }
 
             if (!window.commands) window.commands = {};
             if (!window.commands['clear']) {
@@ -158,6 +205,7 @@ module.exports = (() => {
                };
             }
          };
+
 
          stop() {
             delete window.commands?.['clear'];
@@ -274,7 +322,7 @@ module.exports = (() => {
                if (get.messages.length <= 0 && get.skipped == 0) break;
                offset = get.offset;
                while (count !== 'all' && count < get.messages.length) get.messages.pop();
-               let chunk = get.messages.chunk(this.settings.chunkSize);
+               let chunk = this.chunk(get.messages, this.settings.chunkSize);
                for (const msgs of chunk) {
                   let funcs = [];
                   for (const msg of msgs) {
@@ -376,130 +424,17 @@ module.exports = (() => {
             };
          };
 
-         async random(length) {
-            var result = '';
-            var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            var charactersLength = characters.length;
-            for (var i = 0; i < length; i++) {
-               result += characters.charAt(Math.floor(Math.random() * charactersLength));
+         chunk(arr, size) {
+            const array = [];
+
+            for (var i = 0; i < arr.length; i += size) {
+               array.push(arr.slice(i, i + size));
             }
-            return result;
+
+            return array;
          }
       };
-   };
-
-   return !global.ZeresPluginLibrary || !global.XenoLib || !global.CommandsAPI ? class {
-      constructor() {
-         this.start = this.load = this.handleMissingLib;
-      }
-
-      getName() {
-         return this.name.replace(/\s+/g, '');
-      }
-
-      getAuthor() {
-         return this.author;
-      }
-
-      getVersion() {
-         return this.version;
-      }
-
-      getDescription() {
-         return this.description + ' You are missing libraries for this plugin, please enable the plugin and click Download Now.';
-      }
-
-      start() { }
-
-      stop() { }
-
-      async handleMissingLib() {
-         const request = require('request');
-         const path = require('path');
-         const fs = require('fs');
-
-         const dependencies = [
-            {
-               global: 'ZeresPluginLibrary',
-               filename: '0PluginLibrary.plugin.js',
-               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js',
-               url: 'https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js'
-            },
-            {
-               global: 'CommandsAPI',
-               filename: '2CommandsAPI.plugin.js',
-               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
-               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
-            },
-            {
-               global: 'XenoLib',
-               filename: '1XenoLib.plugin.js',
-               external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js',
-               url: 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js'
-            }
-         ];
-
-         if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return;
-
-         if (global.eternalModal) {
-            while (global.eternalModal && dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) await new Promise(f => setTimeout(f, 1000));
-            if (!dependencies.map(d => window.hasOwnProperty(d.global)).includes(false)) return BdApi.Plugins.reload(this.getName());
-         };
-
-         global.eternalModal = true;
-
-         BdApi.showConfirmationModal(
-            'Dependencies needed',
-            `Dependencies needed for ${this.getName()} are missing. Please click download to install the dependecies.`,
-            {
-               confirmText: 'Download',
-               cancelText: 'Cancel',
-               onCancel: () => delete global.eternalModal,
-               onConfirm: async () => {
-                  for (const dependency of dependencies) {
-                     if (!window.hasOwnProperty(dependency.global)) {
-                        await new Promise((resolve) => {
-                           request.get(dependency.url, (error, res, body) => {
-                              if (error) return electron.shell.openExternal(dependency.external);
-                              fs.writeFile(path.join(BdApi.Plugins.folder, dependency.filename), body, resolve);
-                           });
-                        });
-                     }
-                  }
-
-                  delete global.eternalModal;
-               }
-            }
-         );
-      }
-
-      get [Symbol.toStringTag]() {
-         return 'Plugin';
-      }
-
-      get name() {
-         return config.info.name;
-      }
-
-      get short() {
-         let string = '';
-         for (let i = 0, len = config.info.name.length; i < len; i++) {
-            const char = config.info.name[i];
-            if (char === char.toUpperCase()) string += char;
-         }
-         return string;
-      }
-
-      get author() {
-         return config.info.authors.map(author => author.name).join(', ');
-      }
-
-      get version() {
-         return config.info.version;
-      }
-
-      get description() {
-         return config.info.description;
-      }
-   } : buildPlugin(global.ZeresPluginLibrary.buildPlugin(config));
+   })(ZLibrary.buildPlugin(config));
 })();
+
+/*@end@*/

@@ -10,84 +10,44 @@
 
 /*@cc_on
 @if (@_jscript)
-	
-  // Offer to self-install for clueless users that try to run this directly.
-  var shell = WScript.CreateObject("WScript.Shell");
-  var fs = new ActiveXObject("Scripting.FileSystemObject");
-  var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%\BetterDiscord\plugins");
-  var pathSelf = WScript.ScriptFullName;
-  // Put the user at ease by addressing them in the first person
-  shell.Popup("It looks like you've mistakenly tried to run me directly. \n(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30);
-  if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
-     shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40);
-  } else if (!fs.FolderExists(pathPlugins)) {
-     shell.Popup("I can't find the BetterDiscord plugins folder.\nAre you sure it's even installed?", 0, "Can't install myself", 0x10);
-  } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
-     fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true);
-     // Show the user where to put plugins in the future
-     shell.Exec("explorer " + pathPlugins);
-     shell.Popup("I'm installed!", 0, "Successfully installed", 0x40);
-  }
-  WScript.Quit();
+
+    // Offer to self-install for clueless users that try to run this directly.
+    var shell = WScript.CreateObject("WScript.Shell");
+    var fs = new ActiveXObject("Scripting.FileSystemObject");
+    var pathPlugins = shell.ExpandEnvironmentStrings("%APPDATA%\\BetterDiscord\\plugins");
+    var pathSelf = WScript.ScriptFullName;
+    // Put the user at ease by addressing them in the first person
+    shell.Popup("It looks like you've mistakenly tried to run me directly. \n(Don't do that!)", 0, "I'm a plugin for BetterDiscord", 0x30);
+    if (fs.GetParentFolderName(pathSelf) === fs.GetAbsolutePathName(pathPlugins)) {
+        shell.Popup("I'm in the correct folder already.", 0, "I'm already installed", 0x40);
+    } else if (!fs.FolderExists(pathPlugins)) {
+        shell.Popup("I can't find the BetterDiscord plugins folder.\nAre you sure it's even installed?", 0, "Can't install myself", 0x10);
+    } else if (shell.Popup("Should I copy myself to BetterDiscord's plugins folder for you?", 0, "Do you need some help?", 0x34) === 6) {
+        fs.CopyFile(pathSelf, fs.BuildPath(pathPlugins, fs.GetFileName(pathSelf)), true);
+        // Show the user where to put plugins in the future
+        shell.Exec("explorer " + pathPlugins);
+        shell.Popup("I'm installed!", 0, "Successfully installed", 0x40);
+    }
+    WScript.Quit();
 
 @else@*/
 
 module.exports = (() => {
    const config = {
-      main: 'index.js',
       info: {
          name: 'Mock',
          authors: [
             {
                name: 'eternal',
                discord_id: '282595588950982656',
-               github_username: 'slow',
-               twitter_username: ''
+               github_username: 'slow'
             }
          ],
          version: '3.0.6',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/Mock/Mock.plugin.js'
-      },
-      changelog: [
-         {
-            title: 'Fixed',
-            type: 'fixed',
-            items: [
-               'CommandsAPI boot priority.',
-               'Commands should persist through reloads of CommandsAPI.',
-               'This means when you turn the plugin off then on the commands from other plugins will still be registered.'
-            ]
-         }
-      ],
-   };
-
-   const buildPlugin = ([Plugin, API]) => {
-      return class Mock extends Plugin {
-         constructor() {
-            super();
-         }
-
-         async start() {
-            if (!window.commands) window.commands = {};
-            if (!window.commands?.['mock']) {
-               window.commands['mock'] = {
-                  command: 'mock',
-                  description: 'Mock a user...',
-                  usage: '{c} [text to mock]',
-                  executor: (args) => ({
-                     send: true,
-                     result: args.join(' ').split('').map((c, i) => i % 2 ? c.toUpperCase() : c.toLowerCase()).join('')
-                  })
-               };
-            }
-         };
-
-         stop() {
-            delete window.commands?.['mock'];
-         };
-      };
+      }
    };
 
    return !global.ZeresPluginLibrary || !global.CommandsAPI ? class {
@@ -168,35 +128,32 @@ module.exports = (() => {
             }
          );
       }
-
-
-      get [Symbol.toStringTag]() {
-         return 'Plugin';
-      }
-
-      get name() {
-         return config.info.name;
-      }
-
-      get short() {
-         let string = '';
-         for (let i = 0, len = config.info.name.length; i < len; i++) {
-            const char = config.info.name[i];
-            if (char === char.toUpperCase()) string += char;
+   } : (([Plugin, API]) => {
+      return class extends Plugin {
+         constructor() {
+            super();
          }
-         return string;
-      }
 
-      get author() {
-         return config.info.authors.map(author => author.name).join(', ');
-      }
+         async start() {
+            if (!window.commands) window.commands = {};
+            if (!window.commands?.['mock']) {
+               window.commands['mock'] = {
+                  command: 'mock',
+                  description: 'Mock a user...',
+                  usage: '{c} [text to mock]',
+                  executor: (args) => ({
+                     send: true,
+                     result: args.join(' ').split('').map((c, i) => i % 2 ? c.toUpperCase() : c.toLowerCase()).join('')
+                  })
+               };
+            }
+         };
 
-      get version() {
-         return config.info.version;
-      }
-
-      get description() {
-         return config.info.description;
-      }
-   } : buildPlugin(global.ZeresPluginLibrary.buildPlugin(config));
+         stop() {
+            delete window.commands?.['mock'];
+         };
+      };
+   })(ZLibrary.buildPlugin(config));
 })();
+
+/*@end@*/
