@@ -46,7 +46,17 @@ module.exports = (() => {
             }
          ],
          description: 'Clears messages in the current channel.',
-         version: '1.0.6',
+         version: '1.0.7',
+         changelog: [
+            {
+               title: 'Fixed',
+               type: 'fixed',
+               items: [
+                  'CommandsAPI boot priority.',
+                  'Multiple modals popping up when libraries are missing'
+               ]
+            }
+         ],
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
@@ -402,7 +412,16 @@ module.exports = (() => {
 
       stop() { }
 
-      handleMissingLib() {
+      async handleMissingLib() {
+         if (global.eternalModal) {
+            while (global.eternalModal) {
+               await new Promise(f => setTimeout(f, 1000));
+            }
+
+            if (global.commands) return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
          let missing = {
             ZeresPluginLibrary: false,
             XenoLib: false,
@@ -449,9 +468,18 @@ module.exports = (() => {
                      });
                   });
                }
+
+               // hacky as fuck but works
+               while (!window.commands) {
+                  await new Promise(f => setTimeout(f, 1000));
+                  BdApi.Plugins.reload(this.getName());
+               }
+
+               delete global.eternalModal;
             }
          });
       }
+
 
       get [Symbol.toStringTag]() {
          return 'Plugin';

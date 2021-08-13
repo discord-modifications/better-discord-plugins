@@ -45,7 +45,17 @@ module.exports = (() => {
                twitter_username: ''
             }
          ],
-         version: '3.0.1',
+         version: '3.0.2',
+         changelog: [
+            {
+               title: 'Fixed',
+               type: 'fixed',
+               items: [
+                  'CommandsAPI boot priority.',
+                  'Multiple modals popping up when libraries are missing'
+               ]
+            }
+         ],
          description: 'Adds the command "read" that reads channels, DMs and removes pings.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MarkAllRead/MarkAllRead.plugin.js'
@@ -85,7 +95,7 @@ module.exports = (() => {
       };
    };
 
-   return !global.ZeresPluginLibrary || !global.XenoLib || !global.commands ? class {
+   return !global.ZeresPluginLibrary || !global.commands ? class {
       constructor() {
          this._XL_PLUGIN = true;
          this.start = this.load = this.handleMissingLib;
@@ -111,7 +121,16 @@ module.exports = (() => {
 
       stop() { }
 
-      handleMissingLib() {
+      async handleMissingLib() {
+         if (global.eternalModal) {
+            while (global.eternalModal) {
+               await new Promise(f => setTimeout(f, 1000));
+            }
+
+            if (global.commands) return BdApi.Plugins.reload(this.getName());
+         };
+
+         global.eternalModal = true;
          let missing = {
             ZeresPluginLibrary: false,
             CommandsAPI: false
@@ -125,6 +144,9 @@ module.exports = (() => {
             `The library plugin${missingCount > 1 ? 's' : ''} needed for ${config.info.name} is missing. Please click Download to install the dependecies.`, {
             confirmText: 'Download',
             cancelText: 'Cancel',
+            onCancel: () => {
+               delete global.eternalModal;
+            },
             onConfirm: async () => {
                if (missing.ZeresPluginLibrary) {
                   await new Promise((fulfill, reject) => {
@@ -146,6 +168,14 @@ module.exports = (() => {
                      });
                   });
                }
+
+               while (!window.commands?.register) {
+                  await new Promise(f => setTimeout(f, 1000));
+                  BdApi.Plugins.reload(this.getName());
+               }
+
+
+               delete global.eternalModal;
             }
          });
       }
