@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: 'Allows you to screenshare in any quality/fps without nitro.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/ScreenshareCrack/ScreenshareCrack.plugin.js'
@@ -132,7 +132,7 @@ module.exports = (() => {
          }
 
          start() {
-            Patcher.after(Users, 'getCurrentUser', (res, args) => {
+            Patcher.after(Users, 'getCurrentUser', (_, args, res) => {
                res['premiumType'] = 2;
             });
          };
