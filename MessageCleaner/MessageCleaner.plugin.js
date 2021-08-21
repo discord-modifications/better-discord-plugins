@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.3',
+         version: '1.1.4',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -95,7 +95,7 @@ module.exports = (() => {
       ]
    };
 
-   return !global.ZeresPluginLibrary ? class {
+   return !global.ZeresPluginLibrary || !global.CommandsAPI || !global.XenoLib ? class {
       constructor() {
          this.start = this.load = this.handleMissingLib;
       }
@@ -137,6 +137,12 @@ module.exports = (() => {
                filename: '1XenoLib.plugin.js',
                external: 'https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js',
                url: 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/1XenoLib.plugin.js'
+            },
+            {
+               global: 'CommandsAPI',
+               filename: '2CommandsAPI.plugin.js',
+               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js',
+               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
             }
          ];
 

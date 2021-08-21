@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '3.0.7',
+         version: '3.0.8',
          description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup/UserLookup.plugin.js'
@@ -90,8 +90,8 @@ module.exports = (() => {
             {
                global: 'CommandsAPI',
                filename: '2CommandsAPI.plugin.js',
-               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js',
-               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
+               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js',
+               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
             }
          ];
 
