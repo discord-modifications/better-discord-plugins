@@ -52,3 +52,8 @@ Stops discord from disconnecting you when you're in a call alone for more than 5
 
 ## [UploadFromLinks](https://github.com/slow/better-discord-plugins/tree/master/UploadFromLinks "UploadFromLinks")
 Allows you to upload from links by surrounding the link in brackets.
+
+## [ScreenshareCrack](https://github.com/slow/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack")
+Allows you to screenshare in any quality/fps without nitro.
+
+
