@@ -43,8 +43,8 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '3.0.8',
-         description: 'Adds the command "mock" that uppercases & lowercases letters to mock someone.',
+         version: '3.0.9',
+         description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup/UserLookup.plugin.js'
       }
