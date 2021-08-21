@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.4',
+         version: '1.1.5',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/CommandsAPI.plugin.js'
@@ -160,7 +160,7 @@ module.exports = (() => {
             const path = require('path');
             this.changeName(path.join(__dirname, path.basename(__filename)), '2CommandsAPI');
 
-            const settings = this.settings = PluginUtilities.loadSettings('CommandsAPI', {
+            const settings = this.settings = PluginUtilities.loadSettings(this.getName(), {
                prefix: '-',
                replaceClyde: true
             });
