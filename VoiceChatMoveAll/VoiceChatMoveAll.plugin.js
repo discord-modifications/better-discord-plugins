@@ -43,11 +43,18 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.3',
+         version: '2.0.4',
          description: 'A context menu utility to move everyone to a certain voice channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
       },
+      changelog: [
+         {
+           title: 'Changes',
+           type: 'added',
+           items: ["You can now use the context menu entry when you're by yourself in a voice channel."]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -148,7 +155,7 @@ module.exports = (() => {
                let channel = args[0].channel;
                if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
                let currentChannel = this.getVoiceChannel();
-               if (!currentChannel || currentChannel.members.length < 2) return res;
+               if (!currentChannel) return res;
 
                let item = React.createElement(Menu.MenuItem, {
                   action: async () => {
