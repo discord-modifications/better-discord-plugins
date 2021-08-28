@@ -1,6 +1,11 @@
 # Message Cleaner [![Download][download-badge]][download-link] [![PayPal][paypal-badge]][paypal-link] [![Support][support-badge]][support-link]
 Clears messages in the current channel.
 
+# Previews
+
+![Preview](https://i.imgur.com/GvPunQp.png)
+![Preview](https://i.imgur.com/e9tgbwO.png)
+
 # Usage
 
 -  `[prefix]clear all beforeId`
