@@ -43,11 +43,21 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.4',
+         version: '1.1.5',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
+      changelog: [
+         {
+            title: "What's new",
+            type: 'added',
+            items: [
+               'You can now right click any server, group chat, dm and server channel to prune messages.',
+               "You can now stop pruning either by right clicking the channel/guild/group/dm you're pruning in and using the context menu option or by running `cl stop`."
+            ]
+         }
+      ],
       defaultConfig: [
          {
             name: 'Deletion Mode',
@@ -180,11 +190,12 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules, Patcher, Logger, PluginUtilities } = API;
+      const { WebpackModules, Patcher, DiscordModules: { React }, Logger, PluginUtilities, Utilities } = API;
       const { getToken } = WebpackModules.getByProps('getToken');
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
       const { getChannel } = WebpackModules.getByProps('getChannel');
+      const { MenuItem } = WebpackModules.getByProps('MenuItem');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuild } = WebpackModules.getByProps('getGuild');
       const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser');
@@ -199,7 +210,7 @@ module.exports = (() => {
          }
 
          start() {
-            const settings = this.settings = PluginUtilities.loadSettings(this.name, {
+            this.settings = PluginUtilities.loadSettings(this.name, {
                mode: 0,
                normalDelay: 150,
                burstDelay: 1000,
@@ -216,24 +227,89 @@ module.exports = (() => {
                   executor: (args) => this.clear(args)
                };
             }
+
+            this.patchContextMenus();
          };
 
+         patchContextMenus() {
+            const DMContextMenu = WebpackModules.find(m => m.default?.displayName == 'DMUserContextMenu');
+            console.log(DMContextMenu);
+            Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
+
+            const ChannelContextMenu = WebpackModules.find(m => m.default?.displayName == 'ChannelListTextChannelContextMenu');
+            console.log(ChannelContextMenu);
+            Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
+
+            const GuildContextMenu = WebpackModules.find(m => m.default?.displayName == 'GuildContextMenu');
+            Patcher.after(GuildContextMenu, 'default', this.processContextMenu.bind(this));
+
+            const GroupDMContextMenu = WebpackModules.find(m => m.default?.displayName == 'GroupDMContextMenu');
+            Patcher.after(GroupDMContextMenu, 'default', this.processContextMenu.bind(this));
+         }
+
+         processContextMenu(_, args, res) {
+            const channel = !res.props?.navId?.includes('guild');
+            const children = Utilities.findInReactTree(res, r => Array.isArray(r));
+            const instance = channel ? args[0].channel?.id : args[0].guild?.id;
+            const mute = Utilities.findInReactTree(children, (c) => {
+               const children = c?.props?.children;
+               if (!children || (Array.isArray(children) && !children.length)) return false;
+
+               const items = [
+                  'unmute-channel',
+                  'unmute-guild',
+                  'mute-channel',
+                  'mute-guild'
+               ];
+
+               if (children.length) {
+                  return children.find(child => items.includes(child?.props?.id));
+               } else {
+                  return items.includes(children.props?.id);
+               }
+            });
+
+            const old = mute?.props?.children;
+            if (mute && old) {
+               const button = (!this.pruning[instance] ?
+                  React.createElement(MenuItem, {
+                     id: 'clean-all',
+                     key: 'clean-all',
+                     label: 'Purge all messages',
+                     action: () => this.clear(['all'], null, instance, !channel)
+                  })
+                  :
+                  React.createElement(MenuItem, {
+                     id: 'stop-cleaning',
+                     key: 'stop-cleaning',
+                     label: 'Stop purging',
+                     action: () => delete this.pruning[instance]
+                  })
+               );
+
+
+               mute.props.children = [old, button];
+            }
+
+            return res;
+         }
 
          stop() {
             delete window.commands?.['clear'];
+            Patcher.unpatchAll();
          };
 
          getSettingsPanel() {
             return this.buildSettingsPanel().getElement();
          }
 
-         async clear(args) {
+         async clear(args, _, channel, guild = false) {
+            channel = channel ? channel : getChannelId();
+
             const { BOT_AVATARS } = WebpackModules.getByProps('BOT_AVATARS');
             const { createBotMessage } = WebpackModules.getByProps('createBotMessage');
 
-            this.channel = getChannelId();
-
-            const receivedMessage = createBotMessage(this.channel, {});
+            const receivedMessage = createBotMessage(channel, {});
             BOT_AVATARS.message_cleaner = 'https://i.imgur.com/dOe7F3y.png';
             receivedMessage.author.username = 'Message Cleaner';
             receivedMessage.author.avatar = 'message_cleaner';
@@ -243,15 +319,19 @@ module.exports = (() => {
                return messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
             }
 
-            if (this.pruning[this.channel] == true) {
+            if (this.pruning[channel] == true && args[0]?.toLowerCase() !== 'stop') {
                receivedMessage.content = `Already pruning in this channel.`;
+               return messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
+            }
+
+            if (args[0]?.toLowerCase() === 'stop') {
+               delete this.pruning[channel];
+               receivedMessage.content = `Stopped pruning.`;
                return messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
             }
 
             let count = args.shift();
             let before = args.shift();
-
-            this.pruning[this.channel] = true;
 
             if (count !== 'all') {
                count = parseInt(count);
@@ -262,17 +342,21 @@ module.exports = (() => {
                return messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
             }
 
+            this.pruning[channel] = true;
+
             receivedMessage.content = `Started clearing.`;
             messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
 
-            let amount = this.settings.mode ? await this.burstDelete(count, before, this.channel) : await this.normalDelete(count, before, this.channel);
+            let amount = this.settings.mode ? await this.burstDelete(count, before, channel, guild) : await this.normalDelete(count, before, channel, guild);
 
-            delete this.pruning[this.channel];
+            delete this.pruning[channel];
 
             if (amount !== 0) {
-               let location = this.channel;
-               let instance = await getChannel(location);
-               if (instance.type == 0) {
+               let location = channel;
+               let instance = guild ? getGuild(location) : await getChannel(location);
+               if (guild) {
+                  location = `in ${instance.name}`;
+               } else if (instance.type == 0) {
                   let guild = getGuild(instance.guild_id);
                   location = `in ${guild.name} > <#${instance.id}>`;
                } else if (instance.type == 1) {
@@ -294,6 +378,7 @@ module.exports = (() => {
                XenoLib.Notifications.success(`Deleted ${amount} messages ${location}`, {
                   timeout: 0,
                   onClick: () => {
+                     if (guild) return transitionTo(transitionTo(Routes.CHANNEL(instance.id, getChannelId(instance.id))));
                      if (instance.type == 1) return ChannelStore.openPrivateChannel(instance.recipients[0]);
                      ZLibrary.DiscordModules.NavigationUtils.transitionTo(`/channels/${instance.guild_id || '@me'}/${instance.id}`);
                   }
@@ -308,24 +393,25 @@ module.exports = (() => {
          }
 
 
-         async normalDelete(count, before, channel) {
+         async normalDelete(count, before, channel, guild) {
             let deleted = 0;
             let offset = 0;
             while (count == 'all' || count > deleted) {
-               if (count !== 'all' && count === deleted) break;
-               let get = await this.fetch(channel, getCurrentUser().id, before, offset);
+               if ((count !== 'all' && count === deleted) || !this.pruning[channel]) break;
+               let get = await this.fetch(channel, getCurrentUser().id, before, offset, guild);
                if (get.messages.length <= 0 && get.skipped == 0) break;
                offset = get.offset;
                while (count !== 'all' && count < get.messages.length) get.messages.pop();
                for (const msg of get.messages) {
+                  if (!this.pruning[channel]) break;
                   await sleep(this.settings.normalDelay);
-                  deleted += await this.deleteMsg(msg.id, channel);
+                  deleted += await this.deleteMsg(msg.id, msg.channel_id);
                }
             }
             return deleted;
          }
 
-         async burstDelete(count, before, channel) {
+         async burstDelete(count, before, channel, guild) {
             let deleted = 0;
             let offset = 0;
             while (count == 'all' || count > deleted) {
@@ -344,12 +430,15 @@ module.exports = (() => {
                   }
                   await Promise.all(
                      funcs.map((f) => {
-                        return f().then((amount) => {
-                           deleted += amount;
-                        });
+                        if (this.pruning[channel]) {
+                           return f().then((amount) => {
+                              deleted += amount;
+                           });
+                        }
                      })
                   );
-                  await sleep(this.settings.burstDelay);
+
+                  if (this.pruning[channel]) await sleep(this.settings.burstDelay);
                }
             }
 
@@ -384,16 +473,25 @@ module.exports = (() => {
             return 0;
          }
 
-         async fetch(channel, user, before, offset) {
+         async fetch(channel, user, before, offset, guild = false) {
             let out = [];
-            let get = await fetch(
-               `https://discord.com/api/v6/channels/${channel}/messages/search?author_id=${user}${before ? `&max_id=${before}` : ''}${offset > 0 ? `&offset=${offset}` : ''}`,
-               {
-                  headers: {
-                     'Authorization': getToken(),
-                     'User-Agent': navigator.userAgent
-                  }
+            console.log(channel, user, before, offset, guild);
+            let url = `https://discord.com/api/v9/${guild ?
+               'guilds' :
+               'channels'
+               }/${channel}/messages/search?author_id=${user}${before ?
+                  `&max_id=${before}` :
+                  ''
+               }${offset > 0 ?
+                  `&offset=${offset}` :
+                  ''
+               }`;
+            let get = await fetch(url, {
+               headers: {
+                  'Authorization': getToken(),
+                  'User-Agent': navigator.userAgent
                }
+            }
             );
             let messages = await get.json();
             switch (get.status) {
@@ -425,7 +523,7 @@ module.exports = (() => {
             let skippedMsgs = 0;
             for (let bulk of msgs) {
                bulk = bulk.filter((msg) => msg.hit == true);
-               out.push(...bulk.filter((msg) => msg.type === 0 || msg.type === 6));
+               out.push(...bulk.filter((msg) => msg.type === 0 || msg.type === 6 || msg.type === 19));
                skippedMsgs += bulk.filter((msg) => !out.find((m) => m.id === msg.id)).length;
             }
 
