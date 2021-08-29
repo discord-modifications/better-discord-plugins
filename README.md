@@ -58,3 +58,6 @@ Allows you to click people's profile pictures and banners in their user modal an
 
 ## [OpenInApp](https://github.com/slow/better-discord-plugins/tree/master/OpenInApp "OpenInApp")
 Opens links all over the app in their respective app.
+
+## [HideDMButtons](https://github.com/slow/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons")
+Hides every button in the DMs list except friends.
