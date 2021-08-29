@@ -61,7 +61,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: 'Opens links all over the app in their respective app.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/OpenInApp/OpenInApp.plugin.js'
@@ -75,8 +75,6 @@ module.exports = (() => {
       type: 'switch',
       value: true
    });
-
-   console.log(config);
 
    return !global.ZeresPluginLibrary ? class {
       constructor() {
