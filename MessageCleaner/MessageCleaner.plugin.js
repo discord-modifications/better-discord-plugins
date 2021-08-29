@@ -43,64 +43,18 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.5',
+         version: '1.2.0',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
-            title: "What's new",
+            title: "What's changed",
             type: 'added',
             items: [
-               'You can now right click any server, group chat, dm and server channel to prune messages.',
-               "You can now stop pruning either by right clicking the channel/guild/group/dm you're pruning in and using the context menu option or by running `cl stop`."
+               'Settings panel has been revamped, defaults will now show as green text and whats shown in settings will adapt to your mode.'
             ]
-         }
-      ],
-      defaultConfig: [
-         {
-            name: 'Deletion Mode',
-            id: 'mode',
-            type: 'radio',
-            options: [
-               { name: 'Normal: Deletes one message at a time (most stable but slower)', value: 0 },
-               { name: 'Burst: Deletes in burst for every x messages (unstable but fast)', value: 1 }
-            ],
-            defaultValue: 0
-         },
-         {
-            name: 'Normal Delay',
-            id: 'normalDelay',
-            type: 'slider',
-            min: 100,
-            max: 200,
-            value: 200,
-            note: 'Delay between deleting messages on normal mode in milliseconds',
-            markers: [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200],
-            renderValue: v => `${Math.round(v)}ms`
-         },
-         {
-            name: 'Burst Delay',
-            id: 'burstDelay',
-            type: 'slider',
-            min: 500,
-            max: 1500,
-            value: 200,
-            note: 'Delay between burst deleting messages on burst mode in milliseconds',
-            markers: [500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500],
-            renderValue: v => `${Math.round(v)}ms`
-         },
-         {
-            name: 'Burst Chunk Size',
-            id: 'chunkSize',
-            type: 'slider',
-            stickToMarkers: true,
-            min: 1,
-            max: 10,
-            markers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-            note: 'Collection size of burst deletion chunks to delete every x milliseconds',
-            value: 3
          }
       ]
    };
@@ -201,6 +155,80 @@ module.exports = (() => {
       const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser');
       const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
       const sleep = (time) => new Promise((f) => setTimeout(() => f(), time));
+      const Components = (() => {
+         const comps = {};
+
+         const { divider } = WebpackModules.find(m => m.divider && Object.keys(m).length === 1);
+         const { dividerDefault } = WebpackModules.getByProps('dividerDefault');
+
+         comps.Divider = class Divider extends React.Component {
+            render() {
+               return React.createElement('div', {
+                  className: `${divider} ${dividerDefault}`
+               });
+            }
+         };
+
+         const { description } = WebpackModules.getByProps('formText', 'description');
+         const DFormItem = WebpackModules.getByDisplayName('FormItem');
+         const FormText = WebpackModules.getByDisplayName('FormText');
+         const margins = WebpackModules.getByProps('marginTop20');
+         const Flex = WebpackModules.getByDisplayName('Flex');
+
+         comps.FormItem = class FormItem extends React.PureComponent {
+            render() {
+               const noteClasses = [description, this.props.noteHasMargin && margins.marginTop8].filter(Boolean).join(' ');
+               return React.createElement(DFormItem, {
+                  title: this.props.title,
+                  required: this.props.required,
+                  className: `${Flex.Direction.VERTICAL} ${Flex.Justify.START} ${Flex.Align.STRETCH} ${Flex.Wrap.NO_WRAP} ${margins.marginBottom20}`
+               }, this.props.children, this.props.note && React.createElement(FormText, {
+                  className: noteClasses
+               }, this.props.note), React.createElement(comps.Divider, null));
+            };
+         };
+
+         const DRadioGroup = WebpackModules.getByDisplayName('RadioGroup');
+
+         comps.RadioGroup = class RadioGroup extends React.PureComponent {
+            render() {
+               const { children: title, note, required } = this.props;
+
+               return React.createElement(comps.FormItem, {
+                  title: title,
+                  note: note,
+                  required: required
+               }, React.createElement(DRadioGroup, this.props));
+            }
+         };
+
+         const Slider = WebpackModules.getByDisplayName('Slider');
+         comps.SliderInput = class SliderInput extends React.PureComponent {
+            render() {
+               const { children: title, note, required } = this.props;
+               delete this.props.children;
+
+               return React.createElement(comps.FormItem, {
+                  title: title,
+                  note: note,
+                  required: required
+               }, React.createElement(Slider, {
+                  ...this.props,
+                  className: `${this.props.className || ''} ${margins.marginTop20}`.trim()
+               }));
+            };
+         };
+
+         return comps;
+      })();
+
+      const settings = PluginUtilities.loadSettings(config.info.name, {
+         mode: 0,
+         normalDelay: 150,
+         burstDelay: 1000,
+         chunkSize: 3,
+         searchDelay: 200
+      });
 
       return class extends Plugin {
          constructor() {
@@ -210,13 +238,6 @@ module.exports = (() => {
          }
 
          start() {
-            this.settings = PluginUtilities.loadSettings(this.name, {
-               mode: 0,
-               normalDelay: 150,
-               burstDelay: 1000,
-               chunkSize: 3
-            });
-
             if (!window.commands) window.commands = {};
             if (!window.commands['clear']) {
                window.commands['clear'] = {
@@ -233,11 +254,9 @@ module.exports = (() => {
 
          patchContextMenus() {
             const DMContextMenu = WebpackModules.find(m => m.default?.displayName == 'DMUserContextMenu');
-            console.log(DMContextMenu);
             Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
 
             const ChannelContextMenu = WebpackModules.find(m => m.default?.displayName == 'ChannelListTextChannelContextMenu');
-            console.log(ChannelContextMenu);
             Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
 
             const GuildContextMenu = WebpackModules.find(m => m.default?.displayName == 'GuildContextMenu');
@@ -300,7 +319,100 @@ module.exports = (() => {
          };
 
          getSettingsPanel() {
-            return this.buildSettingsPanel().getElement();
+            return class Settings extends React.Component {
+               constructor() {
+                  super();
+                  this.state = {
+                     editError: null,
+                     delayExpanded: false
+                  };
+               }
+
+               renderBurst() {
+                  return React.createElement("div", null, React.createElement(Components.SliderInput, {
+                     minValue: 1,
+                     maxValue: 10,
+                     stickToMarkers: true,
+                     markers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                     defaultValue: 3,
+                     initialValue: settings.chunkSize,
+                     onValueChange: val => {
+                        settings.chunkSize = Math.floor(parseInt(val));
+                        PluginUtilities.saveSettings(config.info.name, settings);
+                        this.forceUpdate();
+                     },
+                     note: "Collection size of burst deletion chunks",
+                     onMarkerRender: v => `x${v}`
+                  }, "Chunk Size"), React.createElement(Components.SliderInput, {
+                     minValue: 500,
+                     maxValue: 1500,
+                     stickToMarkers: true,
+                     markers: [500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500],
+                     defaultValue: 1000,
+                     initialValue: settings.burstDelay,
+                     onValueChange: val => {
+                        settings.burstDelay = Math.floor(parseInt(val));
+                        PluginUtilities.saveSettings(config.info.name, settings);
+                        this.forceUpdate();
+                     },
+                     note: "Delay between deleting chunks",
+                     onMarkerRender: v => `${Math.floor(v / 1000 * 100) / 100}s`
+                  }, "Burst Delay"));
+               }
+
+               renderNormal() {
+                  return React.createElement("div", null, React.createElement(Components.SliderInput, {
+                     minValue: 100,
+                     maxValue: 500,
+                     stickToMarkers: true,
+                     markers: [100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200],
+                     defaultValue: 150,
+                     initialValue: settings.normalDelay,
+                     onValueChange: val => {
+                        settings.normalDelay = Math.floor(parseInt(val));
+                        PluginUtilities.saveSettings(config.info.name, settings);
+                        this.forceUpdate();
+                     },
+                     note: "Delay between deleting messages",
+                     onMarkerRender: v => `${Math.floor(v)}ms`
+                  }, "Delete Delay"));
+               }
+
+               render() {
+                  return React.createElement("div", null, React.createElement(Components.RadioGroup, {
+                     value: settings.mode,
+                     onChange: v => {
+                        settings.mode = v.value;
+                        PluginUtilities.saveSettings(config.info.name, settings);
+                        this.forceUpdate();
+                     },
+                     options: [
+                        {
+                           name: 'Normal: Deletes one message at a time (most stable but slower)',
+                           value: 0
+                        }, {
+                           name: 'Burst: Deletes multiple messages at a time (unstable but fast)',
+                           value: 1
+                        }
+                     ]
+                  }, "Deletion Mode"), React.createElement(Components.SliderInput, {
+                     minValue: 500,
+                     maxValue: 1500,
+                     stickToMarkers: true,
+                     markers: [150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250],
+                     defaultValue: 200,
+                     initialValue: settings.searchDelay,
+                     onValueChange: val => {
+                        settings.searchDelay = Math.floor(parseInt(val));
+                        console.log(config.info.name, settings);
+                        PluginUtilities.saveSettings(config.info.name, settings);
+                        this.forceUpdate();
+                     },
+                     note: "Delay between fetching messages",
+                     onMarkerRender: v => `${Math.floor(v / 1000 * 100) / 100}s`
+                  }, "Search Delay"), settings.mode == 1 ? this.renderBurst() : this.renderNormal());
+               }
+            };
          }
 
          async clear(args, _, channel, guild = false) {
@@ -347,7 +459,7 @@ module.exports = (() => {
             receivedMessage.content = `Started clearing.`;
             messages.receiveMessage(receivedMessage.channel_id, receivedMessage);
 
-            let amount = this.settings.mode ? await this.burstDelete(count, before, channel, guild) : await this.normalDelete(count, before, channel, guild);
+            let amount = settings.mode ? await this.burstDelete(count, before, channel, guild) : await this.normalDelete(count, before, channel, guild);
 
             delete this.pruning[channel];
 
@@ -404,7 +516,7 @@ module.exports = (() => {
                while (count !== 'all' && count < get.messages.length) get.messages.pop();
                for (const msg of get.messages) {
                   if (!this.pruning[channel]) break;
-                  await sleep(this.settings.normalDelay);
+                  await sleep(settings.normalDelay);
                   deleted += await this.deleteMsg(msg.id, msg.channel_id);
                }
             }
@@ -420,7 +532,7 @@ module.exports = (() => {
                if (get.messages.length <= 0 && get.skipped == 0) break;
                offset = get.offset;
                while (count !== 'all' && count < get.messages.length) get.messages.pop();
-               let chunk = this.chunk(get.messages, this.settings.chunkSize);
+               let chunk = this.chunk(get.messages, settings.chunkSize);
                for (const msgs of chunk) {
                   let funcs = [];
                   for (const msg of msgs) {
@@ -438,7 +550,7 @@ module.exports = (() => {
                      })
                   );
 
-                  if (this.pruning[channel]) await sleep(this.settings.burstDelay);
+                  if (this.pruning[channel]) await sleep(settings.burstDelay);
                }
             }
 
@@ -475,7 +587,6 @@ module.exports = (() => {
 
          async fetch(channel, user, before, offset, guild = false) {
             let out = [];
-            console.log(channel, user, before, offset, guild);
             let url = `https://discord.com/api/v9/${guild ?
                'guilds' :
                'channels'
