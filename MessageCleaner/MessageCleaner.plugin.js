@@ -43,17 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.0',
+         version: '1.2.1',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
-            title: "What's changed",
-            type: 'added',
+            title: "What's gone",
+            type: 'fixed',
             items: [
-               'Settings panel has been revamped, defaults will now show as green text and whats shown in settings will adapt to your mode.'
+               'Removed search delay as it was useless.'
             ]
          }
       ]
@@ -226,8 +226,7 @@ module.exports = (() => {
          mode: 0,
          normalDelay: 150,
          burstDelay: 1000,
-         chunkSize: 3,
-         searchDelay: 200
+         chunkSize: 3
       });
 
       return class extends Plugin {
@@ -395,22 +394,7 @@ module.exports = (() => {
                            value: 1
                         }
                      ]
-                  }, "Deletion Mode"), React.createElement(Components.SliderInput, {
-                     minValue: 500,
-                     maxValue: 1500,
-                     stickToMarkers: true,
-                     markers: [150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250],
-                     defaultValue: 200,
-                     initialValue: settings.searchDelay,
-                     onValueChange: val => {
-                        settings.searchDelay = Math.floor(parseInt(val));
-                        console.log(config.info.name, settings);
-                        PluginUtilities.saveSettings(config.info.name, settings);
-                        this.forceUpdate();
-                     },
-                     note: "Delay between fetching messages",
-                     onMarkerRender: v => `${Math.floor(v / 1000 * 100) / 100}s`
-                  }, "Search Delay"), settings.mode == 1 ? this.renderBurst() : this.renderNormal());
+                  }, "Deletion Mode"), settings.mode == 1 ? this.renderBurst() : this.renderNormal());
                }
             };
          }
