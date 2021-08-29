@@ -52,3 +52,6 @@ Stops discord from disconnecting you when you're in a call alone for more than 5
 
 ## [UploadFromLinks](https://github.com/slow/better-discord-plugins/tree/master/UploadFromLinks "UploadFromLinks")
 Allows you to upload from links by surrounding the link in brackets.
+
+## [PictureLink](https://github.com/slow/better-discord-plugins/tree/master/PictureLink "PictureLink")
+Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
