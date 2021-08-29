@@ -55,3 +55,6 @@ Allows you to upload from links by surrounding the link in brackets.
 
 ## [PictureLink](https://github.com/slow/better-discord-plugins/tree/master/PictureLink "PictureLink")
 Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
+
+## [OpenInApp](https://github.com/slow/better-discord-plugins/tree/master/OpenInApp "OpenInApp")
+Opens links all over the app in their respective app.
