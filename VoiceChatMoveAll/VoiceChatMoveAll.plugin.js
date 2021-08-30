@@ -43,16 +43,16 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.4',
+         version: '2.0.5',
          description: 'A context menu utility to move everyone to a certain voice channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
       },
       changelog: [
          {
-           title: 'Changes',
-           type: 'added',
-           items: ["You can now use the context menu entry when you're by yourself in a voice channel."]
+           title: 'Fixed',
+           type: 'fixed',
+           items: ['The plugin now works again.']
          }
       ]
    };
@@ -130,7 +130,7 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules, Patcher } = API;
+      const { WebpackModules, Patcher, DiscordModules: { React } } = API;
 
       const sleep = (time) => new Promise((f) => setTimeout(f, time));
 
