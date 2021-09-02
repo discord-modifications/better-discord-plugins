@@ -43,11 +43,18 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.6',
+         version: '1.0.7',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
       },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: ['You will no longer be notified that you\'ve been kicked/banned if you stop lurking a server.']
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -142,7 +149,6 @@ module.exports = (() => {
 
             Dispatcher.subscribe('RELATIONSHIP_REMOVE', this.relationshipRemove);
             Dispatcher.subscribe('GUILD_MEMBER_REMOVE', this.memberRemove);
-            Dispatcher.subscribe('GUILD_BAN_ADD', this.ban);
             Dispatcher.subscribe('GUILD_CREATE', this.guildCreate);
             Dispatcher.subscribe('CHANNEL_CREATE', this.channelCreate);
             Dispatcher.subscribe('CHANNEL_DELETE', this.channelDelete);
@@ -150,6 +156,7 @@ module.exports = (() => {
             this.mostRecentlyRemovedID = null;
             this.mostRecentlyLeftGuild = null;
             this.mostRecentlyLeftGroup = null;
+            this.mostRecentlyLurking = null;
 
             const Relationships = WebpackModules.getByProps('removeRelationship');
             Patcher.after(Relationships, 'removeRelationship', (_, args) => {
@@ -167,19 +174,28 @@ module.exports = (() => {
                this.mostRecentlyLeftGroup = args[0];
                this.removeGroupFromCache(args[0]);
             });
+
+            const Lurk = WebpackModules.getByProps('startLurking');
+            Patcher.after(Lurk, 'startLurking', (_, [guild]) => {
+               this.mostRecentlyLurking = guild;
+            });
          };
 
          stop() {
             Patcher.unpatchAll();
             Dispatcher.unsubscribe('RELATIONSHIP_REMOVE', this.relationshipRemove);
             Dispatcher.unsubscribe('GUILD_MEMBER_REMOVE', this.memberRemove);
-            Dispatcher.unsubscribe('GUILD_BAN_ADD', this.ban);
             Dispatcher.unsubscribe('GUILD_CREATE', this.guildCreate);
             Dispatcher.unsubscribe('CHANNEL_CREATE', this.channelCreate);
             Dispatcher.unsubscribe('CHANNEL_DELETE', this.channelDelete);
          };
 
          guildCreate = (data) => {
+            if (this.mostRecentlyLurking == data.guild.id) {
+               this.mostRecentlyLurking = null;
+               this.removeGroupFromCache(data.guild.id);
+               return;
+            }
             this.cachedGuilds.push(data.guild);
          };
 
@@ -206,15 +222,6 @@ module.exports = (() => {
             const index = this.cachedGuilds.indexOf(this.cachedGuilds.find((g) => g.id == id));
             if (index == -1) return;
             this.cachedGuilds.splice(index, 1);
-         };
-
-         ban = (data) => {
-            if (data.user.id !== getCurrentUser().id) return;
-            let guild = this.cachedGuilds.find((g) => g.id == data.guildId);
-            if (!guild || guild === null) return;
-            this.removeGuildFromCache(guild.id);
-            this.fireToast('ban', guild);
-
          };
 
          relationshipRemove = (data) => {
@@ -252,10 +259,7 @@ module.exports = (() => {
                   options.onClick = () => ChannelStore.openPrivateChannel(instance.id);
                   break;
                case 'kick':
-                  message = `You've been kicked from ${instance.name}`;
-                  break;
-               case 'ban':
-                  message = `You've been banned from ${instance.name}`;
+                  message = `You've been kicked/banned from ${instance.name}`;
                   break;
                case 'group':
                   message = "You've been removed from the group chat ";
