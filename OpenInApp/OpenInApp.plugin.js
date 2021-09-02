@@ -61,11 +61,18 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.1',
+         version: '1.0.2',
          description: 'Opens links all over the app in their respective app.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/OpenInApp/OpenInApp.plugin.js'
       },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: ['If someone posts a link that already includes an identifier for example: steam://something, identifiers will no longer duplicate causing the links to be unusable. The plugin will now respect the identifier and make them usable.']
+         }
+      ],
       defaultConfig: []
    };
 
@@ -165,7 +172,7 @@ module.exports = (() => {
                if (link) {
                   for (const service of services) {
                      if (this.settings[service.name] && service.links.some(l => ~link.indexOf(l))) {
-                        args[0].href = `${service.identifier}${args[0].href}`;
+                        if (!link.includes(service.identifier)) args[0].href = `${service.identifier}${args[0].href}`;
                      }
                   }
                }
