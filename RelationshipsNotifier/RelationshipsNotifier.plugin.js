@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.0',
+         version: '2.0.1',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -242,8 +242,35 @@ module.exports = (() => {
             }
          };
 
-         if (!document.head.find(`style[id="${config.info.name}"]`)) {
-            PluginUtilities.addStyle(config.info.name, `
+         const SwitchItem = WebpackModules.getByDisplayName('SwitchItem');
+         comps.SwitchItem = SwitchItem;
+
+         return comps;
+      })();
+
+      const settings = PluginUtilities.loadSettings(config.info.name, {
+         remove: true,
+         group: true,
+         kick: true,
+         friendCancel: true,
+         removeText: '%username#%usertag removed you as a friend.',
+         groupText: 'You\'ve been removed from the group %groupname',
+         kickText: 'You\'ve been kicked/banned from %servername',
+         friendCancelText: '%username#%usertag cancelled their friend request.',
+         appToasts: true,
+         appToastsFocus: true,
+         desktopNotif: true,
+         desktopNotifFocus: false,
+      });
+
+      return class RelationshipsNotifier extends Plugin {
+         constructor() {
+            super();
+         }
+
+         start() {
+            if (!document.head.find(`style[id="${config.info.name}"]`)) {
+               PluginUtilities.addStyle(config.info.name, `
                .bd-settings-item-title {
                   display: flex;
                   cursor: pointer;
@@ -276,35 +303,8 @@ module.exports = (() => {
                   padding-left: 33px;
                }
             `);
-         }
+            }
 
-         const SwitchItem = WebpackModules.getByDisplayName('SwitchItem');
-         comps.SwitchItem = SwitchItem;
-
-         return comps;
-      })();
-
-      const settings = PluginUtilities.loadSettings(config.info.name, {
-         remove: true,
-         group: true,
-         kick: true,
-         friendCancel: true,
-         removeText: '%username#%usertag removed you as a friend.',
-         groupText: 'You\'ve been removed from the group %groupname',
-         kickText: 'You\'ve been kicked/banned from %servername',
-         friendCancelText: '%username#%usertag cancelled their friend request.',
-         appToasts: true,
-         appToastsFocus: true,
-         desktopNotif: true,
-         desktopNotifFocus: false,
-      });
-
-      return class RelationshipsNotifier extends Plugin {
-         constructor() {
-            super();
-         }
-
-         start() {
             this.cachedGroups = [...Object.values(getChannels())].filter((c) => c.type === 3);
             this.cachedGuilds = [...Object.values(getGuilds())];
 
