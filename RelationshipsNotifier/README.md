@@ -2,7 +2,7 @@
 Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.
 
 # Preview
-![Preview](https://media.wtf/43507824) <br />
+![Preview](https://media.wtf/22820930) <br />
 ![Preview](https://media.wtf/49346438) <br />
 ![Preview](https://media.wtf/89826297) <br />
 ![Preview](https://media.wtf/56583707) <br />
