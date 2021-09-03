@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
       },
+      changelog: [
+         {
+            type: 'fixed',
+            title: 'Fixed',
+            items: [
+               'The plugin now works with or without hardware acceleration.'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -129,8 +138,8 @@ module.exports = (() => {
       const { openContextMenu, closeContextMenu } = WebpackModules.getByProps('openContextMenu', 'closeContextMenu');
       const ContextMenu = WebpackModules.getByProps('MenuGroup', 'MenuItem');
       const Banner = WebpackModules.find(m => m.default?.displayName == 'UserBanner');
-      const { header, avatar } = WebpackModules.getByProps('discriminator', 'header');
-      const Avatar = WebpackModules.getByProps('AnimatedAvatar');
+      const ProfileModalHeader = WebpackModules.find(m => m.default?.displayName == 'UserProfileModalHeader');
+      const classes = WebpackModules.getByProps('discriminator', 'header');
 
       return class extends Plugin {
          constructor() {
@@ -144,24 +153,21 @@ module.exports = (() => {
                }
             `);
 
-            // Why the fuck doesn't the injection i applied on canary work on stable? (Avatar.default)
-            Patcher.after(Avatar.AnimatedAvatar, 'type', (_, args, res) => {
-               if (res.props?.className?.includes?.(avatar)) {
-                  res.props.className = [res.props.className, 'picture-link'].join(' ');
+            Patcher.after(ProfileModalHeader, 'default', (_, args, res) => {
+               const avatar = Utilities.findInReactTree(res, m => m?.props?.className == classes.avatar);
 
-                  res.props.onClick = (v) => {
-                     if (v.target.parentElement.classList.contains(header)) {
-                        open(args[0].src?.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'));
-                     }
+               if (avatar) {
+                  avatar.props.onClick = (v) => {
+                     open(avatar.props.src.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'));
                   };
 
-                  res.props.onContextMenu = (e) => {
+                  avatar.props.onContextMenu = (e) => {
                      return openContextMenu(e, () =>
                         React.createElement(ContextMenu.default, { onClose: closeContextMenu },
                            React.createElement(ContextMenu.MenuItem, {
                               label: 'Copy Avatar URL',
                               id: 'copy-avatar-url',
-                              action: () => clipboard.writeText(args[0].src?.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'))
+                              action: () => clipboard.writeText(avatar.props.src.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'))
                            })
                         )
                      );
