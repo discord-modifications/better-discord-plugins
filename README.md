@@ -8,6 +8,9 @@
 
 [![Support][support-badge]][support-link] [![PayPal][paypal-badge]][paypal-link]
 
+### [DNDBypass](https://github.com/slow/better-discord-plugins/tree/master/DNDBypass "DNDBypass")
+Give your selection of friends the ability to bypass Do Not Disturb.
+
 ### [DataSaver](https://github.com/slow/better-discord-plugins/tree/master/DataSaver "DataSaver")
 Saves friends & Servers every 30 minutes to a file.
 
