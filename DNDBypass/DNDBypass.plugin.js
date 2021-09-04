@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: 'Give your selection of friends the ability to bypass Do Not Disturb.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DNDBypass/DNDBypass.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               `You will no longer be notified if you already have the channel selected.`
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -125,8 +134,9 @@ module.exports = (() => {
    } : (([Plugin, API]) => {
       const { WebpackModules, Patcher, PluginUtilities, DiscordModules: { React } } = API;
 
-      const { getChannel } = WebpackModules.getByProps('getChannel');
+      const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const Notifications = WebpackModules.getByProps('makeTextChatNotification');
+      const { getChannel } = WebpackModules.getByProps('getChannel');
 
       const settings = PluginUtilities.loadSettings(config.info.name, {
          friends: [],
@@ -253,8 +263,13 @@ module.exports = (() => {
          }
 
          start() {
-            Patcher.after(Notifications, 'shouldNotify', (_, [msg], res) => {
+            Patcher.after(Notifications, 'shouldNotify', (_, [msg, channelId, n], res) => {
                if (settings.friends.includes(msg.author.id)) {
+                  // Check if were already looking at the channel
+                  if (getChannelId() == channelId) {
+                     return false;
+                  }
+
                   // Guilds
                   if (msg.guild_id && !settings.guilds) {
                      return false;
