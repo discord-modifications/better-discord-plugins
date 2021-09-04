@@ -263,7 +263,7 @@ module.exports = (() => {
          }
 
          start() {
-            Patcher.after(Notifications, 'shouldNotify', (_, [msg, channelId, n], res) => {
+            Patcher.after(Notifications, 'shouldNotify', (_, [msg, channelId], res) => {
                if (settings.friends.includes(msg.author.id)) {
                   // Check if were already looking at the channel
                   if (getChannelId() == channelId) {
