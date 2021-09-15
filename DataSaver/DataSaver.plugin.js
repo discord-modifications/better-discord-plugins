@@ -43,11 +43,18 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.5',
+         version: '1.0.6',
          description: 'Saves friends & Servers every 30 minutes to a file.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver/DataSaver.plugin.js'
       },
+      changelog: [
+         {
+            type: 'fixed',
+            title: 'Fixed',
+            items: ['Saves now properly go to C:\\Users\\username\\Documents\\Discord']
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -170,7 +177,7 @@ module.exports = (() => {
                }
 
                for (let save of Object.keys(obj)) {
-                  let savePath = path[save].replace(/%([^%]+)%/g, (_, n) => process.env[n]);
+                  let savePath = path[save].replace(/%([^%]+)%/g, (_, n) => process.env[n.toUpperCase()]);
                   if (!fs.existsSync(savePath)) {
                      fs.mkdirSync(savePath, { recursive: true });
                   }
