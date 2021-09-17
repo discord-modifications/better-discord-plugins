@@ -43,17 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.1',
+         version: '1.2.2',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
-            title: "What's gone",
-            type: 'fixed',
+            title: "What's changed",
+            type: 'added',
             items: [
-               'Removed search delay as it was useless.'
+               'Messages should now start clearing faster after command initiation.'
             ]
          }
       ]
@@ -500,8 +500,8 @@ module.exports = (() => {
                while (count !== 'all' && count < get.messages.length) get.messages.pop();
                for (const msg of get.messages) {
                   if (!this.pruning[channel]) break;
-                  await sleep(settings.normalDelay);
                   deleted += await this.deleteMsg(msg.id, msg.channel_id);
+                  await sleep(settings.normalDelay);
                }
             }
             return deleted;
