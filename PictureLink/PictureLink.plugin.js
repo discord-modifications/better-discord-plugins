@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.1',
+         version: '1.0.2',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             type: 'fixed',
             title: 'Fixed',
             items: [
-               'The plugin now works with or without hardware acceleration.'
+               'The plugin now works again for banners.'
             ]
          }
       ]
@@ -177,7 +177,7 @@ module.exports = (() => {
 
             Patcher.after(Banner, 'default', (_, args, res) => {
                let handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
-               let image = args[0].user?.bannerURL;
+               let image = args[0].user?.getBannerURL?.();
                if (!handler?.children && image) {
                   res.props.onClick = () => {
                      open(image.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'));
