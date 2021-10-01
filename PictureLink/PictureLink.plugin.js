@@ -173,7 +173,7 @@ module.exports = (() => {
             });
 
             Patcher.after(Banner, 'default', (_, args, res) => {
-               const handler = Utilities.findInReactTree(res.props.children, p => p.onClick);
+               const handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
                const image = args[0].user?.getBannerURL?.(4096, true)?.replace('.webp', '.png');
 
                if (!handler?.children && image) {
