@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.2',
+         version: '1.0.3',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             type: 'fixed',
             title: 'Fixed',
             items: [
-               'The plugin now works again for banners.'
+               'The plugin now works again for GIF banners.'
             ]
          }
       ]
@@ -155,45 +155,41 @@ module.exports = (() => {
 
             Patcher.after(ProfileModalHeader, 'default', (_, args, res) => {
                const avatar = Utilities.findInReactTree(res, m => m?.props?.className == classes.avatar);
+               const image = args[0].user?.getAvatarURL?.(false, 4096, true)?.replace('.webp', '.png');
 
-               if (avatar) {
-                  avatar.props.onClick = (v) => {
-                     open(avatar.props.src.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'));
-                  };
+               if (avatar && image) {
+                  avatar.props.onClick = () => open(image);
 
-                  avatar.props.onContextMenu = (e) => {
-                     return openContextMenu(e, () =>
-                        React.createElement(ContextMenu.default, { onClose: closeContextMenu },
-                           React.createElement(ContextMenu.MenuItem, {
-                              label: 'Copy Avatar URL',
-                              id: 'copy-avatar-url',
-                              action: () => clipboard.writeText(avatar.props.src.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'))
-                           })
-                        )
-                     );
-                  };
+                  avatar.props.onContextMenu = (e) => openContextMenu(e, () =>
+                     React.createElement(ContextMenu.default, { onClose: closeContextMenu },
+                        React.createElement(ContextMenu.MenuItem, {
+                           label: 'Copy Avatar URL',
+                           id: 'copy-avatar-url',
+                           action: () => clipboard.writeText(image)
+                        })
+                     )
+                  );
                }
             });
 
             Patcher.after(Banner, 'default', (_, args, res) => {
-               let handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
-               let image = args[0].user?.getBannerURL?.();
+               const handler = Utilities.findInReactTree(res.props.children, p => p.onClick);
+               const image = args[0].user?.getBannerURL?.(4096, true)?.replace('.webp', '.png');
+
                if (!handler?.children && image) {
                   res.props.onClick = () => {
-                     open(image.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'));
+                     open(image);
                   };
 
-                  res.props.onContextMenu = (e) => {
-                     return openContextMenu(e, () =>
-                        React.createElement(ContextMenu.default, { onClose: closeContextMenu },
-                           React.createElement(ContextMenu.MenuItem, {
-                              label: 'Copy Banner URL',
-                              id: 'copy-banner-url',
-                              action: () => clipboard.writeText(image.replace(/(?:\?size=\d{3,4})?$/, '?size=4096'))
-                           })
-                        )
-                     );
-                  };
+                  res.props.onContextMenu = (e) => openContextMenu(e, () =>
+                     React.createElement(ContextMenu.default, { onClose: closeContextMenu },
+                        React.createElement(ContextMenu.MenuItem, {
+                           label: 'Copy Banner URL',
+                           id: 'copy-banner-url',
+                           action: () => clipboard.writeText(image)
+                        })
+                     )
+                  );
 
                   res.props.className = [res.props.className, 'picture-link'].join(' ');
                }
