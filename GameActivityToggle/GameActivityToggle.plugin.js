@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.6',
+         version: '1.0.7',
          description: 'Adds an entry in the status picker to toggle game activity.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js'
@@ -152,12 +152,12 @@ module.exports = (() => {
                points: '22.6,2.7 22.6,2.8 19.3,6.1 16,9.3 16,9.4 15,10.4 15,10.4 10.3,15 2.8,22.5 1.4,21.1 21.2,1.3 '
             }));
             Patcher.before(Menu, 'default', (_, args) => {
-               if (args[0].navId != 'status-picker') return args;
+               if (args[0]?.navId != 'status-picker') return args;
 
                const [{ children }] = args;
-               const invisibleStatus = children.find(c => c.props.id == 'invisible');
+               const invisibleStatus = children.find(c => c?.props?.id == 'invisible');
 
-               if (!children.find(c => c.props.id == 'game-activity')) {
+               if (!children.find(c => c?.props?.id == 'game-activity')) {
                   showCurrentGame = g.showCurrentGame;
 
                   children.splice(children.indexOf(invisibleStatus) + 1, 0, React.createElement(Menu.MenuItem, {
