@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.2',
+         version: '1.2.3',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: "What's changed",
             type: 'added',
             items: [
-               'Messages should now start clearing faster after command initiation.'
+               'Burst mode will no longer delete messages all over the place.'
             ]
          }
       ]
@@ -524,7 +524,8 @@ module.exports = (() => {
                         return await this.deleteMsg(msg.id, channel);
                      });
                   }
-                  await Promise.all(
+                  
+                  await Promise.allSettled(
                      funcs.map((f) => {
                         if (this.pruning[channel]) {
                            return f().then((amount) => {
