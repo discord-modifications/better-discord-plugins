@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.1',
+         version: '1.0.2',
          description: 'Give your selection of friends the ability to bypass Do Not Disturb.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DNDBypass/DNDBypass.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               `You will no longer be notified if you already have the channel selected.`
+               `Settings panel will no longer error out when you aren't friends with one of the users you previously selected.`
             ]
          }
       ]
@@ -193,7 +193,7 @@ module.exports = (() => {
                   })
                }), React.createElement(PopoutListDivider, null), React.createElement(AdvancedScrollerThin, {
                   className: `${classes.scroller} db-friend-scroller`
-               }, friends.map(getUser).filter(user => this.state.friendsQuery ? user.username.toLowerCase().includes(this.state.friendsQuery.toLowerCase()) : true).map((user, i) => React.createElement(SelectableItem, {
+               }, friends.map(getUser).filter(user => this.state.friendsQuery ? user.username.toLowerCase().includes(this.state.friendsQuery.toLowerCase()) : true).map((user, i) => user && React.createElement(SelectableItem, {
                   className: 'db-friend-item',
                   id: user.id,
                   key: i.toString(),
