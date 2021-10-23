@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.3',
+         version: '2.0.4',
          description: "Bypasses discord's NSFW age gate.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/NSFWGateBypass/NSFWGateBypass.plugin.js'
       },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'Fixes for canary'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -124,7 +133,7 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { Patcher, WebpackModules } = API;
-      const Users = WebpackModules.getByProps('getCurrentUser');
+      const Users = WebpackModules.getByProps('getNullableCurrentUser');
 
       return class extends Plugin {
          constructor() {
