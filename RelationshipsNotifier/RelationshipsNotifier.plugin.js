@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.2',
+         version: '2.0.3',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               'Fixed canary errors.',
+               'Fixed settings dividers on canary.',
             ]
          }
       ]
@@ -144,17 +144,8 @@ module.exports = (() => {
       const Components = (() => {
          const comps = {};
 
-         const { divider } = WebpackModules.find(m => m.divider && Object.keys(m).length === 1);
-         const { dividerDefault } = WebpackModules.getByProps('dividerDefault');
-
-         comps.Divider = class Divider extends React.Component {
-            render() {
-               return React.createElement('div', {
-                  className: `${divider} ${dividerDefault}`,
-                  ...this.props
-               });
-            }
-         };
+         const FormDivider = WebpackModules.getByDisplayName('FormDivider');
+         comps.Divider = () => FormDivider({ style: { marginTop: '20px' } });
 
          const { description } = WebpackModules.getByProps('formText', 'description');
          const DFormItem = WebpackModules.getByDisplayName('FormItem');
@@ -198,8 +189,6 @@ module.exports = (() => {
          const classes = {
             flexClassName: `${Flex.Direction.VERTICAL} ${Flex.Justify.START} ${Flex.Align.STRETCH} ${Flex.Wrap.NO_WRAP}`,
             classMargins: WebpackModules.getByProps('marginBottom20'),
-            classDivider: WebpackModules.find(m => m.divider && Object.keys(m).length === 1).divider,
-            classDividerDef: WebpackModules.getByProps('dividerDefault').dividerDefault,
             classDescription: WebpackModules.getByProps('formText', 'description').description,
             classesLabel: WebpackModules.getByProps('labelRow')
          };
@@ -230,9 +219,7 @@ module.exports = (() => {
                   className: classes.classDescription
                }, this.props.description))), this.props.opened ? React.createElement('div', {
                   className: 'bd-settings-item-inner'
-               }, this.props.children) : React.createElement('div', {
-                  className: `${classes.classDivider} ${classes.classDividerDef}`
-               }));
+               }, this.props.children) : React.createElement(comps.Divider));
             }
          };
 

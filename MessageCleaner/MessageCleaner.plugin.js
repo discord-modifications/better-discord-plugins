@@ -43,17 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.4',
+         version: '1.2.5',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
-            title: "What's changed",
+            title: "Fixed",
             type: 'fixed',
             items: [
-               'Fixes for canary.'
+               'Fixed settings dividers on canary'
             ]
          }
       ]
@@ -158,16 +158,8 @@ module.exports = (() => {
       const Components = (() => {
          const comps = {};
 
-         const { divider } = WebpackModules.find(m => m.divider && Object.keys(m).length === 1);
-         const { dividerDefault } = WebpackModules.getByProps('dividerDefault');
-
-         comps.Divider = class Divider extends React.Component {
-            render() {
-               return React.createElement('div', {
-                  className: `${divider} ${dividerDefault}`
-               });
-            }
-         };
+         const FormDivider = WebpackModules.getByDisplayName('FormDivider');
+         comps.Divider = () => FormDivider({ style: { marginTop: '20px' } });
 
          const { description } = WebpackModules.getByProps('formText', 'description');
          const DFormItem = WebpackModules.getByDisplayName('FormItem');
