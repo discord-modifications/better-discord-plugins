@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.3',
+         version: '1.2.4',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -51,9 +51,9 @@ module.exports = (() => {
       changelog: [
          {
             title: "What's changed",
-            type: 'added',
+            type: 'fixed',
             items: [
-               'Burst mode will no longer delete messages all over the place.'
+               'Fixes for canary.'
             ]
          }
       ]
@@ -148,11 +148,11 @@ module.exports = (() => {
       const { getToken } = WebpackModules.getByProps('getToken');
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
-      const { getChannel } = WebpackModules.getByProps('getChannel');
+      const { getChannel } = WebpackModules.getByProps('hasChannel');
       const { MenuItem } = WebpackModules.getByProps('MenuItem');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuild } = WebpackModules.getByProps('getGuild');
-      const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser');
+      const { getCurrentUser } = WebpackModules.getByProps('getNullableCurrentUser');
       const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
       const sleep = (time) => new Promise((f) => setTimeout(() => f(), time));
       const Components = (() => {
@@ -172,7 +172,7 @@ module.exports = (() => {
          const { description } = WebpackModules.getByProps('formText', 'description');
          const DFormItem = WebpackModules.getByDisplayName('FormItem');
          const FormText = WebpackModules.getByDisplayName('FormText');
-         const margins = WebpackModules.getByProps('marginTop20');
+         const margins = WebpackModules.getByProps('avatar', 'marginBottom20');
          const Flex = WebpackModules.getByDisplayName('Flex');
 
          comps.FormItem = class FormItem extends React.PureComponent {
@@ -255,7 +255,11 @@ module.exports = (() => {
             const DMContextMenu = WebpackModules.find(m => m.default?.displayName == 'DMUserContextMenu');
             Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
 
-            const ChannelContextMenu = WebpackModules.find(m => m.default?.displayName == 'ChannelListTextChannelContextMenu');
+            const ChannelContextMenu = WebpackModules.findAll(m => m.default?.displayName == 'ChannelListTextChannelContextMenu');
+            for (let i = 0; i < ChannelContextMenu.length; i++) {
+               Patcher.after(ChannelContextMenu[i], 'default', this.processContextMenu.bind(this));
+            }
+
             Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
 
             const GuildContextMenu = WebpackModules.find(m => m.default?.displayName == 'GuildContextMenu');
@@ -524,7 +528,7 @@ module.exports = (() => {
                         return await this.deleteMsg(msg.id, channel);
                      });
                   }
-                  
+
                   await Promise.allSettled(
                      funcs.map((f) => {
                         if (this.pruning[channel]) {

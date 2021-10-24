@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.1.6',
+         version: '1.1.7',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
@@ -62,6 +62,13 @@ module.exports = (() => {
             id: 'replaceClyde',
             type: 'switch',
             value: true
+         }
+      ],
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: ['Fixed canary crashes']
          }
       ]
    };
@@ -143,10 +150,9 @@ module.exports = (() => {
          PluginUtilities,
          WebpackModules,
          Patcher,
-         DiscordModules: { React },
-         ReactTools
+         DiscordModules: { React }
       } = API;
-      const { Messages } = WebpackModules.getByProps('Messages', 'getLocale');
+      const { Messages } = WebpackModules.find(m => m.Messages?.ACCOUNT);
 
       return class extends Plugin {
          constructor() {
@@ -211,7 +217,7 @@ module.exports = (() => {
             const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
             const { BOT_AVATARS } = WebpackModules.getByProps('BOT_AVATARS');
             const { createBotMessage } = WebpackModules.getByProps('createBotMessage');
-            const { getChannelId } = WebpackModules.getByProps('getChannelId');
+            const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
 
             BOT_AVATARS.CommandsAPI = 'http://github.com/BetterDiscord.png';
 

@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.4',
+         version: '1.0.5',
          description: 'Give your selection of friends the ability to bypass Do Not Disturb.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DNDBypass/DNDBypass.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               `Notify when in current channel and window is unfocused.`
+               `Fixes for canary.`
             ]
          }
       ]
@@ -136,7 +136,7 @@ module.exports = (() => {
 
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const Notifications = WebpackModules.getByProps('makeTextChatNotification');
-      const { getChannel } = WebpackModules.getByProps('getChannel');
+      const { getChannel } = WebpackModules.getByProps('hasChannel');
 
       const settings = PluginUtilities.loadSettings(config.info.name, {
          friends: [],

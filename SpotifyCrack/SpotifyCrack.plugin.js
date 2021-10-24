@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.3',
+         version: '2.0.4',
          description: 'Allows you to listen along with discord users without premium.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/SpotifyCrack/SpotifyCrack.plugin.js'
       },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'Fixed canary errors.'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -124,7 +133,7 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { WebpackModules, Patcher } = API;
-      const Dispatcher = WebpackModules.getByProps('dispatch');
+      const Dispatcher = WebpackModules.getByProps('_currentDispatchActionType');
       const Profile = WebpackModules.getByProps('getProfile');
       const Spotify = WebpackModules.getByProps('isSpotifyPremium');
 

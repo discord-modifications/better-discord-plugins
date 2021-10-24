@@ -43,23 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.1',
+         version: '2.0.2',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
       },
       changelog: [
          {
-            title: 'What\'s new',
-            type: 'added',
+            title: 'Fixed',
+            type: 'fixed',
             items: [
-               'You can now fully configure the plugin using the brand new settings panel.',
-               'You can now toggle each event in settings.',
-               'You can decide wether you want desktop notifications always or only when not focused',
-               'You can now decide wether you want app toasts always or only when focused',
-               'You can now customize the text that appears on the notifications',
-               'New log type: Friend Request Cancel (will trigger when someone cancells their friend request)',
-               'You can now click on toasts with the type Friend Remove or Friend Request Cancel to open a DM with that person.'
+               'Fixed canary errors.',
             ]
          }
       ]
@@ -140,10 +134,10 @@ module.exports = (() => {
    } : (([Plugin, API]) => {
       const { WebpackModules, Patcher, PluginUtilities, DiscordModules: { React } } = API;
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
-      const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser');
+      const { getCurrentUser } = WebpackModules.getByProps('getNullableCurrentUser');
       const { getChannels } = WebpackModules.getByProps('getChannels');
       const { getGuilds } = WebpackModules.getByProps('getGuilds');
-      const Dispatcher = WebpackModules.getByProps('subscribe');
+      const Dispatcher = WebpackModules.getByProps('_currentDispatchActionType');
       const { getUser } = WebpackModules.getByProps('getUser');
       const FlexChild = WebpackModules.getByProps('flexChild').flexChild;
 
@@ -166,7 +160,7 @@ module.exports = (() => {
          const DFormItem = WebpackModules.getByDisplayName('FormItem');
          const FormTitle = WebpackModules.getByDisplayName('FormTitle');
          const FormText = WebpackModules.getByDisplayName('FormText');
-         const margins = WebpackModules.getByProps('marginTop20');
+         const margins = WebpackModules.getByProps('avatar', 'marginBottom20');
          const Flex = WebpackModules.getByDisplayName('Flex');
 
          comps.Flex = Flex;
@@ -203,8 +197,8 @@ module.exports = (() => {
 
          const classes = {
             flexClassName: `${Flex.Direction.VERTICAL} ${Flex.Justify.START} ${Flex.Align.STRETCH} ${Flex.Wrap.NO_WRAP}`,
-            classMargins: WebpackModules.getByProps('marginTop20'),
-            classDivider: WebpackModules.find(m => Object.keys(m).join('') === 'divider').divider,
+            classMargins: WebpackModules.getByProps('marginBottom20'),
+            classDivider: WebpackModules.find(m => m.divider && Object.keys(m).length === 1).divider,
             classDividerDef: WebpackModules.getByProps('dividerDefault').dividerDefault,
             classDescription: WebpackModules.getByProps('formText', 'description').description,
             classesLabel: WebpackModules.getByProps('labelRow')

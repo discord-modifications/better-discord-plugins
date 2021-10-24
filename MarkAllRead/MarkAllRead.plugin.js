@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '3.0.8',
+         version: '3.0.9',
          description: 'Adds the command "read" that reads channels, DMs and removes pings.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MarkAllRead/MarkAllRead.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'Fixed canary errors'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary || !global.CommandsAPI ? class {
@@ -130,7 +139,7 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { WebpackModules } = API;
-      const { getMutableGuildAndPrivateChannels } = WebpackModules.getByProps('getChannel');
+      const { getMutableGuildAndPrivateChannels } = WebpackModules.getByProps('hasChannel');
       const unreadAcks = WebpackModules.getByProps('ack', 'ackCategory');
       const messageStore = WebpackModules.getByProps('hasUnread', 'lastMessageId');
 

@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '3.0.9',
+         version: '3.1.0',
          description: 'Adds a command to look up information about the user using their ID.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/UserLookup/UserLookup.plugin.js'
-      }
+      },
+      changelog: [
+         {
+            title: 'Fixed',
+            type: 'fixed',
+            items: [
+               'Fixed canary errors.'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary || !global.CommandsAPI ? class {
@@ -185,7 +194,6 @@ module.exports = (() => {
                   embed: true
                };
             } catch (err) {
-               console.log(err);
                return {
                   result: 'Invalid ID.'
                };
