@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.3',
+         version: '2.0.4',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               'Fixed settings dividers on canary.',
+               'Fixed undefined user.',
             ]
          }
       ]
@@ -133,13 +133,12 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { WebpackModules, Patcher, PluginUtilities, DiscordModules: { React } } = API;
+      const { getCurrentUser, getUser } = WebpackModules.getByProps('getNullableCurrentUser');
+      const Dispatcher = WebpackModules.getByProps('_currentDispatchActionType');
+      const { flexChild: FlexChild } = WebpackModules.getByProps('flexChild');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
-      const { getCurrentUser } = WebpackModules.getByProps('getNullableCurrentUser');
       const { getChannels } = WebpackModules.getByProps('getChannels');
       const { getGuilds } = WebpackModules.getByProps('getGuilds');
-      const Dispatcher = WebpackModules.getByProps('_currentDispatchActionType');
-      const { getUser } = WebpackModules.getByProps('getUser');
-      const FlexChild = WebpackModules.getByProps('flexChild').flexChild;
 
       const Components = (() => {
          const comps = {};
