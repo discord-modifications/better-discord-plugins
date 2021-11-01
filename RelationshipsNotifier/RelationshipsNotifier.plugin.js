@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.4',
+         version: '2.0.5',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -53,7 +53,8 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               'Fixed undefined user.',
+               'Fixed misaligned category in settings',
+               'Fixed bugs with toasts not showing when not focused if toasts are set to fire regardless of focus'
             ]
          }
       ]
@@ -353,12 +354,7 @@ module.exports = (() => {
                }
 
                render() {
-                  return React.createElement('div', null, React.createElement(Components.Divider, {
-                     style: {
-                        'margin-bottom': '20px',
-                        'margin-top': '0px'
-                     }
-                  }), React.createElement(Components.Category, {
+                  return React.createElement('div', null, React.createElement(Components.Category, {
                      name: 'Notifications',
                      description: 'Customize notification behaviour.',
                      opened: this.state.notificationsExpanded,
@@ -519,7 +515,7 @@ module.exports = (() => {
             }
 
             if (settings.appToasts) {
-               if (settings.appToastsFocus && document.hasFocus()) {
+               if (settings.appToastsFocus && document.hasFocus() || !settings.appToastsFocus && !document.hasFocus()) {
                   XenoLib.Notifications.warning(text, options);
                }
             }
