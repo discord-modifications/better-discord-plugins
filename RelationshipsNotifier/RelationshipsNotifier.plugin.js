@@ -43,18 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.5',
+         version: '2.0.6',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
       },
       changelog: [
          {
-            title: 'Fixed',
-            type: 'fixed',
+            title: 'New features',
+            type: 'added',
             items: [
-               'Fixed misaligned category in settings',
-               'Fixed bugs with toasts not showing when not focused if toasts are set to fire regardless of focus'
+               'Tags are now clickable as long as the text is set to `%username#%usertag`',
             ]
          }
       ]
@@ -544,7 +543,7 @@ module.exports = (() => {
 
          replaceWithVars(type, text, object) {
             if (type === 'remove' || type === 'friendCancel') {
-               return text.replace('%username', object.username).replace('%usertag', object.discriminator).replace('%userid', object.id);
+               return text.replace('%username#%usertag', `<@${object.id}>`).replace('%username', object.username).replace('%usertag', object.discriminator).replace('%userid', object.id);
             } else if (type === 'kick') {
                return text.replace('%servername', object.name).replace('%serverid', object.id);
             } else if (type === 'group') {
