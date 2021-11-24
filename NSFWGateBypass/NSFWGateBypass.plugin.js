@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.4',
+         version: '2.0.5',
          description: "Bypasses discord's NSFW age gate.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/NSFWGateBypass/NSFWGateBypass.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               'Fixes for canary'
+               'The plugin now works again.'
             ]
          }
       ]
@@ -133,7 +133,7 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { Patcher, WebpackModules } = API;
-      const Users = WebpackModules.getByProps('getNullableCurrentUser');
+      const Users = WebpackModules.getByProps('getCurrentUser', 'getUser');
 
       return class extends Plugin {
          constructor() {
