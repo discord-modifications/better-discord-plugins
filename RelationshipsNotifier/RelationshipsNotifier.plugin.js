@@ -43,17 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.6',
+         version: '2.0.7',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
       },
       changelog: [
          {
-            title: 'New features',
-            type: 'added',
+            title: 'Fixes',
+            type: 'fixed',
             items: [
-               'Tags are now clickable as long as the text is set to `%username#%usertag`',
+               'The plugin now works again.',
             ]
          }
       ]
@@ -133,7 +133,7 @@ module.exports = (() => {
       }
    } : (([Plugin, API]) => {
       const { WebpackModules, Patcher, PluginUtilities, DiscordModules: { React } } = API;
-      const { getCurrentUser, getUser } = WebpackModules.getByProps('getNullableCurrentUser');
+      const { getCurrentUser, getUser } = WebpackModules.getByProps('getCurrentUser', 'getUser');
       const Dispatcher = WebpackModules.getByProps('_currentDispatchActionType');
       const { flexChild: FlexChild } = WebpackModules.getByProps('flexChild');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
