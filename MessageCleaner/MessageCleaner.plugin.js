@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.5',
+         version: '1.2.6',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: "Fixed",
             type: 'fixed',
             items: [
-               'Fixed settings dividers on canary'
+               'The plugin now works again.'
             ]
          }
       ]
@@ -152,7 +152,7 @@ module.exports = (() => {
       const { MenuItem } = WebpackModules.getByProps('MenuItem');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuild } = WebpackModules.getByProps('getGuild');
-      const { getCurrentUser } = WebpackModules.getByProps('getNullableCurrentUser');
+      const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser', 'getUser');
       const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
       const sleep = (time) => new Promise((f) => setTimeout(() => f(), time));
       const Components = (() => {
