@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.3',
+         version: '1.0.4',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             type: 'fixed',
             title: 'Fixed',
             items: [
-               'The plugin now works again for GIF banners.'
+               'Banners now work again.'
             ]
          }
       ]
@@ -140,6 +140,8 @@ module.exports = (() => {
       const Banner = WebpackModules.find(m => m.default?.displayName == 'UserBanner');
       const ProfileModalHeader = WebpackModules.find(m => m.default?.displayName == 'UserProfileModalHeader');
       const classes = WebpackModules.getByProps('discriminator', 'header');
+      const Banners = WebpackModules.getByProps('getUserBannerURL');
+      const SizeRegex = /(?:\?size=\d{3,4})?$/;
 
       return class extends Plugin {
          constructor() {
@@ -174,7 +176,10 @@ module.exports = (() => {
 
             Patcher.after(Banner, 'default', (_, args, res) => {
                const handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
-               const image = args[0].user?.getBannerURL?.(4096, true)?.replace('.webp', '.png');
+               const image = Banners.getUserBannerURL({
+                  ...args[0].user,
+                  canAnimate: true
+               }).replace(SizeRegex, '?size=4096')?.replace('.webp', '.png');
 
                if (!handler?.children && image) {
                   res.props.onClick = () => {
