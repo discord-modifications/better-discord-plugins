@@ -43,16 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.6',
+         version: '1.0.7',
          description: 'Saves friends & Servers every 30 minutes to a file.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DataSaver/DataSaver.plugin.js'
       },
       changelog: [
          {
-            type: 'fixed',
-            title: 'Fixed',
-            items: ['Saves now properly go to C:\\Users\\username\\Documents\\Discord']
+            type: 'added',
+            title: 'Changes',
+            items: [
+               'The plugin now works on linux and macOS.',
+               'The plugin now saves its data in its settings file inside the BetterDiscord plugins folder.',
+               'The plugin now saves information for each account you log into under the user ID.'
+            ]
          }
       ]
    };
@@ -130,12 +134,12 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules } = API;
-      const fs = require('fs');
+      const { WebpackModules, PluginUtilities } = API;
 
       const { getRelationships } = WebpackModules.getByProps('getRelationships');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuilds } = WebpackModules.getByProps('getGuilds');
+      const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser', 'getUser');
 
       return class extends Plugin {
          constructor() {
@@ -143,49 +147,37 @@ module.exports = (() => {
          }
 
          start() {
-            this.interval = setInterval(async () => {
-               let path = {
-                  friends: '%userprofile%\\Documents\\Discord\\',
-                  servers: '%userprofile%\\Documents\\Discord\\'
-               };
+            this.interval = setInterval(this.save, 18e5);
+            this.save();
+         };
 
-               let fileNames = {
-                  friends: 'Discord Friends',
-                  servers: 'Discord Servers'
-               };
+         async save() {
+            const user = getCurrentUser();
+            if (!user) return;
 
-               let obj = {
-                  servers: [],
-                  friends: []
-               };
+            const obj = {
+               servers: [],
+               friends: []
+            };
 
-               for (let friend of Object.keys(getRelationships())) {
-                  friend = await getUser(friend);
+            for (const id of Object.keys(getRelationships())) {
+               const friend = await getUser(id);
 
-                  if (!friend || !friend.id) continue;
+               if (!friend || !friend.id) continue;
 
-                  obj.friends.push({
-                     username: friend.username,
-                     discriminator: friend.discriminator,
-                     id: friend.id,
-                     tag: `${friend.username}#${friend.discriminator}`
-                  });
-               };
+               obj.friends.push({
+                  username: friend.username,
+                  discriminator: friend.discriminator,
+                  id: friend.id,
+                  tag: `${friend.username}#${friend.discriminator}`
+               });
+            };
 
-               for (let { id, name, vanityURLCode, ownerId } of Object.values(getGuilds())) {
-                  obj.servers.push({ id, name, vanityURLCode, ownerId });
-               }
+            for (const { id, name, vanityURLCode, ownerId } of Object.values(getGuilds())) {
+               obj.servers.push({ id, name, vanityURLCode, ownerId });
+            }
 
-               for (let save of Object.keys(obj)) {
-                  let savePath = path[save].replace(/%([^%]+)%/g, (_, n) => process.env[n.toUpperCase()]);
-                  if (!fs.existsSync(savePath)) {
-                     fs.mkdirSync(savePath, { recursive: true });
-                  }
-                  fs.writeFile(`${savePath}${fileNames[save]}.json`.replace(/%([^%]+)%/g, (_, n) => process.env[n]), JSON.stringify(obj[save]), (err) => {
-                     if (err) console.log(err);
-                  });
-               }
-            }, 18e5);
+            PluginUtilities.saveData(config.info.name, user.id, obj);
          };
 
          stop() {
