@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.6',
+         version: '1.2.7',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: "Fixed",
             type: 'fixed',
             items: [
-               'The plugin now works again.'
+               'Fixes the functionality of clearing a whole server\'s messages through right clicking its icon.'
             ]
          }
       ]
@@ -262,9 +262,11 @@ module.exports = (() => {
          }
 
          processContextMenu(_, args, res) {
-            const channel = !res.props?.navId?.includes('guild');
+            const channel = !args[0].guild;
             const children = Utilities.findInReactTree(res, r => Array.isArray(r));
             const instance = channel ? args[0].channel?.id : args[0].guild?.id;
+            if (!instance) return res;
+
             const mute = Utilities.findInReactTree(children, (c) => {
                const children = c?.props?.children;
                if (!children || (Array.isArray(children) && !children.length)) return false;
