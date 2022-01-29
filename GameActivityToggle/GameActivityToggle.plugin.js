@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.7',
+         version: '1.0.8',
          description: 'Adds an entry in the status picker to toggle game activity.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js'
       },
+      changelog: [
+         {
+            type: 'fixed',
+            title: 'Fixed',
+            items: [
+               'Fixed the plugin.'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -131,17 +140,17 @@ module.exports = (() => {
          }
 
          start() {
-            let showCurrentGame;
-            const g = WebpackModules.getByProps('showCurrentGame');
-            const settings = WebpackModules.getByProps('updateRemoteSettings');
+            const { ShowCurrentGame } = WebpackModules.getByProps('ShowCurrentGame') || {};
             const classes = WebpackModules.getByProps('status', 'statusItem');
             const Menu = WebpackModules.getByProps('MenuItem');
+
             const enabledIcon = w => React.createElement('svg', {
                viewBox: '0 0 24 24', width: w, height: w, style: { 'margin-left': '-2px' }
             }, React.createElement('path', {
                style: { fill: 'currentColor' },
                d: 'M20.8,7.7c-0.6-1.2-1.8-1.9-3.1-1.9H6.3C5,5.7,3.8,6.5,3.2,7.6l-2.8,5.8c0,0,0,0,0,0C-0.3,15.1,0.4,17,2,17.8L2.3,18C4,18.7,5.9,18,6.7,16.4l0.1-0.3c0.3-0.6,0.9-1,1.6-1h7.1c0.7,0,1.3,0.4,1.6,1l0.1,0.3c0.8,1.6,2.7,2.4,4.4,1.6l0.3-0.1c1.6-0.8,2.3-2.7,1.6-4.4L20.8,7.7z M8.6,10.5c0,0.2-0.2,0.4-0.4,0.4H7.3c-0.2,0-0.4,0.2-0.4,0.4v0.9c0,0.2-0.2,0.4-0.4,0.4H5.7c-0.2,0-0.4-0.2-0.4-0.4v-0.9c0-0.2-0.2-0.4-0.4-0.4c0,0,0,0,0,0H4.1c-0.2,0-0.4-0.2-0.4-0.4V9.7c0-0.2,0.2-0.4,0.4-0.4h0.9c0.2,0,0.4-0.2,0.4-0.4c0,0,0,0,0,0V8.1c0-0.2,0.2-0.4,0.4-0.4h0.8C6.8,7.7,7,7.9,7,8.1V9c0,0.2,0.2,0.4,0.4,0.4h0.9c0.2,0,0.3,0.2,0.3,0.4V10.5z M15.6,10.9c-0.4,0-0.8-0.3-0.8-0.8c0-0.4,0.3-0.8,0.8-0.8c0,0,0,0,0,0c0.4,0,0.8,0.3,0.8,0.8C16.4,10.5,16.1,10.9,15.6,10.9z M17.2,7.7C17.2,7.7,17.2,7.7,17.2,7.7c0.4,0,0.8,0.3,0.8,0.8c0,0,0,0,0,0c0,0.4-0.4,0.8-0.8,0.8c-0.4,0-0.8-0.4-0.8-0.8S16.8,7.7,17.2,7.7z M18,11.7L18,11.7C18,11.7,18,11.7,18,11.7c0,0.4-0.3,0.8-0.8,0.8c-0.4,0-0.8-0.3-0.8-0.8c0-0.4,0.3-0.8,0.8-0.8c0,0,0,0,0,0C17.7,10.9,18,11.3,18,11.7C18,11.7,18,11.7,18,11.7L18,11.7C18,11.7,18,11.7,18,11.7C18,11.7,18,11.7,18,11.7z M18.9,10.9c-0.4,0-0.8-0.3-0.8-0.8c0-0.4,0.3-0.8,0.8-0.8c0,0,0,0,0,0c0.4,0,0.8,0.3,0.8,0.8C19.6,10.5,19.3,10.9,18.9,10.9z'
             }));
+
             const disabledIcon = w => React.createElement('svg', {
                viewBox: '0 0 24 24', width: w, height: w, style: { 'margin-left': '-2px' }
             }, React.createElement('path', {
@@ -151,28 +160,27 @@ module.exports = (() => {
                style: { fill: '#F04747' },
                points: '22.6,2.7 22.6,2.8 19.3,6.1 16,9.3 16,9.4 15,10.4 15,10.4 10.3,15 2.8,22.5 1.4,21.1 21.2,1.3 '
             }));
+
             Patcher.before(Menu, 'default', (_, args) => {
                if (args[0]?.navId != 'status-picker') return args;
+               const enabled = ShowCurrentGame.getSetting();
 
                const [{ children }] = args;
                const invisibleStatus = children.find(c => c?.props?.id == 'invisible');
 
                if (!children.find(c => c?.props?.id == 'game-activity')) {
-                  showCurrentGame = g.showCurrentGame;
-
                   children.splice(children.indexOf(invisibleStatus) + 1, 0, React.createElement(Menu.MenuItem, {
                      id: 'game-activity',
                      keepItemStyles: true,
                      action: () => {
-                        showCurrentGame = !showCurrentGame;
-                        return settings.updateRemoteSettings({ showCurrentGame });
+                        return ShowCurrentGame.updateSetting(!ShowCurrentGame.getSetting());
                      },
                      render: () => React.createElement('div', {
                         className: classes.statusItem,
-                        'aria-label': `${showCurrentGame ? 'Hide' : 'Show'} Game Activity`
-                     }, showCurrentGame ? disabledIcon('16') : enabledIcon('16'), React.createElement('div', {
+                        'aria-label': `${enabled ? 'Hide' : 'Show'} Game Activity`
+                     }, enabled ? disabledIcon('16') : enabledIcon('16'), React.createElement('div', {
                         className: classes.status
-                     }, `${showCurrentGame ? 'Hide' : 'Show'} Game Activity`), React.createElement('div', {
+                     }, `${enabled ? 'Hide' : 'Show'} Game Activity`), React.createElement('div', {
                         className: classes.description
                      }, 'Display currently running game as a status message.'))
                   }));

@@ -43,17 +43,17 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.2.7',
+         version: '1.2.8',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
-            title: "Fixed",
+            title: 'Fixed',
             type: 'fixed',
             items: [
-               'Fixes the functionality of clearing a whole server\'s messages through right clicking its icon.'
+               'Completely fix the plugin.'
             ]
          }
       ]
@@ -144,7 +144,7 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules, Patcher, DiscordModules: { React }, Logger, PluginUtilities, Utilities } = API;
+      const { WebpackModules, DCM, Patcher, DiscordModules: { React }, Logger, PluginUtilities, Utilities } = API;
       const { getToken } = WebpackModules.getByProps('getToken');
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
@@ -240,31 +240,47 @@ module.exports = (() => {
                };
             }
 
+            this.promises = { cancelled: false };
+
             this.patchContextMenus();
          };
 
-         patchContextMenus() {
-            const DMContextMenu = WebpackModules.find(m => m.default?.displayName == 'DMUserContextMenu');
-            Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
+         async patchContextMenus() {
+            this.patchDMContextMenu();
+            this.patchChannelContextMenu();
+            this.patchGuildContextMenu();
+            this.patchGroupContextMenu();
+         }
 
-            const ChannelContextMenu = WebpackModules.findAll(m => m.default?.displayName == 'ChannelListTextChannelContextMenu');
-            for (let i = 0; i < ChannelContextMenu.length; i++) {
-               Patcher.after(ChannelContextMenu[i], 'default', this.processContextMenu.bind(this));
-            }
-
-            Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
-
-            const GuildContextMenu = WebpackModules.find(m => m.default?.displayName == 'GuildContextMenu');
-            Patcher.after(GuildContextMenu, 'default', this.processContextMenu.bind(this));
-
-            const GroupDMContextMenu = WebpackModules.find(m => m.default?.displayName == 'GroupDMContextMenu');
+         async patchGroupContextMenu() {
+            const GroupDMContextMenu = await DCM.getDiscordMenu('GroupDMContextMenu');
+            if (this.promises.cancelled) return;
             Patcher.after(GroupDMContextMenu, 'default', this.processContextMenu.bind(this));
          }
 
+         async patchGuildContextMenu() {
+            const GuildContextMenu = await DCM.getDiscordMenu('GuildContextMenu');
+            if (this.promises.cancelled) return;
+
+            Patcher.after(GuildContextMenu, 'default', this.processContextMenu.bind(this));
+         }
+
+         async patchChannelContextMenu() {
+            const ChannelContextMenu = await DCM.getDiscordMenu('ChannelListTextChannelContextMenu');
+            if (this.promises.cancelled) return;
+            Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
+         }
+
+         async patchDMContextMenu() {
+            const DMContextMenu = await DCM.getDiscordMenu('DMUserContextMenu');
+            if (this.promises.cancelled) return;
+            Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
+         }
+
          processContextMenu(_, args, res) {
-            const channel = !args[0].guild;
+            const channel = args[0].channel?.id;
             const children = Utilities.findInReactTree(res, r => Array.isArray(r));
-            const instance = channel ? args[0].channel?.id : args[0].guild?.id;
+            const instance = args[0].channel?.id ?? args[0].guild?.id;
             if (!instance) return res;
 
             const mute = Utilities.findInReactTree(children, (c) => {
@@ -313,6 +329,7 @@ module.exports = (() => {
          stop() {
             delete window.commands?.['clear'];
             Patcher.unpatchAll();
+            this.promises.cancelled = true;
          };
 
          getSettingsPanel() {
@@ -472,7 +489,7 @@ module.exports = (() => {
                XenoLib.Notifications.success(`Deleted ${amount} messages ${location}`, {
                   timeout: 0,
                   onClick: () => {
-                     if (guild) return transitionTo(transitionTo(Routes.CHANNEL(instance.id, getChannelId(instance.id))));
+                     if (guild) return ZLibrary.DiscordModules.NavigationUtils.transitionTo(Routes.CHANNEL(instance.id, getChannelId(instance.id)));
                      if (instance.type == 1) return ChannelStore.openPrivateChannel(instance.recipients[0]);
                      ZLibrary.DiscordModules.NavigationUtils.transitionTo(`/channels/${instance.guild_id || '@me'}/${instance.id}`);
                   }

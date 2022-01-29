@@ -43,11 +43,20 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: 'Hides every button in the DMs list except friends.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/HideDMButons/HideDMButons.plugin.js'
       },
+      changelog: [
+         {
+            type: 'fixed',
+            title: 'Fixed',
+            items: [
+               'Fixed the plugin.'
+            ]
+         }
+      ]
    };
 
    return !global.ZeresPluginLibrary ? class {
@@ -135,7 +144,7 @@ module.exports = (() => {
             Patcher.before(DMsList, 'default', (_, args, res) => {
                const Arguments = args[0];
                if (Arguments?.children) {
-                  Arguments.children = [Arguments?.children?.find(i => i?.toString().includes('"friends"'))];
+                  Arguments.children = Arguments.children.filter(a => a?.key == 'friends');;
                }
             });
 

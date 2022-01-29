@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.6',
+         version: '2.0.7',
          description: 'A context menu utility to move everyone to a certain voice channel.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
@@ -130,11 +130,10 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules, Patcher, DiscordModules: { React } } = API;
+      const { WebpackModules, Patcher, DCM, DiscordModules: { React } } = API;
 
       const sleep = (time) => new Promise((f) => setTimeout(f, time));
 
-      const VCContextMenu = WebpackModules.findAll(m => m.default && m.default.displayName == 'ChannelListVoiceChannelContextMenu');
       const { getVoiceStatesForChannel } = WebpackModules.getByProps('getVoiceStatesForChannel');
       const DiscordPermissions = WebpackModules.getByProps('API_HOST').Permissions;
       const { getVoiceChannelId } = WebpackModules.getByProps('getVoiceChannelId');
@@ -151,40 +150,52 @@ module.exports = (() => {
          }
 
          start() {
-            for (let i = 0; VCContextMenu.length > i; i++) {
-               Patcher.after(VCContextMenu[i], 'default', (_, args, res) => {
-                  let channel = args[0].channel;
-                  if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
-                  let currentChannel = this.getVoiceChannel();
-                  if (!currentChannel) return res;
+            this.promises = { cancelled: false };
+            this.patchContextMenu();
+         }
 
-                  let item = React.createElement(Menu.MenuItem, {
-                     action: async () => {
-                        for (const member of currentChannel.members) {
-                           await patch({
-                              url: Endpoints.GUILD_MEMBER(channel.guild_id, member),
-                              body: {
-                                 channel_id: channel.id
-                              }
-                           }).catch(async (e) => {
-                              await sleep(e.body.retry_after * 1000);
-                              currentChannel.members.unshift(member);
-                           });
-                        }
-                     },
-                     id: 'move-all-vc',
-                     label: 'Move All'
-                  });
+         async patchContextMenu() {
+            const ContextMenu = await DCM.getDiscordMenu('ChannelListVoiceChannelContextMenu');
+            if (this.promises.cancelled) return;
 
-                  let element = React.createElement(Menu.MenuGroup, null, item);
-                  res.props.children.push(element);
-                  return res;
+            Patcher.after(ContextMenu, 'default', (_, args, res) => {
+               const channel = args[0].channel;
+               if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
+               const currentChannel = this.getVoiceChannel();
+               if (!currentChannel) return res;
+
+               const item = React.createElement(Menu.MenuItem, {
+                  action: async () => {
+                     for (const member of currentChannel.members) {
+                        await patch({
+                           url: Endpoints.GUILD_MEMBER(channel.guild_id, member),
+                           body: {
+                              channel_id: channel.id
+                           }
+                        }).catch(async (e) => {
+                           await sleep(e.body.retry_after * 1000);
+                           currentChannel.members.unshift(member);
+                        });
+                     }
+                  },
+                  id: 'move-all-vc',
+                  label: 'Move All'
                });
-            }
+
+               const element = React.createElement(Menu.MenuGroup, null, item);
+               if (res.props.children?.props) {
+                  res.props.children?.props.children.push(element);
+               } else {
+                  res.props.children.push(element);
+               };
+
+               return res;
+            });
          }
 
          stop() {
             Patcher.unpatchAll();
+            this.promises.cancelled = true;
          }
 
          getVoiceUserIds(channel) {

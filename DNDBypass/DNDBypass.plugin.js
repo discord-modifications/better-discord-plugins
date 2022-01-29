@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '1.0.6',
+         version: '1.0.7',
          description: 'Give your selection of friends the ability to bypass Do Not Disturb.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/DNDBypass/DNDBypass.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               `Fixed the click-jack when trying to whitelist users.`
+               `Fixed the plugin.`
             ]
          }
       ]
@@ -153,7 +153,6 @@ module.exports = (() => {
          const { getRelationships } = WebpackModules.getByProps('getRelationships');
          const { getUser } = WebpackModules.getByProps('getUser', 'getUsers');
          const classes = {
-            auditLogsFilter: WebpackModules.getByProps('guildSettingsAuditLogsUserFilterPopout').guildSettingsAuditLogsUserFilterPopout,
             elevationBorderHigh: WebpackModules.getByProps('elevationBorderHigh').elevationBorderHigh,
             alignCenter: WebpackModules.getByProps('alignCenter').alignCenter,
             scroller: WebpackModules.getByProps('listWrapper', 'scroller').scroller,
@@ -180,7 +179,7 @@ module.exports = (() => {
                let friends = Object.keys(relationships).filter(relation => relationships[relation] === 1);
                friends = [...this.state.friends.filter(f => !friends.includes(f)), ...friends];
                return React.createElement('div', null, React.createElement('div', {
-                  className: `db-user-settings ${classes.popoutList} ${classes.auditLogsFilter} ${classes.elevationBorderHigh}`,
+                  className: `db-user-settings ${classes.popoutList} ${classes.elevationBorderHigh}`,
                   popoutKey: 'db-users'
                }, React.createElement(PopoutListSearchBar, {
                   autoFocus: true,
