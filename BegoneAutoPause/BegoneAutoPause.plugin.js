@@ -1,8 +1,8 @@
 /**
  * @name BegoneAutoPause
- * @source https://github.com/slow/better-discord-plugins/blob/master/BegoneAutoPause/BegoneAutoPause.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/BegoneAutoPause/BegoneAutoPause.plugin.js
+ * @source https://github.com/eternal404/better-discord-plugins/blob/master/BegoneAutoPause/BegoneAutoPause.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js
+ * @website https://github.com/eternal404/better-discord-plugins/tree/master/BegoneAutoPause/BegoneAutoPause.plugin.js
  * @authorId 282595588950982656
  * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
@@ -40,13 +40,13 @@ module.exports = (() => {
             {
                name: 'eternal',
                discord_id: '282595588950982656',
-               github_username: 'slow'
+               github_username: 'eternal404'
             }
          ],
          version: '2.0.3',
          description: 'Stops Discord from automatically pausing your music after 30 seconds.',
-         github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js'
+         github: 'https://github.com/eternal404',
+         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/BegoneAutoPause/BegoneAutoPause.plugin.js'
       },
    };
 

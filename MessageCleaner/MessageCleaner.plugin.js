@@ -1,8 +1,8 @@
 /**
  * @name MessageCleaner
- * @source https://github.com/slow/better-discord-plugins/blob/master/MessageCleaner/MessageCleaner.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/MessageCleaner/MessageCleaner.plugin.js
+ * @source https://github.com/eternal404/better-discord-plugins/blob/master/MessageCleaner/MessageCleaner.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js
+ * @website https://github.com/eternal404/better-discord-plugins/tree/master/MessageCleaner/MessageCleaner.plugin.js
  * @authorId 282595588950982656
  * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
@@ -40,13 +40,13 @@ module.exports = (() => {
             {
                name: 'eternal',
                discord_id: '282595588950982656',
-               github_username: 'slow'
+               github_username: 'eternal404'
             }
          ],
          version: '1.2.8',
          description: 'Clears messages in the current channel.',
-         github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
+         github: 'https://github.com/eternal404',
+         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
       },
       changelog: [
          {
@@ -105,8 +105,8 @@ module.exports = (() => {
             {
                global: 'CommandsAPI',
                filename: '2CommandsAPI.plugin.js',
-               external: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js',
-               url: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
+               external: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js',
+               url: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
             }
          ];
 
@@ -402,7 +402,7 @@ module.exports = (() => {
                      },
                      options: [
                         {
-                           name: 'Normal: Deletes one message at a time (most stable but slower)',
+                           name: 'Normal: Deletes one message at a time (most stable but eternal404er)',
                            value: 0
                         }, {
                            name: 'Burst: Deletes multiple messages at a time (unstable but fast)',

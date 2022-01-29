@@ -1,8 +1,8 @@
 /**
  * @name VoiceChatMoveAll
- * @source https://github.com/slow/better-discord-plugins/blob/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
- * @updateUrl https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
- * @website https://github.com/slow/better-discord-plugins/tree/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
+ * @source https://github.com/eternal404/better-discord-plugins/blob/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
+ * @website https://github.com/eternal404/better-discord-plugins/tree/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js
  * @authorId 282595588950982656
  * @invite shnvz5ryAt
  * @donate https://paypal.me/eternal404
@@ -40,13 +40,13 @@ module.exports = (() => {
             {
                name: 'eternal',
                discord_id: '282595588950982656',
-               github_username: 'slow'
+               github_username: 'eternal404'
             }
          ],
          version: '2.0.7',
          description: 'A context menu utility to move everyone to a certain voice channel.',
-         github: 'https://github.com/slow',
-         github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
+         github: 'https://github.com/eternal404',
+         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
       },
       changelog: [
          {
