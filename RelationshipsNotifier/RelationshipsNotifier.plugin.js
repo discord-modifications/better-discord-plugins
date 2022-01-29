@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'slow'
             }
          ],
-         version: '2.0.7',
+         version: '2.0.8',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/slow',
          github_raw: 'https://raw.githubusercontent.com/slow/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -249,7 +249,7 @@ module.exports = (() => {
          }
 
          start() {
-            if (!document.head.find(`style[id="${config.info.name}"]`)) {
+            if (!document.querySelector(`style[id="${config.info.name}"]`)) {
                PluginUtilities.addStyle(config.info.name, `
                .bd-settings-item-title {
                   display: flex;
@@ -323,7 +323,7 @@ module.exports = (() => {
          };
 
          stop() {
-            if (document.head.find(`style[id="${config.info.name}"]`)) {
+            if (document.querySelector(`style[id="${config.info.name}"]`)) {
                PluginUtilities.removeStyle(config.info.name);
             }
 
