@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '1.0.5',
+         version: '2.0.0',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             type: 'fixed',
             title: 'Fixed',
             items: [
-               'Fixes errors in console for users with no banners.'
+               'Now works again.'
             ]
          }
       ]
@@ -135,28 +135,54 @@ module.exports = (() => {
       const { WebpackModules, DiscordModules: { React }, Utilities, Patcher, PluginUtilities } = API;
       const { clipboard } = require('electron');
 
+      const listeners = [];
+      async function findLazy(filter) {
+         const direct = WebpackModules.find(filter);
+         if (direct) return direct;
+
+         return new Promise(resolve => {
+            const listener = (m) => {
+               const direct = filter(m);
+               if (direct) {
+                  resolve(m);
+                  return void remove();
+               }
+
+               if (!m.default) return;
+               const defaultMatch = filter(m.default);
+               if (!defaultMatch) return;
+
+               resolve(m.default);
+               remove();
+            };
+
+            const remove = WebpackModules.addListener(listener);
+            listeners.push(remove);
+         });
+      }
+
       const { openContextMenu, closeContextMenu } = WebpackModules.getByProps('openContextMenu', 'closeContextMenu');
       const ContextMenu = WebpackModules.getByProps('MenuGroup', 'MenuItem');
-      const Banner = WebpackModules.find(m => m.default?.displayName == 'UserBanner');
-      const ProfileModalHeader = WebpackModules.find(m => m.default?.displayName == 'UserProfileModalHeader');
-      const classes = WebpackModules.getByProps('discriminator', 'header');
       const Banners = WebpackModules.getByProps('getUserBannerURL');
       const SizeRegex = /(?:\?size=\d{3,4})?$/;
+      const style = `.picture-link { cursor: pointer; }`;
 
       return class extends Plugin {
-         constructor() {
-            super();
-         }
-
          start() {
-            PluginUtilities.addStyle(this.getName(), `
-               .picture-link {
-                  cursor: pointer;
-               }
-            `);
+            this.promises = { cancelled: false };
+            PluginUtilities.addStyle(this.getName(), style);
 
+            this.patchBanners();
+            this.patchModalAvatar();
+         };
+
+         async patchModalAvatar() {
+            const ProfileModalHeader = await findLazy(m => m.default?.displayName == 'UserProfileModalHeader');
+            if (this.promises.cancelled) return;
+
+            const classes = WebpackModules.getByProps('relationshipButtons');
             Patcher.after(ProfileModalHeader, 'default', (_, args, res) => {
-               const avatar = Utilities.findInReactTree(res, m => m?.props?.className == classes.avatar);
+               const avatar = Utilities.findInReactTree(res, m => m?.props?.className == classes?.avatar);
                const image = args[0].user?.getAvatarURL?.(false, 4096, true)?.replace('.webp', '.png');
 
                if (avatar && image) {
@@ -173,6 +199,11 @@ module.exports = (() => {
                   );
                }
             });
+         }
+
+         async patchBanners() {
+            const Banner = await findLazy(m => m.default?.displayName == 'UserBanner');
+            if (this.promises.cancelled) return;
 
             Patcher.after(Banner, 'default', (_, args, res) => {
                const handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
@@ -199,11 +230,13 @@ module.exports = (() => {
                   res.props.className = [res.props.className, 'picture-link'].join(' ');
                }
             });
-         };
+         }
 
          stop() {
+            this.promises.cancelled = true;
             PluginUtilities.removeStyle(this.getName());
             Patcher.unpatchAll();
+            listeners.map(l => l());
          };
       };
    })(ZLibrary.buildPlugin(config));

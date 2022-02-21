@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '1.2.8',
+         version: '1.2.9',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -53,7 +53,7 @@ module.exports = (() => {
             title: 'Fixed',
             type: 'fixed',
             items: [
-               'Completely fix the plugin.'
+               'Fix context menus.'
             ]
          }
       ]
@@ -149,12 +149,13 @@ module.exports = (() => {
       const { getChannelId } = WebpackModules.getByProps('getLastSelectedChannelId');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
       const { getChannel } = WebpackModules.getByProps('hasChannel');
-      const { MenuItem } = WebpackModules.getByProps('MenuItem');
+      const { MenuItem, MenuSeperator } = WebpackModules.getByProps('MenuItem');
       const { getUser } = WebpackModules.getByProps('getUser');
       const { getGuild } = WebpackModules.getByProps('getGuild');
       const { getCurrentUser } = WebpackModules.getByProps('getCurrentUser', 'getUser');
       const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
       const sleep = (time) => new Promise((f) => setTimeout(() => f(), time));
+
       const Components = (() => {
          const comps = {};
 
@@ -246,14 +247,12 @@ module.exports = (() => {
          };
 
          async patchContextMenus() {
-            this.patchDMContextMenu();
-            this.patchChannelContextMenu();
             this.patchGuildContextMenu();
-            this.patchGroupContextMenu();
+            this.patchChannelsContextMenu();
          }
 
-         async patchGroupContextMenu() {
-            const GroupDMContextMenu = await DCM.getDiscordMenu('GroupDMContextMenu');
+         async patchChannelsContextMenu() {
+            const GroupDMContextMenu = WebpackModules.find(m => m.default?.toString()?.includes?.('mute-channel'));
             if (this.promises.cancelled) return;
             Patcher.after(GroupDMContextMenu, 'default', this.processContextMenu.bind(this));
          }
@@ -265,19 +264,31 @@ module.exports = (() => {
             Patcher.after(GuildContextMenu, 'default', this.processContextMenu.bind(this));
          }
 
-         async patchChannelContextMenu() {
-            const ChannelContextMenu = await DCM.getDiscordMenu('ChannelListTextChannelContextMenu');
-            if (this.promises.cancelled) return;
-            Patcher.after(ChannelContextMenu, 'default', this.processContextMenu.bind(this));
-         }
-
-         async patchDMContextMenu() {
-            const DMContextMenu = await DCM.getDiscordMenu('DMUserContextMenu');
-            if (this.promises.cancelled) return;
-            Patcher.after(DMContextMenu, 'default', this.processContextMenu.bind(this));
-         }
-
          processContextMenu(_, args, res) {
+            if (args.length === 1 && args[0].type !== void 0) {
+               const button = (!this.pruning[args[0].id] ?
+                  React.createElement(MenuItem, {
+                     id: 'clean-all',
+                     key: 'clean-all',
+                     label: 'Purge all messages',
+                     action: () => this.clear(['all'], null, args[0].id, false)
+                  })
+                  :
+                  React.createElement(MenuItem, {
+                     id: 'stop-cleaning',
+                     key: 'stop-cleaning',
+                     label: 'Stop purging',
+                     action: () => delete this.pruning[args[0].id]
+                  })
+               );
+
+               return [
+                  res,
+                  MenuSeperator,
+                  button,
+               ];
+            };
+
             const channel = args[0].channel?.id;
             const children = Utilities.findInReactTree(res, r => Array.isArray(r));
             const instance = args[0].channel?.id ?? args[0].guild?.id;
