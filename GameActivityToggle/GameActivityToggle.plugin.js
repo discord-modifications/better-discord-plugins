@@ -1,10 +1,10 @@
 /**
  * @name GameActivityToggle
- * @source https://github.com/eternal404/better-discord-plugins/blob/master/GameActivityToggle/GameActivityToggle.plugin.js
- * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js
- * @website https://github.com/eternal404/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js
+ * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/GameActivityToggle/GameActivityToggle.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js
+ * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/GameActivityToggle/GameActivityToggle.plugin.js
  * @authorId 282595588950982656
- * @invite shnvz5ryAt
+ * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
 
@@ -46,7 +46,7 @@ module.exports = (() => {
          version: '1.0.8',
          description: 'Adds an entry in the status picker to toggle game activity.',
          github: 'https://github.com/eternal404',
-         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/GameActivityToggle/GameActivityToggle.plugin.js'
       },
       changelog: [
          {

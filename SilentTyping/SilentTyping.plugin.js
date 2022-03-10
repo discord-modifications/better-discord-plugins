@@ -1,10 +1,10 @@
 /**
  * @name SilentTyping
- * @source https://github.com/eternal404/better-discord-plugins/blob/master/SilentTyping/SilentTyping.plugin.js
- * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js
- * @website https://github.com/eternal404/better-discord-plugins/tree/master/SilentTyping/SilentTyping.plugin.js
+ * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/SilentTyping/SilentTyping.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js
+ * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/SilentTyping/SilentTyping.plugin.js
  * @authorId 282595588950982656
- * @invite shnvz5ryAt
+ * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
 
@@ -46,7 +46,7 @@ module.exports = (() => {
          version: '2.0.3',
          description: 'Silences your typing indicator/status.',
          github: 'https://github.com/eternal404',
-         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/SilentTyping/SilentTyping.plugin.js'
       },
    };
 

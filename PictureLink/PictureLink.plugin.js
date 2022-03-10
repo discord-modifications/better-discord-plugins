@@ -1,10 +1,10 @@
 /**
  * @name PictureLink
- * @source https://github.com/eternal404/better-discord-plugins/blob/master/PictureLink/PictureLink.plugin.js
- * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/PictureLink/PictureLink.plugin.js
- * @website https://github.com/eternal404/better-discord-plugins/tree/master/PictureLink/PictureLink.plugin.js
+ * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/PictureLink/PictureLink.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/PictureLink/PictureLink.plugin.js
+ * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink/PictureLink.plugin.js
  * @authorId 282595588950982656
- * @invite shnvz5ryAt
+ * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
 
@@ -46,7 +46,7 @@ module.exports = (() => {
          version: '2.0.0',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/eternal404',
-         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
       },
       changelog: [
          {

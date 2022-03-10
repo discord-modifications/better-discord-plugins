@@ -1,10 +1,10 @@
 /**
  * @name CommandsAPI
- * @source https://github.com/eternal404/better-discord-plugins/blob/master/CommandsAPI/2CommandsAPI.plugin.js
- * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js
- * @website https://github.com/eternal404/better-discord-plugins/tree/master/CommandsAPI/2CommandsAPI.plugin.js
+ * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/CommandsAPI/2CommandsAPI.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js
+ * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/CommandsAPI/2CommandsAPI.plugin.js
  * @authorId 282595588950982656
- * @invite shnvz5ryAt
+ * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
 
@@ -46,7 +46,7 @@ module.exports = (() => {
          version: '1.1.7',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/eternal404',
-         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
       },
       defaultConfig: [
          {

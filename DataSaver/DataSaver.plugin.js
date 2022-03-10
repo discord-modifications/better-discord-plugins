@@ -1,10 +1,10 @@
 /**
  * @name DataSaver
- * @source https://github.com/eternal404/better-discord-plugins/blob/master/DataSaver/DataSaver.plugin.js
- * @updateUrl https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/DataSaver/DataSaver.plugin.js
- * @website https://github.com/eternal404/better-discord-plugins/tree/master/DataSaver/DataSaver.plugin.js
+ * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/DataSaver/DataSaver.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/DataSaver/DataSaver.plugin.js
+ * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver/DataSaver.plugin.js
  * @authorId 282595588950982656
- * @invite shnvz5ryAt
+ * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
 
@@ -46,7 +46,7 @@ module.exports = (() => {
          version: '1.0.7',
          description: 'Saves friends & Servers every 30 minutes to a file.',
          github: 'https://github.com/eternal404',
-         github_raw: 'https://raw.githubusercontent.com/eternal404/better-discord-plugins/master/DataSaver/DataSaver.plugin.js'
+         github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/DataSaver/DataSaver.plugin.js'
       },
       changelog: [
          {
