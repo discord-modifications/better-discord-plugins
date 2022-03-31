@@ -16,6 +16,9 @@
 #### [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass")
 Give your selection of friends the ability to bypass Do Not Disturb.
 
+#### [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack")
+Allows you to screenshare in any quality/fps without nitro.
+
 #### [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver")
 Saves friends & Servers every 30 minutes to a file.
 
