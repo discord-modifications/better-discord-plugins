@@ -72,3 +72,6 @@ Opens links all over the app in their respective app.
 
 #### [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons")
 Hides every button in the DMs list except friends.
+
+#### [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC")
+Requires you to double click voice channels to join them instead of single clicking.
