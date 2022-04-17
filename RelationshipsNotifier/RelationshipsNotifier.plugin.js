@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '2.0.8',
+         version: '2.0.9',
          description: 'Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/RelationshipsNotifier/RelationshipsNotifier.plugin.js'
@@ -138,7 +138,7 @@ module.exports = (() => {
       const { flexChild: FlexChild } = WebpackModules.getByProps('flexChild');
       const ChannelStore = WebpackModules.getByProps('openPrivateChannel');
       const { getChannels } = WebpackModules.getByProps('getChannels');
-      const { getGuilds } = WebpackModules.getByProps('getGuilds');
+      const { getGuilds, getGuild } = WebpackModules.getByProps('getGuilds');
 
       const Components = (() => {
          const comps = {};
@@ -291,6 +291,7 @@ module.exports = (() => {
             Dispatcher.subscribe('RELATIONSHIP_REMOVE', this.relationshipRemove);
             Dispatcher.subscribe('GUILD_MEMBER_REMOVE', this.memberRemove);
             Dispatcher.subscribe('GUILD_CREATE', this.guildCreate);
+            Dispatcher.subscribe('GUILD_JOIN', this.guildJoin);
             Dispatcher.subscribe('CHANNEL_CREATE', this.channelCreate);
             Dispatcher.subscribe('CHANNEL_DELETE', this.channelDelete);
 
@@ -315,11 +316,6 @@ module.exports = (() => {
                this.mostRecentlyLeftGroup = args[0];
                this.removeGroupFromCache(args[0]);
             });
-
-            const Lurk = WebpackModules.getByProps('startLurking');
-            Patcher.after(Lurk, 'startLurking', (_, [guild]) => {
-               this.mostRecentlyLurking = guild;
-            });
          };
 
          stop() {
@@ -331,6 +327,7 @@ module.exports = (() => {
             Dispatcher.unsubscribe('RELATIONSHIP_REMOVE', this.relationshipRemove);
             Dispatcher.unsubscribe('GUILD_MEMBER_REMOVE', this.memberRemove);
             Dispatcher.unsubscribe('GUILD_CREATE', this.guildCreate);
+            Dispatcher.unsubscribe('GUILD_JOIN', this.guildJoin);
             Dispatcher.unsubscribe('CHANNEL_CREATE', this.channelCreate);
             Dispatcher.unsubscribe('CHANNEL_DELETE', this.channelDelete);
          };
@@ -435,14 +432,18 @@ module.exports = (() => {
             };
          };
 
+         guildJoin = (data) => {
+            if (!data.lurker) return;
+            this.mostRecentlyLurking = data.guildId;
+         };
 
          guildCreate = (data) => {
             if (this.mostRecentlyLurking == data.guild.id) {
                this.mostRecentlyLurking = null;
-               this.removeGroupFromCache(data.guild.id);
+               this.removeGuildFromCache(data.guild.id);
                return;
             }
-            this.cachedGuilds.push(data.guild);
+            this.cachedGuilds.push(getGuild(data.guild.id));
          };
 
          channelCreate = (data) => {
