@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '2.0.5',
+         version: '2.0.6',
          description: "Bypasses discord's NSFW age gate.",
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/NSFWGateBypass/NSFWGateBypass.plugin.js'
@@ -142,7 +142,9 @@ module.exports = (() => {
 
          start() {
             Patcher.after(Users, 'getCurrentUser', (_, args, res) => {
-               if (res.nsfwAllowed == false) res.nsfwAllowed = true;
+               if (res?.hasOwnProperty('nsfwAllowed')) {
+                  res.nsfwAllowed = true;
+               }
             });
          };
 
