@@ -130,7 +130,7 @@ module.exports = (() => {
          );
       }
    } : (([Plugin, API]) => {
-      const { WebpackModules, Patcher, DCM, DiscordModules: { React } } = API;
+      const { WebpackModules, Patcher,  ContextMenu, DiscordModules: { React } } = API;
 
       const sleep = (time) => new Promise((f) => setTimeout(f, time));
 
@@ -155,16 +155,24 @@ module.exports = (() => {
          }
 
          async patchContextMenu() {
-            const ContextMenu = await DCM.getDiscordMenu('ChannelListVoiceChannelContextMenu');
+   
             if (this.promises.cancelled) return;
 
-            Patcher.after(ContextMenu, 'default', (_, args, res) => {
-               const channel = args[0].channel;
-               if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return res;
-               const currentChannel = this.getVoiceChannel();
-               if (!currentChannel) return res;
+         }
 
-               const item = React.createElement(Menu.MenuItem, {
+         stop() {
+            Patcher.unpatchAll();
+            this.promises.cancelled = true;
+             ContextMenu.getDiscordMenu("useChannelDeleteItem").then(menu => {
+Patcher.after(menu, "default", (_, [channel], ret) => {
+	
+	if (channel.type !== 2 ) return;
+	 if (!channel || !channel.guild_id || !this.canMoveAll(channel)) return;
+	 	
+               const currentChannel = this.getVoiceChannel();
+               if (!currentChannel) return;
+    return [
+        ContextMenu.buildMenuItem({
                   action: async () => {
                      for (const member of currentChannel.members) {
                         await patch({
@@ -180,22 +188,11 @@ module.exports = (() => {
                   },
                   id: 'move-all-vc',
                   label: 'Move All'
-               });
-
-               const element = React.createElement(Menu.MenuGroup, null, item);
-               if (res.props.children?.props) {
-                  res.props.children?.props.children.push(element);
-               } else {
-                  res.props.children.push(element);
-               };
-
-               return res;
-            });
-         }
-
-         stop() {
-            Patcher.unpatchAll();
-            this.promises.cancelled = true;
+               }, true),
+        ret
+    ];
+});
+})
          }
 
          getVoiceUserIds(channel) {
