@@ -41,9 +41,14 @@ module.exports = (() => {
                name: 'eternal',
                discord_id: '282595588950982656',
                github_username: 'eternal404'
-            }
+            },
+            {
+	       name: "Ahlawat",
+	       discord_id: "887483349369765930",
+	       github_username: "Tharki-God",
+	    },
          ],
-         version: '2.0.7',
+         version: '2.0.8',
          description: 'A context menu utility to move everyone to a certain voice channel.',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/VoiceChatMoveAll/VoiceChatMoveAll.plugin.js'
