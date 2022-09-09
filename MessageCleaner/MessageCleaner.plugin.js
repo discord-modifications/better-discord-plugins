@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '1.2.9',
+         version: '1.3.0',
          description: 'Clears messages in the current channel.',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/MessageCleaner/MessageCleaner.plugin.js'
@@ -431,7 +431,7 @@ module.exports = (() => {
             const { BOT_AVATARS } = WebpackModules.getByProps('BOT_AVATARS');
             const { createBotMessage } = WebpackModules.getByProps('createBotMessage');
 
-            const receivedMessage = createBotMessage(channel, {});
+            const receivedMessage = createBotMessage({ channelId: channel, content: '' });
             BOT_AVATARS.message_cleaner = 'https://i.imgur.com/dOe7F3y.png';
             receivedMessage.author.username = 'Message Cleaner';
             receivedMessage.author.avatar = 'message_cleaner';
