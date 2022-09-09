@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '1.1.7',
+         version: '1.1.8',
          description: 'Adds a command system to BetterDiscord for other plugins to utilize..',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/CommandsAPI/2CommandsAPI.plugin.js'
@@ -251,7 +251,7 @@ module.exports = (() => {
                if (result.send) {
                   message.content = result.result;
                } else {
-                  const receivedMessage = createBotMessage(getChannelId(), '');
+                  const receivedMessage = createBotMessage({ channelId: getChannelId(), content: '' });
 
                   if (this.settings.replaceClyde) {
                      receivedMessage.author.username = result.username || 'Commands';
@@ -285,19 +285,18 @@ module.exports = (() => {
             const Scroller = WebpackModules.getByDisplayName('AdvancedScrollerThin');
             const messages = WebpackModules.getByProps('sendMessage', 'editMessage');
             const Autocomplete = WebpackModules.getByDisplayName('Autocomplete');
-            const Text = WebpackModules.getByDisplayName('Text');
+            const Text = WebpackModules.getByDisplayName('LegacyText');
             const _this = this;
 
-            class Title extends Autocomplete.Title {
-               render() {
-                  const res = super.render();
-                  if (!this.props.title[0]) {
-                     res.props.children = null;
-                     res.props.style = { padding: '4px' };
-                  }
 
-                  return res;
+            const Title = (props) => {
+               const res = React.createElement(Autocomplete.Title, props);
+               if (!props.title[0]) {
+                  res.props.children = null;
+                  res.props.style = { padding: '4px' };
                }
+
+               return res;
             };
 
             class Command extends Autocomplete.Command {
@@ -360,12 +359,13 @@ module.exports = (() => {
                         autocompleteRows.commands.__header = [autocompleteRows.header];
                         delete autocompleteRows.header;
                      }
+
                      return { results: autocompleteRows };
                   }
 
                   return { results: {} };
                },
-               renderResults: (result, selected, _channel, _guild, value, _props, onHover, onClick) => {
+               renderResults: ({ results: result, selectedIndex: selected, query: value, onHover: onHover, onClick: onClick }) => {
                   if (result && result.commands) {
                      const { commands } = result;
                      const customHeader = Array.isArray(commands.__header) ? commands.__header : [commands.__header];
@@ -380,7 +380,7 @@ module.exports = (() => {
                      }), () => void 0, customHeader);
                   }
                },
-               onSelect: (result, selected, isEnter, props) => {
+               onSelect: ({ results, index, isEnter, options }) => {
                   if (result.commands[selected].instruction) {
                      if (isEnter) {
                         const msg = `${window.CommandsAPI.prefix}${result.value}`;
@@ -406,7 +406,7 @@ module.exports = (() => {
                      commands: window.CommandsAPI.filter(c => (getMatchingCommand(c)).some(commandName => commandName.includes(value)))
                   }
                }),
-               renderResults: (result, selected, _channel, _guild, value, _props, onHover, onClick) => {
+               renderResults: ({ results: result, selectedIndex: selected, query: value, onHover: onHover, onClick: onClick }) => {
                   if (result && result.commands) {
                      return renderCommandResults(value, selected, result.commands, onHover, onClick, c => ({
                         key: `betterdiscord-${c.command}`,
@@ -417,8 +417,8 @@ module.exports = (() => {
                      }), (value) => `${window.CommandsAPI.prefix}${value}`);
                   }
                },
-               onSelect: (result, selected, _, props) => {
-                  props.insertText(`${window.CommandsAPI.prefix}${result.commands[selected].command}`);
+               onSelect: ({ results, index, options }) => {
+                  options.insertText(`${window.CommandsAPI.prefix}${results.commands[index].command}`);
                   return {};
                }
             };
@@ -452,26 +452,6 @@ module.exports = (() => {
                      word: value,
                      isAtStart: true
                   };
-               }
-               return res;
-            });
-
-            const SlateChannelTextArea = WebpackModules.getByDisplayName('SlateChannelTextArea');
-            Patcher.after(SlateChannelTextArea.prototype, 'getCurrentWord', function (ctx, args, res) {
-               const { value } = ctx.editorRef;
-               const { selection, document } = value;
-               if (new RegExp(`^\\${window.CommandsAPI.prefix}\\S+ `).test(document.text)) {
-                  if ((/^@|#|:/).test(res.word)) {
-                     return res;
-                  }
-
-                  const node = document.getNode(selection.start.key);
-                  if (node) {
-                     return {
-                        word: node.text.substring(0, selection.start.offset),
-                        isAtStart: true
-                     };
-                  }
                }
                return res;
             });
