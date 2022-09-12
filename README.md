@@ -13,6 +13,10 @@
 <p align="center">A collection of my BetterDiscord plugins.</p>
 
 ---
+
+#### [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels")
+Displays all hidden channels which can't be accessed, this won't allow you to read them.
+
 #### [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass")
 Give your selection of friends the ability to bypass Do Not Disturb.
 
