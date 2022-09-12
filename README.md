@@ -18,7 +18,7 @@
 #### [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels")
 Displays all hidden channels which can't be accessed, this won't allow you to read them.
 
-![Image](https://files.unbound.rip/r/889246.png)
+![Image](https://files.unbound.rip/r/825599.png)
 
 ---
 
