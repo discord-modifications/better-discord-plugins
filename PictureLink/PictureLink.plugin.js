@@ -43,7 +43,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '2.0.0',
+         version: '2.0.1',
          description: "Allows you to click people's profile pictures and banners in their user modal and open them in your browser.",
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/PictureLink/PictureLink.plugin.js'
@@ -163,7 +163,6 @@ module.exports = (() => {
 
       const { openContextMenu, closeContextMenu } = WebpackModules.getByProps('openContextMenu', 'closeContextMenu');
       const ContextMenu = WebpackModules.getByProps('MenuGroup', 'MenuItem');
-      const Banners = WebpackModules.getByProps('getUserBannerURL');
       const SizeRegex = /(?:\?size=\d{3,4})?$/;
       const style = `.picture-link { cursor: pointer; }`;
 
@@ -201,35 +200,37 @@ module.exports = (() => {
             });
          }
 
-         async patchBanners() {
-            const Banner = await findLazy(m => m.default?.displayName == 'UserBanner');
-            if (this.promises.cancelled) return;
+         patchBanners() {
+            const Banners = WebpackModules.findAll(m => m.default?.displayName === 'UserBanner');
 
-            Patcher.after(Banner, 'default', (_, args, res) => {
-               const handler = Utilities.findInReactTree(res.props.children, p => p?.onClick);
-               const image = Banners.getUserBannerURL({
-                  ...args[0].user,
-                  canAnimate: true
-               })?.replace(SizeRegex, '?size=4096')?.replace('.webp', '.png');
+            for (const Banner of Banners) {
+               Patcher.after(Banner, 'default', (_, args, res) => {
+                  const [options] = args;
+                  if (options.bannerType !== 1) return;
 
-               if (!handler?.children && image) {
-                  res.props.onClick = () => {
-                     open(image);
-                  };
+                  if (options?.bannerSrc) {
+                     const image = options.bannerSrc.replace(SizeRegex, '?size=4096');
 
-                  res.props.onContextMenu = (e) => openContextMenu(e, () =>
-                     React.createElement(ContextMenu.default, { onClose: closeContextMenu },
-                        React.createElement(ContextMenu.MenuItem, {
-                           label: 'Copy Banner URL',
-                           id: 'copy-banner-url',
-                           action: () => clipboard.writeText(image)
-                        })
-                     )
-                  );
+                     res.props.onClick = () => {
+                        open(image);
+                     };
 
-                  res.props.className = [res.props.className, 'picture-link'].join(' ');
-               }
-            });
+                     res.props.onContextMenu = (e) => openContextMenu(e, () =>
+                        React.createElement(ContextMenu.default, { onClose: closeContextMenu },
+                           React.createElement(ContextMenu.MenuItem, {
+                              label: 'Copy Banner URL',
+                              id: 'copy-banner-url',
+                              action: () => clipboard.writeText(image)
+                           })
+                        )
+                     );
+
+                     res.props.className = [res.props.className, 'picture-link'].join(' ');
+                  }
+
+                  return res;
+               });
+            }
          }
 
          stop() {

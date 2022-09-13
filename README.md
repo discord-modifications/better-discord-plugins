@@ -25,20 +25,7 @@ Displays all hidden channels which can't be accessed, this won't allow you to re
 #### [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass")
 Give your selection of friends the ability to bypass Do Not Disturb.
 
----
-
-#### [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack")
-Allows you to screenshare in any quality/fps without nitro.
-
----
-
-#### [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver")
-Saves friends & Servers every 30 minutes to a file.
-
----
-
-#### [GameActivityToggle](https://github.com/discord-modifications/better-discord-plugins/tree/master/GameActivityToggle "GameActivityToggle")
-Adds an entry in the status picker to toggle game activity.
+![Image](https://files.unbound.rip/r/090815.png)
 
 ---
 
@@ -102,11 +89,6 @@ Stops discord from disconnecting you when you're in a call alone for more than 5
 
 ---
 
-#### [UploadFromLinks](https://github.com/discord-modifications/better-discord-plugins/tree/master/UploadFromLinks "UploadFromLinks")
-Allows you to upload from links by surrounding the link in brackets.
-
----
-
 #### [PictureLink](https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink "PictureLink")
 Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
 
@@ -120,7 +102,21 @@ Opens links all over the app in their respective app.
 #### [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons")
 Hides every button in the DMs list except friends.
 
+![Image](https://files.unbound.rip/r/484126.png)
+
 ---
 
 #### [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC")
 Requires you to double click voice channels to join them instead of single clicking.
+
+---
+
+#### [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack")
+Allows you to screenshare in any quality/fps without nitro.
+
+---
+
+#### [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver")
+Saves friends & Servers every 30 minutes to a file.
+
+---
