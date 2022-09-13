@@ -15,108 +15,73 @@
 
 <br><br>
 
-#### [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels")
+## [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=ShowHiddenChannels)
 Displays all hidden channels which can't be accessed, this won't allow you to read them.
 
 ![Image](https://files.unbound.rip/r/825599.png)
 
----
-
-#### [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass")
+## [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DNDBypass)
 Give your selection of friends the ability to bypass Do Not Disturb.
 
 ![Image](https://files.unbound.rip/r/090815.png)
 
----
-
-#### [RelationshipsNotifier](https://github.com/discord-modifications/better-discord-plugins/tree/master/RelationshipsNotifier "RelationshipsNotifier")
-Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.
-
----
-
-#### [SilentTyping](https://github.com/discord-modifications/better-discord-plugins/tree/master/SilentTyping "SilentTyping")
-Silences your typing indicator/status.
-
----
-
-#### [CommandsAPI](https://github.com/discord-modifications/better-discord-plugins/tree/master/CommandsAPI "CommandsAPI")
-Adds a command system to BetterDiscord for other plugins to utilize.
-
----
-
-#### [MessageCleaner](https://github.com/discord-modifications/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner")
-Clears messages in the current channel.
-
----
-
-#### [VoiceChatMoveAll](https://github.com/discord-modifications/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll")
-A context menu utility to move everyone to a certain voice channel.
-
----
-
-#### [Mock](https://github.com/discord-modifications/better-discord-plugins/tree/master/Mock "Mock")
-Adds the command "mock" that uppercases & lowercases letters to mock someone.
-
----
-
-#### [UserLookup](https://github.com/discord-modifications/better-discord-plugins/tree/master/UserLookup "UserLookup")
-Adds a command to look up information about the user using their ID.
-
----
-
-#### [SpotifyCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/SpotifyCrack "SpotifyCrack")
-Allows you to listen along with discord users without premium.
-
----
-
-#### [NSFWGateBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass")
-Bypasses discord's NSFW age gate.
-
----
-
-#### [MarkAllRead](https://github.com/discord-modifications/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead")
-Adds the command "read" that reads channels, DMs and removes pings.
-
----
-
-#### [BegoneAutoPause](https://github.com/discord-modifications/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause")
-Stops Discord from automatically pausing your music after 30 seconds.
-
----
-
-#### [NoBandwidthKick](https://github.com/discord-modifications/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick")
-Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
-
----
-
-#### [PictureLink](https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink "PictureLink")
-Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
-
----
-
-#### [OpenInApp](https://github.com/discord-modifications/better-discord-plugins/tree/master/OpenInApp "OpenInApp")
-Opens links all over the app in their respective app.
-
----
-
-#### [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons")
+## [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=HideDMButtons)
 Hides every button in the DMs list except friends.
 
 ![Image](https://files.unbound.rip/r/484126.png)
 
----
+## [RelationshipsNotifier](https://github.com/discord-modifications/better-discord-plugins/tree/master/RelationshipsNotifier "RelationshipsNotifier") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=RelationshipsNotifier)
+Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.
 
-#### [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC")
+## [SilentTyping](https://github.com/discord-modifications/better-discord-plugins/tree/master/SilentTyping "SilentTyping") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=SilentTyping)
+Silences your typing indicator/status.
+
+## [CommandsAPI](https://github.com/discord-modifications/better-discord-plugins/tree/master/CommandsAPI "CommandsAPI") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=CommandsAPI)
+Adds a command system to BetterDiscord for other plugins to utilize.
+
+## [MessageCleaner](https://github.com/discord-modifications/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=MessageCleaner)
+Clears messages in the current channel.
+
+## [VoiceChatMoveAll](https://github.com/discord-modifications/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=VoiceChatMoveAll)
+A context menu utility to move everyone to a certain voice channel.
+
+## [Mock](https://github.com/discord-modifications/better-discord-plugins/tree/master/Mock "Mock") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=Mock)
+Adds the command "mock" that uppercases & lowercases letters to mock someone.
+
+## [UserLookup](https://github.com/discord-modifications/better-discord-plugins/tree/master/UserLookup "UserLookup") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=UserLookup)
+Adds a command to look up information about the user using their ID.
+
+## [SpotifyCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/SpotifyCrack "SpotifyCrack") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=SpotifyCrack)
+Allows you to listen along with discord users without premium.
+
+## [NSFWGateBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=NSFWGateBypass)
+Bypasses discord's NSFW age gate.
+
+## [MarkAllRead](https://github.com/discord-modifications/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=MarkAllRead)
+Adds the command "read" that reads channels, DMs and removes pings.
+
+## [BegoneAutoPause](https://github.com/discord-modifications/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=BegoneAutoPause)
+Stops Discord from automatically pausing your music after 30 seconds.
+
+## [NoBandwidthKick](https://github.com/discord-modifications/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=NoBandwidthKick)
+Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
+
+## [PictureLink](https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink "PictureLink") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=PictureLink)
+Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
+
+## [OpenInApp](https://github.com/discord-modifications/better-discord-plugins/tree/master/OpenInApp "OpenInApp") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=OpenInApp)
+Opens links all over the app in their respective app.
+
+## [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DoubleClickVC)
 Requires you to double click voice channels to join them instead of single clicking.
 
----
 
-#### [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack")
+## [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=ScreenshareCrack)
 Allows you to screenshare in any quality/fps without nitro.
 
----
 
-#### [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver")
+## [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver") [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DataSaver)
 Saves friends & Servers every 30 minutes to a file.
 
----
+
+[download-badge]: https://img.shields.io/badge/Download-%233a71c1.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAgCAYAAAAIXrg4AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAd5gAAHeYBMKt3fAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAE9SURBVEiJ7ZQ7TsNAFEWv06IAShOkEDD5UNCwB8RCWEYWAqkIYiEgZQERoqLgFz4hUIaC+tCM4cmyk4mxCyRfaSRL8+49781YI3kKOASmwBtw4OvzFnDJry58fZUlGGvme70IQCaVgBLwXwBADegDp0AjaxjQAAbACVCzG+fmGRgDYYJ5ZGpGCfuh80Ya/EwgqWpqQ0lDoLVE5y1JQ+eNVLUFXfdSWr0A7UUTAG1XazUFuvEudoFJrPAd2EsDuMZeY56PyJM0aqohDljU0Lzz7KSMbMMmJB9px/fStoFH/PWMuS9fyBbw4Bnu/cclQe7nhD8BO5nCDaQJ3CWEj/8cbiAbwI0JvwU2cwk3kDpw7FY91/BShSoAmpKOJK3knP0l6SwAriXt5xwe6SoAPiWtFgSYVST1JM2KCJfU+wadgFl0/0HGbQAAAABJRU5ErkJggg==
