@@ -40,7 +40,7 @@ module.exports = (() => {
                github_username: 'eternal404'
             }
          ],
-         version: '1.0.0',
+         version: '1.0.1',
          description: 'Displays all hidden channels which can\'t be accessed, this won\'t allow you to read them.',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/ShowHiddenChannels/ShowHiddenChannels.plugin.js'
@@ -304,6 +304,10 @@ module.exports = (() => {
             });
 
             Patcher.after(UnreadStore, 'hasUnread', (_, args, res) => {
+               return res && !getChannel(args[0])?.isHidden();
+            });
+             
+            Patcher.after(UnreadStore, 'hasNotableUnread', (_, args, res) => {
                return res && !getChannel(args[0])?.isHidden();
             });
 
