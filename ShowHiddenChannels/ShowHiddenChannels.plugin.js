@@ -3,7 +3,7 @@
  * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/ShowHiddenChannels/ShowHiddenChannels.plugin.js
  * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/ShowHiddenChannels/ShowHiddenChannels.plugin.js
  * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels/ShowHiddenChannels.plugin.js
- * @authorId 282595588950982656
+ * @authorId 263689920210534400
  * @donate https://paypal.me/eternal404
  */
 
@@ -36,7 +36,7 @@ module.exports = (() => {
          authors: [
             {
                name: 'eternal',
-               discord_id: '282595588950982656',
+               discord_id: '263689920210534400',
                github_username: 'eternal404'
             }
          ],
@@ -306,7 +306,7 @@ module.exports = (() => {
             Patcher.after(UnreadStore, 'hasUnread', (_, args, res) => {
                return res && !getChannel(args[0])?.isHidden();
             });
-             
+
             Patcher.after(UnreadStore, 'hasNotableUnread', (_, args, res) => {
                return res && !getChannel(args[0])?.isHidden();
             });

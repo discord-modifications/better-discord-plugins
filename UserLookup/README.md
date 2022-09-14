@@ -2,9 +2,9 @@
 Adds a command to look up information about the user using their ID.
 
 # Usage
-- `-whois 282595588950982656`
-- `-id 282595588950982656`
-- `-lookup 282595588950982656`
+- `-whois 263689920210534400`
+- `-id 263689920210534400`
+- `-lookup 263689920210534400`
 
 > Legend: `-` = `Your prefix`
 

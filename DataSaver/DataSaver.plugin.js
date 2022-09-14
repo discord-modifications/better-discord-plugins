@@ -3,7 +3,7 @@
  * @source https://github.com/discord-modifications/better-discord-plugins/blob/master/DataSaver/DataSaver.plugin.js
  * @updateUrl https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/DataSaver/DataSaver.plugin.js
  * @website https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver/DataSaver.plugin.js
- * @authorId 282595588950982656
+ * @authorId 263689920210534400
  * @invite HQ5N7Rcajc
  * @donate https://paypal.me/eternal404
  */
@@ -39,7 +39,7 @@ module.exports = (() => {
          authors: [
             {
                name: 'eternal',
-               discord_id: '282595588950982656',
+               discord_id: '263689920210534400',
                github_username: 'eternal404'
             }
          ],
