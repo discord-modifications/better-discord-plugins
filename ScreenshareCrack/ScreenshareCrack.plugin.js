@@ -33,22 +33,31 @@
 @else@*/
 
 module.exports = (() => {
-   const config = {
-      info: {
-         name: 'ScreenshareCrack',
-         authors: [
-            {
-               name: 'eternal',
-               discord_id: '263689920210534400',
-               github_username: 'eternal404'
-            }
-         ],
-         version: '1.0.0',
+	const config = {
+		info: {
+			name: "ScreenshareCrack",
+			authors: [
+				{
+					name: "eternal",
+					discord_id: "263689920210534400",
+					github_username: "eternal404",
+				},
+			],
+			version: "1.5.0",
          description: 'Allows you to screenshare in any quality/fps without nitro..',
          github: 'https://github.com/eternal404',
          github_raw: 'https://raw.githubusercontent.com/discord-modifications/better-discord-plugins/master/ScreenshareCrack/ScreenshareCrack.plugin.js'
-      },
-   };
+		},
+      changelog: [
+         {
+             title: "v1.5.0",
+             type: "Fixed",
+             items: [
+                 "Fixed the plugin after Discord switched to SWC. Plugin might still be fucky but it works."
+             ]
+         },
+     ],
+	};
 
    return !global.ZeresPluginLibrary ? class {
       constructor() {
@@ -122,31 +131,34 @@ module.exports = (() => {
             }
          );
       }
-   } : (([Plugin, API]) => {
-      const { WebpackModules } = API;
+   } : (([Plugin, Api]) => {
+				const plugin = (Plugin, Api) => {
+					const { Patcher, DiscordModules, PluginUtilities } = Api;
+					return class ScreenshareCrack extends Plugin {
+	
 
-      const Stream = WebpackModules.getByProps('ApplicationStreamFPSButtons');
-      const Lodash = window._;
+						onStart() {
+							// spoof client side premium
+							let tries = 1;
+							let intervalId = setInterval(() => {
+								if (++tries > 5) clearInterval(intervalId);
 
-      return class extends Plugin {
-         start() {
-            const requirements = Stream.ApplicationStreamSettingRequirements;
-            this.original = Lodash.cloneDeep(requirements);
+								const user =
+									ZeresPluginLibrary.DiscordModules.UserStore.getCurrentUser();
+								if (!user) return;
+								user.premiumType = 2;
+								clearInterval(intervalId);
+							}, 1000);
 
-            for (let i = 0; i < requirements.length; i++) {
-               for (const key in requirements[i]) {
-                  if (!~['resolution', 'fps'].indexOf(key)) {
-                     delete requirements[i][key];
-                  }
-               }
-            }
-         };
+						}
 
-         stop() {
-            Stream.ApplicationStreamSettingRequirements = this.original;
-         };
-      };
-   })(ZLibrary.buildPlugin(config));
+						onStop() {
+							Patcher.unpatchAll();         //tried some other shit
+						}
+					};
+				};
+				return plugin(Plugin, Api);
+		  })(global.ZeresPluginLibrary.buildPlugin(config));
 })();
 
 /*@end@*/
