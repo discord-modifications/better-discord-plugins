@@ -15,72 +15,72 @@
 
 <br><br>
 
-## [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=ShowHiddenChannels)
+## [ShowHiddenChannels](https://github.com/discord-modifications/better-discord-plugins/tree/master/ShowHiddenChannels "ShowHiddenChannels") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=ShowHiddenChannels)
 Displays all hidden channels which can't be accessed, this won't allow you to read them.
 
 ![Image](https://files.unbound.rip/r/825599.png)
 
-## [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DNDBypass)
+## [DNDBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/DNDBypass "DNDBypass") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=DNDBypass)
 Give your selection of friends the ability to bypass Do Not Disturb.
 
 ![Image](https://files.unbound.rip/r/090815.png)
 
-## [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=HideDMButtons)
+## [HideDMButtons](https://github.com/discord-modifications/better-discord-plugins/tree/master/HideDMButtons "HideDMButtons") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=HideDMButtons)
 Hides every button in the DMs list except friends.
 
 ![Image](https://files.unbound.rip/r/484126.png)
 
-## [RelationshipsNotifier](https://github.com/discord-modifications/better-discord-plugins/tree/master/RelationshipsNotifier "RelationshipsNotifier") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=RelationshipsNotifier)
+## [RelationshipsNotifier](https://github.com/discord-modifications/better-discord-plugins/tree/master/RelationshipsNotifier "RelationshipsNotifier") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=RelationshipsNotifier)
 Notifies you when someone removes you from their friends list, you are banned/kicked from a server or kicked from a group chat.
 
-## [SilentTyping](https://github.com/discord-modifications/better-discord-plugins/tree/master/SilentTyping "SilentTyping") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=SilentTyping)
+## [SilentTyping](https://github.com/discord-modifications/better-discord-plugins/tree/master/SilentTyping "SilentTyping") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=SilentTyping)
 Silences your typing indicator/status.
 
-## [CommandsAPI](https://github.com/discord-modifications/better-discord-plugins/tree/master/CommandsAPI "CommandsAPI") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=CommandsAPI)
+## [CommandsAPI](https://github.com/discord-modifications/better-discord-plugins/tree/master/CommandsAPI "CommandsAPI") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=CommandsAPI)
 Adds a command system to BetterDiscord for other plugins to utilize.
 
-## [MessageCleaner](https://github.com/discord-modifications/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=MessageCleaner)
+## [MessageCleaner](https://github.com/discord-modifications/better-discord-plugins/tree/master/MessageCleaner "MessageCleaner") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=MessageCleaner)
 Clears messages in the current channel.
 
-## [VoiceChatMoveAll](https://github.com/discord-modifications/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=VoiceChatMoveAll)
+## [VoiceChatMoveAll](https://github.com/discord-modifications/better-discord-plugins/tree/master/VoiceChatMoveAll "VoiceChatMoveAll") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=VoiceChatMoveAll)
 A context menu utility to move everyone to a certain voice channel.
 
-## [Mock](https://github.com/discord-modifications/better-discord-plugins/tree/master/Mock "Mock") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=Mock)
+## [Mock](https://github.com/discord-modifications/better-discord-plugins/tree/master/Mock "Mock") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=Mock)
 Adds the command "mock" that uppercases & lowercases letters to mock someone.
 
-## [UserLookup](https://github.com/discord-modifications/better-discord-plugins/tree/master/UserLookup "UserLookup") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=UserLookup)
+## [UserLookup](https://github.com/discord-modifications/better-discord-plugins/tree/master/UserLookup "UserLookup") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=UserLookup)
 Adds a command to look up information about the user using their ID.
 
-## [SpotifyCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/SpotifyCrack "SpotifyCrack") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=SpotifyCrack)
+## [SpotifyCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/SpotifyCrack "SpotifyCrack") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=SpotifyCrack)
 Allows you to listen along with discord users without premium.
 
-## [NSFWGateBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=NSFWGateBypass)
+## [NSFWGateBypass](https://github.com/discord-modifications/better-discord-plugins/tree/master/NSFWGateBypass "NSFWGateBypass") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=NSFWGateBypass)
 Bypasses discord's NSFW age gate.
 
-## [MarkAllRead](https://github.com/discord-modifications/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=MarkAllRead)
+## [MarkAllRead](https://github.com/discord-modifications/better-discord-plugins/tree/master/MarkAllRead "MarkAllRead") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=MarkAllRead)
 Adds the command "read" that reads channels, DMs and removes pings.
 
-## [BegoneAutoPause](https://github.com/discord-modifications/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=BegoneAutoPause)
+## [BegoneAutoPause](https://github.com/discord-modifications/better-discord-plugins/tree/master/BegoneAutoPause "BegoneAutoPause") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=BegoneAutoPause)
 Stops Discord from automatically pausing your music after 30 seconds.
 
-## [NoBandwidthKick](https://github.com/discord-modifications/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=NoBandwidthKick)
+## [NoBandwidthKick](https://github.com/discord-modifications/better-discord-plugins/tree/master/NoBandwidthKick "NoBandwidthKick") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=NoBandwidthKick)
 Stops discord from disconnecting you when you're in a call alone for more than 5 minutes.
 
-## [PictureLink](https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink "PictureLink") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=PictureLink)
+## [PictureLink](https://github.com/discord-modifications/better-discord-plugins/tree/master/PictureLink "PictureLink") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=PictureLink)
 Allows you to click people's profile pictures and banners in their user modal and open them in your browser.
 
-## [OpenInApp](https://github.com/discord-modifications/better-discord-plugins/tree/master/OpenInApp "OpenInApp") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=OpenInApp)
+## [OpenInApp](https://github.com/discord-modifications/better-discord-plugins/tree/master/OpenInApp "OpenInApp") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=OpenInApp)
 Opens links all over the app in their respective app.
 
-## [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DoubleClickVC)
+## [DoubleClickVC](https://github.com/discord-modifications/better-discord-plugins/tree/master/DoubleClickVC "DoubleClickVC") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=DoubleClickVC)
 Requires you to double click voice channels to join them instead of single clicking.
 
 
-## [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=ScreenshareCrack)
+## [ScreenshareCrack](https://github.com/discord-modifications/better-discord-plugins/tree/master/ScreenshareCrack "ScreenshareCrack") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=ScreenshareCrack)
 Allows you to screenshare in any quality/fps without nitro.
 
 
-## [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver") &nbsp; [![Download][download-badge]](https://discord-modifications.github.io/downloader/?plugin=DataSaver)
+## [DataSaver](https://github.com/discord-modifications/better-discord-plugins/tree/master/DataSaver "DataSaver") &nbsp; [![Download][download-badge]](https://marioparaschiv.github.io/better-discord-downloader/?plugin=DataSaver)
 Saves friends & Servers every 30 minutes to a file.
 
 
